@@ -6,59 +6,37 @@ if (!isset($_SESSION['productos'])) {
 }
 
 // Funciones
-function agregarProducto($nombre, $cantidad, $valor, $modelo) {
+function agregarProducto($nombre, $cantidad, $valor, $modelo,$estado) {
     $producto = [
         'nombre' => $nombre,
         'cantidad' => $cantidad,
         'valor' => $valor,
-        'modelo' => $modelo
+        'modelo' => $modelo,
+        'estado' => $estado
     ];
     $_SESSION['productos'][] = $producto;
     return "Producto agregado exitosamente.";
-}
-
-function buscarProductoPorModelo($modelo) {
-    foreach ($_SESSION['productos'] as $producto) {
-        if ($producto['modelo'] === $modelo) {
-            return $producto;
-        }
-    }
-    return "Producto no encontrado.";
 }
 
 function mostrarProductos() {
     return $_SESSION['productos'];
 }
 
-function actualizarProducto($modelo, $nombre, $cantidad, $valor) {
+function actualizarProducto($modelo, $nombre, $cantidad, $valor,$estado) {
     foreach ($_SESSION['productos'] as &$producto) {
         if ($producto['modelo'] === $modelo) {
             $producto['nombre'] = $nombre;
             $producto['cantidad'] = $cantidad;
             $producto['valor'] = $valor;
+            $producto['estado'] = $estado;
             return "Producto actualizado exitosamente.";
         }
     }
     return "Producto no encontrado.";
 }
 
-function calcularValorTotal() {
-    $total = 0;
-    foreach ($_SESSION['productos'] as $producto) {
-        $total += $producto['valor'] * $producto['cantidad'];
-    }
-    return $total;
-}
 
-function filtrarProductosPorValor($valorEspecifico) {
-    $productosFiltrados = [];
-    foreach ($_SESSION['productos'] as $producto) {
-        if ($producto['valor'] > $valorEspecifico) {
-            $productosFiltrados[] = $producto;
-        }
-    }
-    return $productosFiltrados;
-}
+
 
 function listarModelosDisponibles() {
     $modelos = [];
@@ -68,19 +46,10 @@ function listarModelosDisponibles() {
     return $modelos;
 }
 
-function calcularValorPromedio() {
-    $totalValor = 0;
-    $totalCantidad = 0;
-    foreach ($_SESSION['productos'] as $producto) {
-        $totalValor += $producto['valor'] * $producto['cantidad'];
-        $totalCantidad += $producto['cantidad'];
-    }
-    return $totalCantidad ? $totalValor / $totalCantidad : 0;
-}
 
 function limpiarResultados() {
     $_SESSION['productos'] = [];
-    return "Datos de productos limpiados exitosamente.";
+    return "productos limpiados exitosamente.";
 }
 
 // Manejo de formularios
@@ -89,28 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'];
     switch ($accion) {
         case 'agregar':
-            $resultado = agregarProducto($_POST['nombre'], $_POST['cantidad'], $_POST['valor'], $_POST['modelo']);
-            break;
-        case 'buscar':
-            $resultado = buscarProductoPorModelo($_POST['modelo']);
+            $resultado = agregarProducto($_POST['nombre'], $_POST['cantidad'], $_POST['valor'], $_POST['modelo'], $_POST['estado']);
             break;
         case 'mostrar':
             $resultado = mostrarProductos();
             break;
         case 'actualizar':
-            $resultado = actualizarProducto($_POST['modelo'], $_POST['nombre'], $_POST['cantidad'], $_POST['valor']);
-            break;
-        case 'valorTotal':
-            $resultado = calcularValorTotal();
-            break;
-        case 'filtrar':
-            $resultado = filtrarProductosPorValor($_POST['valorEspecifico']);
-            break;
-        case 'listarModelos':
-            $resultado = listarModelosDisponibles();
-            break;
-        case 'valorPromedio':
-            $resultado = calcularValorPromedio();
+            $resultado = actualizarProducto($_POST['modelo'], $_POST['nombre'], $_POST['cantidad'], $_POST['valor'], $_POST['estadoN']);
             break;
         case 'limpiar':
             $resultado = limpiarResultados();

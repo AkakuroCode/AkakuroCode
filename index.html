@@ -13,16 +13,17 @@
         <label>Cantidad: <input type="number" name="cantidad" required></label><br>
         <label>Valor: <input type="number" name="valor" step="0.01" required></label><br>
         <label>Modelo: <input type="text" name="modelo" required></label><br>
+        <label for="estado">Estado:</label>
+             <select id="estado" name="estado">
+            <option value="Nuevo">Nuevo</option>
+            <option value="Usado">Usado</option><br>
+        </select><br>
+        <br>
         <input type="hidden" name="accion" value="agregar">
         <button type="submit">Agregar Producto</button>
     </form>
 
-    <form id="buscarForm" method="POST">
-        <h2>Buscar Producto por Modelo</h2>
-        <label>Modelo: <input type="text" name="modelo" required></label><br>
-        <input type="hidden" name="accion" value="buscar">
-        <button type="submit">Buscar Producto</button>
-    </form>
+   
 
     <form id="mostrarForm" method="POST">
         <h2>Mostrar Productos</h2>
@@ -36,34 +37,18 @@
         <label>Nuevo Nombre: <input type="text" name="nombre" required></label><br>
         <label>Nueva Cantidad: <input type="number" name="cantidad" required></label><br>
         <label>Nuevo Valor: <input type="number" name="valor" step="0.01" required></label><br>
+        <label for="estadoN">Nuevo Estado</label>
+        <select id="estadoN" name="estadoN">
+            <option value="Nuevo">Nuevo</option>
+            <option value="Usado">Usado</option>
+        </select>
+        <br>
+        <br>
         <input type="hidden" name="accion" value="actualizar">
         <button type="submit">Actualizar Producto</button>
     </form>
 
-    <form id="valorTotalForm" method="POST">
-        <h2>Calcular Valor Total</h2>
-        <input type="hidden" name="accion" value="valorTotal">
-        <button type="submit">Calcular Valor Total</button>
-    </form>
 
-    <form id="filtrarForm" method="POST">
-        <h2>Filtrar Productos por Valor</h2>
-        <label>Valor Específico: <input type="number" name="valorEspecifico" step="0.01" required></label><br>
-        <input type="hidden" name="accion" value="filtrar">
-        <button type="submit">Filtrar Productos</button>
-    </form>
-
-    <form id="listarModelosForm" method="POST">
-        <h2>Listar Modelos Disponibles</h2>
-        <input type="hidden" name="accion" value="listarModelos">
-        <button type="submit">Listar Modelos</button>
-    </form>
-
-    <form id="valorPromedioForm" method="POST">
-        <h2>Calcular Valor Promedio</h2>
-        <input type="hidden" name="accion" value="valorPromedio">
-        <button type="submit">Calcular Valor Promedio</button>
-    </form>
 
     <form id="limpiarForm" method="POST">
         <h2>Limpiar Resultados</h2>
