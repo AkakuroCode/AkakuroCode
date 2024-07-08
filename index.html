@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventario de Productos</title>
+    <link rel="stylesheet" type="text/css" href="estilos.css">
+</head>
+<body>
+    <h1>Gestión de Inventario</h1>
+    
+    <form id="agregarForm" method="POST">
+        <h2>Agregar Producto</h2>
+        <label>Nombre: <input type="text" name="nombre" required></label><br>
+        <label>Cantidad: <input type="number" name="cantidad" required></label><br>
+        <label>Valor: <input type="number" name="valor" step="0.01" required></label><br>
+        <label>Modelo: <input type="text" name="modelo" required></label><br>
+        <input type="hidden" name="accion" value="agregar">
+        <button type="submit">Agregar Producto</button>
+    </form>
+
+    <form id="buscarForm" method="POST">
+        <h2>Buscar Producto por Modelo</h2>
+        <label>Modelo: <input type="text" name="modelo" required></label><br>
+        <input type="hidden" name="accion" value="buscar">
+        <button type="submit">Buscar Producto</button>
+    </form>
+
+    <form id="mostrarForm" method="POST">
+        <h2>Mostrar Productos</h2>
+        <input type="hidden" name="accion" value="mostrar">
+        <button type="submit">Mostrar Productos</button>
+    </form>
+
+    <form id="actualizarForm" method="POST">
+        <h2>Actualizar Producto</h2>
+        <label>Modelo: <input type="text" name="modelo" required></label><br>
+        <label>Nuevo Nombre: <input type="text" name="nombre" required></label><br>
+        <label>Nueva Cantidad: <input type="number" name="cantidad" required></label><br>
+        <label>Nuevo Valor: <input type="number" name="valor" step="0.01" required></label><br>
+        <input type="hidden" name="accion" value="actualizar">
+        <button type="submit">Actualizar Producto</button>
+    </form>
+
+    <form id="valorTotalForm" method="POST">
+        <h2>Calcular Valor Total</h2>
+        <input type="hidden" name="accion" value="valorTotal">
+        <button type="submit">Calcular Valor Total</button>
+    </form>
+
+    <form id="filtrarForm" method="POST">
+        <h2>Filtrar Productos por Valor</h2>
+        <label>Valor Específico: <input type="number" name="valorEspecifico" step="0.01" required></label><br>
+        <input type="hidden" name="accion" value="filtrar">
+        <button type="submit">Filtrar Productos</button>
+    </form>
+
+    <form id="listarModelosForm" method="POST">
+        <h2>Listar Modelos Disponibles</h2>
+        <input type="hidden" name="accion" value="listarModelos">
+        <button type="submit">Listar Modelos</button>
+    </form>
+
+    <form id="valorPromedioForm" method="POST">
+        <h2>Calcular Valor Promedio</h2>
+        <input type="hidden" name="accion" value="valorPromedio">
+        <button type="submit">Calcular Valor Promedio</button>
+    </form>
+
+    <form id="limpiarForm" method="POST">
+        <h2>Limpiar Resultados</h2>
+        <input type="hidden" name="accion" value="limpiar">
+        <button type="submit">Limpiar Resultados</button>
+    </form>
+
+    <h2>Resultado</h2>
+    <pre id="resultado"></pre>
+
+    <script>
+       document.querySelectorAll("form").forEach(form => {
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        fetch("productos.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("resultado").textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
