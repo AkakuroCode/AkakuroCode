@@ -19,23 +19,16 @@ if (isset($_SESSION['resultado'])) {
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre"><br>
         
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad"><br>
+        <label for="contraseña">Contraseña:</label>
+        <input type="password" id="contraseña" name="contraseña"><br>
         
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email"><br>
         
         <input type="radio" id="agregar" name="accion" value="agregar">
         <label for="agregar">Agregar</label><br>
         
-        <input type="radio" id="buscar" name="accion" value="buscar">
-        <label for="buscar">Buscar</label><br>
         
         <input type="radio" id="mostrar" name="accion" value="mostrar">
         <label for="mostrar">Mostrar</label><br>
-        
-        <input type="radio" id="actualizar" name="accion" value="actualizar">
-        <label for="actualizar">Actualizar</label><br>
         
         <input type="submit" value="Enviar">
     </form>

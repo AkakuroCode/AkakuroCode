@@ -5,41 +5,22 @@ session_start();
 function agregarUsuario($usuarios, $nombre, $edad, $email) {
     $usuarios[] = [
         'nombre' => $nombre,
-        'edad' => $edad,
-        'email' => $email
+        'contraseña' => $contraseña       
     ];
     return $usuarios;
 }
 
-function buscarUsuarioPorEmail($usuarios, $email) {
-    foreach ($usuarios as $usuario) {
-        if ($usuario['email'] == $email) {
-            return "Nombre: " . $usuario['nombre'] . "<br>";
-        }
-    }
-    return "Email no encontrado.<br>";
-}
 
 function mostrarUsuarios($usuarios) {
     $result = '';
     foreach ($usuarios as $usuario) {
-        $result .= "Nombre: " . $usuario['nombre'] . ", Edad: " . $usuario['edad'] . "<br>";
+        $result .= "Nombre: " . $usuario['nombre'] . "<br>";
         
    
     }
     return $result;
 }
 
-function actualizarUsuario($usuarios, $email, $nombre, $edad) {
-    foreach ($usuarios as &$usuario) {
-        if ($usuario['email'] == $email) {
-            $usuario['nombre'] = $nombre;
-            $usuario['edad'] = $edad;
-            break;
-        }
-    }
-    return $usuarios;
-}
 
 // Inicializar el array de usuarios en la sesión
 if (!isset($_SESSION['usuarios'])) {
@@ -52,8 +33,8 @@ $resultado = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = $_POST['accion'];
     $nombre = $_POST['nombre'] ?? '';
-    $edad = $_POST['edad'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $contraseña = $_POST['contraseña'] ?? '';
+    
 
     switch ($accion) {
         case 'agregar':
@@ -61,18 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resultado = "Usuario agregado correctamente.<br>";
             break;
         
-        case 'buscar':
-            $resultado = buscarUsuarioPorEmail($usuarios, $email);
-            break;
         
         case 'mostrar':
             $resultado = mostrarUsuarios($usuarios);
             break;
         
-        case 'actualizar':
-            $usuarios = actualizarUsuario($usuarios, $email, $nombre, $edad);
-            $resultado = "Usuario actualizado correctamente.<br>";
-            break;
 
         case 'limpiar':
             $_SESSION['usuarios'] = [];
