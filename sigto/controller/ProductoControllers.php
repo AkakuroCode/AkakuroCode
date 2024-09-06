@@ -8,7 +8,7 @@ class ProductoController {
         $producto = new Productos(); // Creamos una nueva instancia del modelo Usuario.
         $producto->setNom($data1['Nombre']); // Asignamos el email del usuario utilizando el dato proporcionado.
         $producto->setDesc($data1['Descripcion']);
-        $producto->setEstado($data1['Estaoo']);
+        $producto->setEstado($data1['Estado']);
         $producto->setOrigen($data1['Origen']);
         $producto->setPrecio($data1['Precio']);
         $producto->setCantidad($data1['Cantidad']); 
