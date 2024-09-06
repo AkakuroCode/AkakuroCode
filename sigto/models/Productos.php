@@ -104,13 +104,13 @@ class Productos {
     // Método para crear un nuevo producto
     public function create() {
         // Creamos una consulta SQL para insertar un nuevo registro en la tabla de usuarios.
-        $query = "INSERT INTO " . $this->table_name1 . " SET Nombre=?, descripcion=?, oferta=? ,fecof=?, estado=?, origen=?, Precio=?, Cantidad=?" ;
+        $query = "INSERT INTO " . $this->table_name1 . " SET Nombre=?, descripcion=?,origen=?, precio=?, stock=?" ;
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("sii", $this->Nombre,$this->descripcion, $this->Cantidad, $this->Precio);
+        $stmt->bind_param("sssii", $this->Nombre,$this->descripcion,$this->origen,$this->Precio,$this->Cantidad);
         
         // Ejecutamos la consulta y verificamos si se ejecutó correctamente.
         if ($stmt->execute()) {
@@ -135,13 +135,13 @@ class Productos {
     // Método para leer un usuario específico por su ID.
     public function readOne() {
         // Consulta SQL para seleccionar un registro específico por ID.
-        $query = "SELECT * FROM " . $this->table_name1 . " WHERE idProductos = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name1 . " WHERE sku = ? LIMIT 0,1";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Unimos el ID al parámetro de la consulta SQL.
-        $stmt->bind_param("i", $this->idProductos);
+        $stmt->bind_param("i", $this->sku);
         
         // Ejecutamos la consulta.
         $stmt->execute();
@@ -154,14 +154,14 @@ class Productos {
     // Método para actualizar un usuario existente.
     public function update() {
         // Consulta SQL para actualizar un registro en la tabla de usuarios.
-        $query = "UPDATE " . $this->table_name1 . " SET Nombre=?, Cantidad=?, Precio=? WHERE idProductos=?";
+        $query = "UPDATE " . $this->table_name1 . " SET Nombre=?, descripcion=?, oferta=? ,fecof=?, estado=?, origen=?, precio=?, stock=? WHERE sku=?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("siii", $this->Nombre, $this->Cantidad, $this->Precio, $this->idProductos);
+        $stmt->bind_param("siii", $this->Nombre,$this->descripcion,$this->oferta,$this->fecof,$this->estado,$this->origen,$this->Precio,$this->Cantidad $this->sku);
         
         // Ejecutamos la consulta y retornamos el resultado (true si fue exitoso, false si no lo fue).
         return $stmt->execute();
@@ -170,13 +170,13 @@ class Productos {
     // Método para eliminar un usuario por su ID.
     public function delete() {
         // Consulta SQL para eliminar un registro específico por ID.
-        $query = "DELETE FROM " . $this->table_name1 . " WHERE idProductos = ?";
+        $query = "DELETE FROM " . $this->table_name1 . " WHERE sku = ?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Unimos el ID al parámetro de la consulta SQL.
-        $stmt->bind_param("i", $this->idProductos);
+        $stmt->bind_param("i", $this->sku);
         
         // Ejecutamos la consulta y retornamos el resultado (true si fue exitoso, false si no lo fue).
         return $stmt->execute();
