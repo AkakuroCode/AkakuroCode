@@ -9,9 +9,16 @@ class Productos {
 
     // Atributos privados.
     private $sku;
+    private $id_emp;
     private $Nombre;
-    private $Cantidad;
+    private $descripcion;
+    private $oferta;
+    private $fecof;
+    private $estado;
+    private $origen;
     private $Precio;
+    private $stock;
+
     
 
     // Constructor para inicializar la conexión a la base de datos.
@@ -28,6 +35,12 @@ class Productos {
     public function setIdProd($sku) {
         $this->sku = $sku; // Asignamos el ID del producto
     }
+    public function getid_emp(){
+        return $this->$id_emp; // retornamos el id_emp del producto 
+    }
+    public function setid_emp($id_emp){
+        $this->id_emp = $id_emp; // asignamos el idemp de producto
+    }
 
     public function getNom() {
         return $this->Nombre; // Retornamos el email del producto
@@ -36,17 +49,49 @@ class Productos {
     public function setNom($Nombre) {
         $this->Nombre = $Nombre; // Asignamos el email del producto
     }
+    public function getDesc(){
+        return $this->descripcion;
 
-    public function getCantidad() {
-        return $this->Cantidad; // Retornamos el nombre de producto
+    }
+    public function setDesc($descripcion){
+        $this->descripcion = $descripcion;
+
+    }
+    public function getOferta(){
+        return $this->$oferta;
+    }
+    public function setOferta($oferta){
+        $this->oferta = $oferta;
+    }
+    public function getFecof(){
+        return $this->$fecof;
+    }
+    public function setFecof($fecof){
+        $this->fecof = $fecof;
+    }
+    public function getEstado(){
+        return $this->$estado;
+    }
+    public function setEstado($estado){
+        $this->estado = $estado;
+    }
+    public function getOrigen(){
+        return $this->$origen;
+    }
+    public function setOrigen($origen){
+        $this->origen = $origen;
     }
 
-    public function setCantidad($Cantidad) {
-        $this->Cantidad = $Cantidad; // Asignamos el nombre de producto
+    public function getCantidad() {
+        return $this->Cantidad; // 
+    }
+
+    public function setCantidad($stock) {
+        $this->Cantidad = $stock; // 
     }
 
     public function getPrecio() {
-        return $this->Precio; // Retornamos el número de celular del producto
+        return $this->Precio; // 
     }
 
     public function setPrecio($Precio) {
@@ -59,13 +104,13 @@ class Productos {
     // Método para crear un nuevo producto
     public function create() {
         // Creamos una consulta SQL para insertar un nuevo registro en la tabla de usuarios.
-        $query = "INSERT INTO " . $this->table_name1 . " SET Nombre=?, Cantidad=?, Precio=?" ;
+        $query = "INSERT INTO " . $this->table_name1 . " SET Nombre=?, descripcion=?, oferta=? ,fecof=?, estado=?, origen=?, Precio=?, Cantidad=?" ;
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("sii", $this->Nombre, $this->Cantidad, $this->Precio);
+        $stmt->bind_param("sii", $this->Nombre,$this->descripcion, $this->Cantidad, $this->Precio);
         
         // Ejecutamos la consulta y verificamos si se ejecutó correctamente.
         if ($stmt->execute()) {
