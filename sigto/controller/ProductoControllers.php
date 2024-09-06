@@ -7,6 +7,8 @@ class ProductoController {
     public function create($data1) {
         $producto = new Productos(); // Creamos una nueva instancia del modelo Usuario.
         $producto->setNom($data1['Nombre']); // Asignamos el email del usuario utilizando el dato proporcionado.
+        $producto->setDesc($data1['Descripcion']);
+        $producto->set
         $producto->setCantidad($data1['Cantidad']); // Asignamos el nombre de usuario.
         $producto->setPrecio($data1['Precio']); // Asignamos el número de celular del usuario.
      if ($producto->create()) { // Intentamos crear el usuario en la base de datos.
