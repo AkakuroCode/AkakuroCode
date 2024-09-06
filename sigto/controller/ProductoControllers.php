@@ -8,9 +8,10 @@ class ProductoController {
         $producto = new Productos(); // Creamos una nueva instancia del modelo Usuario.
         $producto->setNom($data1['Nombre']); // Asignamos el email del usuario utilizando el dato proporcionado.
         $producto->setDesc($data1['Descripcion']);
-        $producto->set
-        $producto->setCantidad($data1['Cantidad']); // Asignamos el nombre de usuario.
-        $producto->setPrecio($data1['Precio']); // Asignamos el número de celular del usuario.
+        $producto->setEstado($data1['Estaoo']);
+        $producto->setOrigen($data1['Origen']);
+        $producto->setPrecio($data1['Precio']);
+        $producto->setCantidad($data1['Cantidad']); 
      if ($producto->create()) { // Intentamos crear el usuario en la base de datos.
             return "Producto creado exitosamente."; // Si la creación fue exitosa, devolvemos un mensaje de éxito.
         } else {
@@ -25,9 +26,9 @@ class ProductoController {
     }
 
     // Método para leer un usuario específico por su ID.
-    public function readOne($idProducto) {
+    public function readOne($sku) {
         $producto = new Productos(); // Creamos una nueva instancia del modelo Usuario.
-        $producto->setIdProd($idProducto); // Asignamos el ID del usuario que queremos leer.
+        $producto->setIdProd($sku); // Asignamos el ID del usuario que queremos leer.
         return $producto->readOne(); // Retornamos los datos del usuario con el ID especificado.
     }
 
@@ -36,8 +37,13 @@ class ProductoController {
         $producto = new Productos(); // Creamos una nueva instancia del modelo Usuario.
         $producto->setIdProd($data1['idProd']); // Asignamos el ID del usuario que se va a actualizar.
         $producto->setNom($data1['Nombre']); // Actualizamos el email del usuario.
-        $producto->setCantidad($data1['Cantidad']); // Actualizamos el nombre de usuario.
+        $producto->setDesc($data1['Descripcion']);
+        $producto->setOferta($data1['Oferta']):
+        $producto->setFecof($data1['Fecof']);
+        $producto->setEstado($data1['Estado']);
+        $producto->setOrigen($data1['Origen']);
         $producto->setPrecio($data1['Precio']); // Actualizamos el número de celular del usuario.
+        $producto->setCantidad($data1['Cantidad']); // Actualizamos el nombre de usuario.
         if ($producto->update()) { // Intentamos actualizar el usuario en la base de datos.
             return "Producto actualizado exitosamente."; // Si la actualización fue exitosa, devolvemos un mensaje de éxito.
         } else {
@@ -46,9 +52,9 @@ class ProductoController {
     }
 
     // Método para eliminar un usuario por su ID.
-    public function delete($idProducto) {
+    public function delete($sku) {
         $producto = new Productos(); // Creamos una nueva instancia del modelo Usuario.
-        $producto->setIdProd($idProducto); // Asignamos el ID del usuario que se va a eliminar.
+        $producto->setIdProd($sku); // Asignamos el ID del usuario que se va a eliminar.
         if ($producto->delete()) { // Intentamos eliminar el usuario de la base de datos.
             return "Producto eliminado exitosamente."; // Si la eliminación fue exitosa, devolvemos un mensaje de éxito.
         } else {
