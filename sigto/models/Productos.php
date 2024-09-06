@@ -104,13 +104,13 @@ class Productos {
     // Método para crear un nuevo producto
     public function create() {
         // Creamos una consulta SQL para insertar un nuevo registro en la tabla de usuarios.
-        $query = "INSERT INTO " . $this->table_name1 . " SET Nombre=?, descripcion=?,origen=?, precio=?, stock=?" ;
+        $query = "INSERT INTO " . $this->table_name1 . " SET Nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?" ;
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("sssii", $this->Nombre,$this->descripcion,$this->origen,$this->Precio,$this->Cantidad);
+        $stmt->bind_param("sssii", $this->Nombre,$this->descripcion,$this->estado, $this->origen,$this->Precio,$this->Cantidad);
         
         // Ejecutamos la consulta y verificamos si se ejecutó correctamente.
         if ($stmt->execute()) {
