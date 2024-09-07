@@ -47,14 +47,25 @@ flex-direction: column;
     
 }
 
+.search-form {
+        display: flex;
+        align-items: center;
+        margin-left: 20px; /* Añade espacio desde el logo */
+        border: none; /* Elimina cualquier borde del form */
+        padding: 0; /* Remueve el padding del form si tiene */
+        background: none; /* Asegúrate de que no tenga fondo */
+        box-shadow: none; /* Remueve cualquier sombra si hay */
+}
+
 .searchbar {
-    flex: 1; /* Permite que la barra de búsqueda crezca para ocupar el espacio disponible */
-    max-width: 300px; /* Limita el ancho máximo de la barra */
-    padding: 5px 10px; /* Añade algo de padding para que se vea más cómoda */
-    margin: 0 20px; /* Espacio alrededor de la barra */
-    border: 1px solid #ccc; /* Estilo de borde */
-    border-radius: 20px; /* Bordes redondeados */
-    outline: none; /* Quita el contorno al hacer clic */
+    flex: 1; /* Permite que crezca dentro del espacio disponible */
+    padding: 8px 15px; /* Aumenta el padding para hacerla más alta */
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    max-width: 100%; /* Aumenta el ancho máximo de la barra */
+    margin: 0 20px; /* Añade espacio a los lados */
+    font-size: 16px; /* Aumenta el tamaño del texto */
 }
 
 .navbar-items a{
