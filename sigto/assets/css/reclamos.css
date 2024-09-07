@@ -87,3 +87,24 @@
         width: 95%; /* Ajustar el ancho en pantallas grandes */
     }
 }
+
+.footer-redes {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaciado entre los íconos */
+}
+
+.reclamos-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Color verde */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+.reclamos-btn:hover {
+    background-color: #45a049; /* Cambia el color al pasar el ratón */
+}
