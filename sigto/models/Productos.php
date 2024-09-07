@@ -161,7 +161,7 @@ class Productos {
         
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("siii", $this->Nombre,$this->descripcion,$this->oferta,$this->fecof,$this->estado,$this->origen,$this->Precio,$this->Cantidad $this->sku);
+        $stmt->bind_param("ssidssiis", $this->Nombre,$this->descripcion,$this->oferta,$this->fecof,$this->estado,$this->origen,$this->Precio,$this->Cantidad, $this->sku);
         
         // Ejecutamos la consulta y retornamos el resultado (true si fue exitoso, false si no lo fue).
         return $stmt->execute();
