@@ -1,0 +1,56 @@
+.panel-gestion {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Evita que los botones se salgan */
+    gap: 5px;
+    
+}
+
+.user-item p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    flex: 1; /* Asegura que el texto se ajuste correctamente */
+}
+
+.edit-btn, .delete-btn {
+    background-color: #0267FF;
+    color: white;
+    border: none;
+    padding: 7px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: auto;
+}
+
+.edit-btn:hover {
+    background-color: #024C9F;
+}
+
+.delete-btn {
+    background-color: #FF0026;
+}
+
+.delete-btn:hover {
+    background-color: #D4001E;
+}

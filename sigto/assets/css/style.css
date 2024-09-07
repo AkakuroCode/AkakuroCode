@@ -1,0 +1,232 @@
+
+body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('../images/ocean\ background.jpg');
+    background-size:cover; /* Asegura que la imagen cubra toda la página */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-position: center; /* Centra la imagen */
+}
+
+main{
+display: flex;
+flex-direction: column;
+
+}
+
+.carrousel{
+    max-width: 100%;
+    max-height: 500px;
+}
+
+.navbar{
+    background-color: #0267FF;
+    color: white;
+    padding: 1px 15px;
+}
+
+.navbar-container{
+    display: flex;
+    justify-content: space-between;    
+    align-items: center;
+    flex-wrap:wrap
+}
+
+.navbar-logo{
+    max-width: 3em; /* Ajusta el ancho del logo */
+    height: auto; /* Mantiene la proporción de aspecto */
+    text-decoration: none;
+}
+
+.navbar-items{
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-items a{
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+   font-weight:bold;
+   text-decoration: none;
+   color: white;
+   padding: 8px 12px;
+}
+
+.navbar-items a:hover {
+    background-color: #5CE1E6;
+    border-radius: 4px;
+}
+
+/*borrar el relleno luego de borrar el Lorem*/
+.relleno{
+    text-align: center;
+    font-size: 48px;
+    color:white;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
+}
+
+footer{
+    background-color: #0267FF;
+    width: 100%;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.footer-container{
+    padding: 1%;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items:center;
+}
+
+.footer-item p{
+    font-weight: bold;
+    font-size: large;
+    }
+
+.footer-item a{
+    color: white;
+    font-size: large;
+}
+
+.redes{
+    max-width: 2.5em;
+    height: auto;
+}
+
+.forms-container{
+  margin: 20%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white; 
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
+
+}
+.forms-container h1{
+    text-align: center;
+}
+
+#agregarForm, #mostrarForm, #actualizarForm, #limpiarForm, #resultado{
+    color: white; 
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 3px solid  #0267FF;
+    border-radius: 5px;
+}
+
+form {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="number"],input[type="list"] , button {
+    display: block;
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #0267FF;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0267FF;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+pre {
+    background: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.ot{
+    text-align: center;
+    color: white;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
+    margin: 10vw;
+    
+}
+
+.ot img{
+    height:600px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(5, 96, 170, 0.678)); /* Añade un sombreado negro alrededor del logo */
+
+}
+
+
+@media (width < 650px){
+    .navbar-items{
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .navbar-logo{
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    
+    }
+
+    .navbar-container{
+        justify-content: center;
+    }
+
+    .navbar-items a{
+        width: 100%;
+        text-align: center;
+        padding: 1px;
+    }
+
+    footer{
+        background-color: #0267FF;
+        width: 100%;
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+    
+    .footer-container{
+        padding: 1%;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items:center;
+    }
+    
+    .footer-redes{
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .ot img{
+        height:450px;
+        width: auto;
+        filter: drop-shadow(0 0 10px rgba(5, 96, 170, 0.678)); /* Añade un sombreado negro alrededor del logo */
+    
+    }
+
+}

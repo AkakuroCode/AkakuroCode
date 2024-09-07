@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('../images/ocean\ background.jpg');
+    background-size: cover; /* Asegura que la imagen cubra toda la página */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-position: center; /* Centra la imagen */
+}
+
+form {
+    background-color: #0267FF;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 4em;
+    border: 3px solid #1900ff;
+    border-radius: 1em;
+    color: white;
+}
+
+label {
+    display: block;
+    margin-top: 1em;
+}
+
+input {
+    width: 100%;
+    padding: 0.5em;
+    margin-top: 0.5em;
+}
+
+button {
+    color:  #0267FF;
+    font-weight: bold;
+    background-color: white;
+    border: 3px solid #1900ff;
+    border-radius: 1em;
+    margin-top: 1em;
+    padding: 0.5em;
+    width: 100%;
+}
+
+.error-message {
+    color: red;
+    margin-top: 1em;
+}
+
+div {
+    display:grid;
+    justify-content: center;
+    align-content: center;
+}
+
+.logologin{
+    height:400px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(5, 96, 170, 0.678)); /* Añade un sombreado negro alrededor del logo */
+
+}
+
+.box{
+    flex-direction: column;
+    padding:5%;
+}
