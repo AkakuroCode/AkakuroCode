@@ -128,8 +128,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Redirigir según el tipo de usuario
             if (user.email === 'torrescristian661@gmail.com'){
                 window.location.href = '../pages/mainadmin.html'; // Redirigir a la página de administrador
-            } else {
-                window.location.href = '../pages/paginaprincipal.html'; // Redirigir a la página de usuario común
+            }
+            if (user.email === 'notegui410@gmail.com'){
+                window.location.href = '../pages/maincliente.html'; // Redirigir a la página de usuario
+            }else {
+                window.location.href = '../pages/paginaprincipal.html'; // Redirigir a la página de vendedor
             }
         } else {
             document.getElementById('loginError').textContent = 'Usuario o contraseña incorrectos';
