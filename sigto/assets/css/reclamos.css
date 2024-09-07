@@ -43,6 +43,21 @@
     border-color: #0056b3; /* Cambiar el color del borde al hacer hover o focus */
 }
 
+#asunto {
+    width: 90%; /* Aumentar el ancho del campo de email */
+    padding: 10px; /* Padding generoso para mayor comodidad */
+    border: 2px solid #007BFF; /* Color del borde azul */
+    border-radius: 15px; /* Bordes más redondeados */
+    font-size: 1.5rem; /* Texto más grande */
+    background-color: #f0f8ff; /* Fondo suave */
+    transition: all 0.3s ease; /* Transición suave al hacer hover */
+}
+
+#asunto:hover, #asunto:focus {
+    border-color: #0056b3; /* Cambiar el color del borde al hacer hover o focus */
+}
+
+
 /* Estilo específico para el campo de reclamo */
 #reclamo {
     width: 90%; /* Aumentar el ancho del campo de reclamo */
