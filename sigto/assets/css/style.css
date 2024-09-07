@@ -30,6 +30,7 @@ flex-direction: column;
     display: flex;
     justify-content: space-between;    
     align-items: center;
+    gap: 20px; /* Añade espacio entre los elementos */
     flex-wrap:wrap
 }
 
@@ -42,6 +43,18 @@ flex-direction: column;
 .navbar-items{
     display: flex;
     gap: 20px;
+
+    
+}
+
+.searchbar {
+    flex: 1; /* Permite que la barra de búsqueda crezca para ocupar el espacio disponible */
+    max-width: 300px; /* Limita el ancho máximo de la barra */
+    padding: 5px 10px; /* Añade algo de padding para que se vea más cómoda */
+    margin: 0 20px; /* Espacio alrededor de la barra */
+    border: 1px solid #ccc; /* Estilo de borde */
+    border-radius: 20px; /* Bordes redondeados */
+    outline: none; /* Quita el contorno al hacer clic */
 }
 
 .navbar-items a{
