@@ -6,7 +6,7 @@
     background-color: #f1f1f1; /* Un color de fondo más suave */
     border-radius: 20px; /* Bordes más redondeados */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra más suave y grande */
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 .reclamo-form h2 {
@@ -60,9 +60,10 @@
 
 /* Estilo específico para el campo de reclamo */
 #reclamo {
+    font-family: Arial, sans-serif;
     width: 90%; /* Aumentar el ancho del campo de reclamo */
     padding: 10px; /* Padding generoso */
-    border: 2px solid #FF4500; /* Borde de color naranja */
+    border: 2px solid #0267FF; 
     border-radius: 15px;
     font-size: 1.5rem; /* Texto más grande */
     min-height: 400px; /* Aumentar la altura del área de texto */
@@ -72,14 +73,14 @@
 }
 
 #reclamo:hover, #reclamo:focus {
-    border-color: #e03b00; /* Cambiar el color del borde al hacer hover o focus */
+    border-color: #0267FF; /* Cambiar el color del borde al hacer hover o focus */
 }
 
 /* Estilo del botón de envío */
 .form-group button {
     width: 100%;
     padding: 20px; /* Botón más grande */
-    background-color: #4CAF50;
+    background-color: #0267FF;
     color: white;
     border: none;
     border-radius: 15px;
@@ -89,7 +90,7 @@
 }
 
 .form-group button:hover {
-    background-color: #45a049; /* Cambiar el color del fondo al hacer hover */
+    background-color: #5CE1E6; /* Cambiar el color del fondo al hacer hover */
 }
 
 /* Mejora para pantallas grandes */
@@ -112,7 +113,7 @@
 .reclamos-btn {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #4CAF50; /* Color verde */
+    background-color: #0267FF;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -121,5 +122,5 @@
 }
 
 .reclamos-btn:hover {
-    background-color: #45a049; /* Cambia el color al pasar el ratón */
+    background-color:  #5CE1E6; /* Cambia el color al pasar el ratón */
 }
