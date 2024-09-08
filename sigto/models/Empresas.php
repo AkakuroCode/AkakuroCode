@@ -2,7 +2,7 @@
 // Incluimos el archivo de configuración de la base de datos.
 require 'config/Database.php';
 
-class Usuario {
+class Empresa {
     // Conexión a la base de datos y nombre de la tabla.
     private $conn;
     private $table_name = "empresa";
@@ -124,7 +124,7 @@ class Usuario {
     // Método para actualizar un usuario existente.
     public function update() {
         // Consulta SQL para actualizar un registro en la tabla de usuarios.
-        $query = "UPDATE " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, contraseña=? WHERE idemp=?";
+        $query = "UPDATE " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, contraseña=? WHERE idemp =?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);

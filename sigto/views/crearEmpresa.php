@@ -10,10 +10,12 @@
     <form action="?action=create" method="post">
         <label for="email">Email:</label>
         <input type="email" name="email" required><br>
-        <label for="nombreUsuario">Nombre de Usuario:</label>
-        <input type="text" name="nombreUsuario" required><br>
-        <label for="celular">Celular:</label>
-        <input type="text" name="celular" required><br>
+        <label for="nombre">Nombre de Usuario:</label>
+        <input type="text" name="nombre" required><br>
+        <label for= "direccion">Direcció</label>
+        <input type="direccion" name="direccion" required><br>
+        <label for="telefono">Teléfono</label>
+        <input type="telefono" name="telefono" required>
         <label for="contraseña">Contraseña:</label>
         <input type="password" name="contraseña" required><br>
         <input type="submit" value="Crear">

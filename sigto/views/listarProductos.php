@@ -27,7 +27,7 @@
         <tbody> <!-- Cuerpo de la tabla donde se mostrarán los datos de los pro$productos -->
             <?php while ($producto = $productos->fetch_assoc()) { ?> <!-- Inicio de un bucle que recorre cada producto obtenido de la base de datos -->
                 <tr> <!-- Fila de la tabla para un producto específico -->
-                    <td><?php echo $producto['idProd']; ?></td> <!-- Celda que muestra el ID del producto -->
+                    <td><?php echo $producto['sku']; ?></td> <!-- Celda que muestra el ID del producto -->
                     <td><?php echo $producto['Nombre']; ?></td> <!-- Celda que muestra el email del producto -->
                     <td><?php echo $producto['Descripcion']; ?></td>
                     <td><?php echo $producto['Oferta']; ?></td>
@@ -36,8 +36,8 @@
                     <td><?php echo $producto['Precio']; ?></td>
                     <td><?php echo $producto['Cantidad']; ?></td> <!-- Celda que muestra el nombre de producto -->
                     <td> <!-- Celda que contiene los enlaces de acciones -->
-                        <a class="button edit" href="?action=edit&idProd=<?php echo $producto['idProd']; ?>">Editar</a> <!-- Enlace para editar al producto -->
-                        <a class="button delete" href="?action=delete&idProd=<?php echo $producto['idProd']; ?>">Eliminar</a> <!-- Enlace para eliminar al pro$producto -->
+                        <a class="button edit" href="?action=edit&sku=<?php echo $producto['sku']; ?>">Editar</a> <!-- Enlace para editar al producto -->
+                        <a class="button delete" href="?action=delete&sku=<?php echo $producto['sku']; ?>">Eliminar</a> <!-- Enlace para eliminar al pro$producto -->
                     </td>
                 </tr>
             <?php } ?> <!-- Cierre del bucle PHP -->
