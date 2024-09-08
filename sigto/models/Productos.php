@@ -35,6 +35,7 @@ class Productos {
     public function setIdProd($sku) {
         $this->sku = $sku; // Asignamos el ID del producto
     }
+    
     public function getid_emp(){
         return $this->$id_emp; // retornamos el id_emp del producto 
     }
@@ -104,7 +105,7 @@ class Productos {
     // Método para crear un nuevo producto
     public function create() {
         // Creamos una consulta SQL para insertar un nuevo registro en la tabla de usuarios.
-        $query = "INSERT INTO " . $this->table_name1 . " SET Nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?" ;
+        $query = "INSERT INTO " . $this->table_name1 . " SET nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?" ;
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
@@ -154,7 +155,7 @@ class Productos {
     // Método para actualizar un usuario existente.
     public function update() {
         // Consulta SQL para actualizar un registro en la tabla de usuarios.
-        $query = "UPDATE " . $this->table_name1 . " SET Nombre=?, descripcion=?, oferta=? ,fecof=?, estado=?, origen=?, precio=?, stock=? WHERE sku=?";
+        $query = "UPDATE " . $this->table_name1 . " SET nombre=?, descripcion=?, oferta=? ,fecof=?, estado=?, origen=?, precio=?, stock=? WHERE sku=?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
