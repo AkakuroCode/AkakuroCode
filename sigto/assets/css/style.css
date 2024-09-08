@@ -20,13 +20,13 @@ flex-direction: column;
     max-height: 500px;
 }
 
-.navbar{
+.mi-navbar{
     background-color: #0267FF;
     color: white;
     padding: 1px 15px;
 }
 
-.navbar-container{
+.mi-navbar-container{
     display: flex;
     justify-content: space-between;    
     align-items: center;
@@ -34,13 +34,13 @@ flex-direction: column;
     flex-wrap:wrap
 }
 
-.navbar-logo{
+.mi-navbar-logo{
     max-width: 3em; /* Ajusta el ancho del logo */
     height: auto; /* Mantiene la proporción de aspecto */
     text-decoration: none;
 }
 
-.navbar-items{
+.mi-navbar-items{
     display: flex;
     gap: 20px;
 
@@ -68,7 +68,7 @@ flex-direction: column;
     font-size: 16px; /* Aumenta el tamaño del texto */
 }
 
-.navbar-items a{
+.mi-navbar-items a{
    font-family: Verdana, Geneva, Tahoma, sans-serif;
    font-weight:bold;
    text-decoration: none;
@@ -76,7 +76,7 @@ flex-direction: column;
    padding: 8px 12px;
 }
 
-.navbar-items a:hover {
+.mi-navbar-items a:hover {
     background-color: #5CE1E6;
     border-radius: 4px;
 }
@@ -199,26 +199,63 @@ pre {
 
 }
 
+  /* Estilos para el carrusel */
+  .carousel-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
 
+.carousel-slide {
+    display: flex;
+    width: 300%; /* Cambia este valor según la cantidad de imágenes */
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 30%; /* Mantiene la proporción de la imagen */
+}
+
+/* Botones de navegación */
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
 @media (width < 650px){
-    .navbar-items{
+    .mi-navbar-items{
         flex-direction: column;
         align-items: center;
         width: 100%;
     }
 
-    .navbar-logo{
+    .mi-navbar-logo{
         justify-content: center;
         align-items: center;
         width: 100%;
     
     }
 
-    .navbar-container{
+    .mi-navbar-container{
         justify-content: center;
     }
 
-    .navbar-items a{
+    .mi-navbar-items a{
         width: 100%;
         text-align: center;
         padding: 1px;
