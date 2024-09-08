@@ -1,58 +1,60 @@
 <?php
 // Incluimos el modelo Usuario.
-require_once 'models/Usuario.php';
+require_once 'C:\xampp\htdocs\AkakuroCode\sigto\models\Empresas.php';
 
-class UsuarioController {
-    // Método para crear un nuevo usuario.
+class EmpresaController {
+    // Método para crear un nuevo empresa$empresa.
     public function create($data) {
-        $usuario = new Usuario(); // Creamos una nueva instancia del modelo Usuario.
-        $usuario->setEmail($data['email']); // Asignamos el email del usuario utilizando el dato proporcionado.
-        $usuario->setNombreUsuario($data['nombreUsuario']); // Asignamos el nombre de usuario.
-        $usuario->setCelular($data['celular']); // Asignamos el número de celular del usuario.
-        $usuario->setContraseña($data['contraseña']); // Asignamos la contraseña del usuario.
-        if ($usuario->create()) { // Intentamos crear el usuario en la base de datos.
+        $empresa = new Empresa(); // Creamos una nueva instancia del modelo Usuario.
+        $empresa->setEmail($data['email']); // Asignamos el email del empresa$empresa utilizando el dato proporcionado.
+        $empresa->setNombre($data['nombre']); // Asignamos el nombre de empresa$empresa.
+        $empresa->setDirecc($data['direccion']);
+        $empresa->setTelefono($data['telefono']); // Asignamos el número de celular del empresa$empresa.
+        $empresa->setContraseña($data['contraseña']); // Asignamos la contraseña del empresa$empresa.
+        if ($empresa->create()) { // Intentamos crear el empresa$empresa en la base de datos.
             return "Usuario creado exitosamente."; // Si la creación fue exitosa, devolvemos un mensaje de éxito.
         } else {
-            return "Error al crear usuario."; // Si hubo un error, devolvemos un mensaje de error.
+            return "Error al crear empresa."; // Si hubo un error, devolvemos un mensaje de error.
         }
     }
 
     // Método para leer todos los usuarios.
     public function readAll() {
-        $usuario = new Usuario(); // Creamos una nueva instancia del modelo Usuario.
-        return $usuario->readAll(); // Retornamos todos los usuarios utilizando el método readAll del modelo Usuario.
+        $empresa = new Empresa(); // Creamos una nueva instancia del modelo Usuario.
+        return $empresa->readAll(); // Retornamos todos los usuarios utilizando el método readAll del modelo Usuario.
     }
 
-    // Método para leer un usuario específico por su ID.
-    public function readOne($id) {
-        $usuario = new Usuario(); // Creamos una nueva instancia del modelo Usuario.
-        $usuario->setId($id); // Asignamos el ID del usuario que queremos leer.
-        return $usuario->readOne(); // Retornamos los datos del usuario con el ID especificado.
+    // Método para leer un empresa$empresa específico por su ID.
+    public function readOne($idemp) {
+        $empresa= new Empresa(); // Creamos una nueva instancia del modelo Usuario.
+        $empresa->setIdEmp($idemp); // Asignamos el ID del empresa$empresa que queremos leer.
+        return $empresa->readOne(); // Retornamos los datos del empresa$empresa con el ID especificado.
     }
 
-    // Método para actualizar un usuario existente.
+    // Método para actualizar un empresa$empresa existente.
     public function update($data) {
-        $usuario = new Usuario(); // Creamos una nueva instancia del modelo Usuario.
-        $usuario->setId($data['id']); // Asignamos el ID del usuario que se va a actualizar.
-        $usuario->setEmail($data['email']); // Actualizamos el email del usuario.
-        $usuario->setNombreUsuario($data['nombreUsuario']); // Actualizamos el nombre de usuario.
-        $usuario->setCelular($data['celular']); // Actualizamos el número de celular del usuario.
-        $usuario->setContraseña($data['contraseña']); // Actualizamos la contraseña del usuario.
-        if ($usuario->update()) { // Intentamos actualizar el usuario en la base de datos.
+        $empresa = new Empresa(); // Creamos una nueva instancia del modelo Usuario.
+        $empresa->setIdEmp($data['idemp']); // Asignamos el ID del empresa$empresa que se va a actualizar.
+        $empresa->setEmail($data['email']); // Actualizamos el email del empresa$empresa.
+        $empresa->setNombre($data['nombre']); // Actualizamos el nombre de empresa$empresa.
+        $empresa->setDirecc($data['direccion']);
+        $empresa->setTelefono($data['telefono']); // Actualizamos el número de celular del empresa$empresa.
+        $empresa->setContraseña($data['contraseña']); // Actualizamos la contraseña del empresa$empresa.
+        if ($empresa->update()) { // Intentamos actualizar el empresa$empresa en la base de datos.
             return "Usuario actualizado exitosamente."; // Si la actualización fue exitosa, devolvemos un mensaje de éxito.
         } else {
-            return "Error al actualizar usuario."; // Si hubo un error, devolvemos un mensaje de error.
+            return "Error al actualizar empresa."; // Si hubo un error, devolvemos un mensaje de error.
         }
     }
 
-    // Método para eliminar un usuario por su ID.
-    public function delete($id) {
-        $usuario = new Usuario(); // Creamos una nueva instancia del modelo Usuario.
-        $usuario->setId($id); // Asignamos el ID del usuario que se va a eliminar.
-        if ($usuario->delete()) { // Intentamos eliminar el usuario de la base de datos.
+    // Método para eliminar un empresa$empresa por su ID.
+    public function delete($idemp) {
+        $empresa = new Empresa(); // Creamos una nueva instancia del modelo Usuario.
+        $empresa->setIdEmp($idemp); // Asignamos el ID del empresa$empresa que se va a eliminar.
+        if ($empresa->delete()) { // Intentamos eliminar el empresa$empresa de la base de datos.
             return "Usuario eliminado exitosamente."; // Si la eliminación fue exitosa, devolvemos un mensaje de éxito.
         } else {
-            return "Error al eliminar usuario."; // Si hubo un error, devolvemos un mensaje de error.
+            return "Error al eliminar empresa."; // Si hubo un error, devolvemos un mensaje de error.
         }
     }
 }
