@@ -2,24 +2,18 @@
 // Incluimos el archivo de configuración de la base de datos.
 require 'config/Database.php';
 
-class Productos {
+class Usuario {
     // Conexión a la base de datos y nombre de la tabla.
     private $conn;
-    private $table_name1 = "producto";
+    private $table_name = "empresa";
 
     // Atributos privados.
-    private $sku;
-    private $id_emp;
-    private $Nombre;
-    private $descripcion;
-    private $oferta;
-    private $fecof;
-    private $estado;
-    private $origen;
-    private $Precio;
-    private $stock;
-
-    
+    private $idemp;
+    private $nombre;
+    private $direccion;
+    private $telefono;
+    private $email;
+    private $passw;
 
     // Constructor para inicializar la conexión a la base de datos.
     public function __construct() {
@@ -28,90 +22,65 @@ class Productos {
     }
 
     // Getters y Setters para los atributos.
-    public function getIdProd() {
-        return $this->sku; // Retornamos el ID del producto
+    public function getIdEmp() {
+        return $this->idemp; // Retornamos el ID del usuario.
     }
 
-    public function setIdProd($sku) {
-        $this->sku = $sku; // Asignamos el ID del producto
+    public function setIdEmp($idemp) {
+        $this->idemp = $idemp; // Asignamos el ID del usuario.
     }
-    
-    public function getid_emp(){
-        return $this->$id_emp; // retornamos el id_emp del producto 
-    }
-    public function setid_emp($id_emp){
-        $this->id_emp = $id_emp; // asignamos el idemp de producto
+    public function getNombre() {
+        return $this->nombre; // Retornamos el email del usuario.
     }
 
-    public function getNom() {
-        return $this->Nombre; // Retornamos el email del producto
+    public function setNombre($nombre) {
+        $this->nombre = $nombre; // Asignamos el email del usuario.
+    }
+    public function getDirecc() {
+        return $this->direcc; // Retornamos el email del usuario.
     }
 
-    public function setNom($Nombre) {
-        $this->Nombre = $Nombre; // Asignamos el email del producto
+    public function setDirecc($direccion) {
+        $this->direcc = $direccion; // Asignamos el email del usuario.
     }
-    public function getDesc(){
-        return $this->descripcion;
-
-    }
-    public function setDesc($descripcion){
-        $this->descripcion = $descripcion;
-
-    }
-    public function getOferta(){
-        return $this->$oferta;
-    }
-    public function setOferta($oferta){
-        $this->oferta = $oferta;
-    }
-    public function getFecof(){
-        return $this->$fecof;
-    }
-    public function setFecof($fecof){
-        $this->fecof = $fecof;
-    }
-    public function getEstado(){
-        return $this->$estado;
-    }
-    public function setEstado($estado){
-        $this->estado = $estado;
-    }
-    public function getOrigen(){
-        return $this->$origen;
-    }
-    public function setOrigen($origen){
-        $this->origen = $origen;
+    public function getEmail() {
+        return $this->email; // Retornamos el email del usuario.
     }
 
-    public function getCantidad() {
-        return $this->Cantidad; // 
-    }
-
-    public function setCantidad($stock) {
-        $this->Cantidad = $stock; // 
-    }
-
-    public function getPrecio() {
-        return $this->Precio; // 
-    }
-
-    public function setPrecio($Precio) {
-        $this->Precio = $Precio; // Asignamos el número de celular del producto
+    public function setEmail($email) {
+        $this->email = $email; // Asignamos el email del usuario.
     }
 
 
-    
+    public function getTelefono() {
+        return $this->telefono; // Retornamos el número de celular del usuario.
+    }
 
-    // Método para crear un nuevo producto
+    public function setTelefono($telefono) {
+        $this->telefono = $telefono; // Asignamos el número de celular del usuario.
+    }
+
+    public function getContraseña() {
+        return $this->contraseña; // Retornamos la contraseña del usuario.
+    }
+
+    public function setContraseña($passw) {
+        $this->contraseña = $passw; // Asignamos la contraseña del usuario.
+    }
+
+    // Método para crear un nuevo usuario.
     public function create() {
         // Creamos una consulta SQL para insertar un nuevo registro en la tabla de usuarios.
-        $query = "INSERT INTO " . $this->table_name1 . " SET nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?" ;
+        $query = "INSERT INTO " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, passw=?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
+        // Aplicamos un hash a la contraseña para almacenarla de manera segura.
+        $hashedPassword = password_hash($this->contraseña, PASSWORD_DEFAULT);
+        
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("ssssii", $this->Nombre,$this->descripcion,$this->estado, $this->origen,$this->Precio,$this->Cantidad);
+        $stmt->bind_param("sssis", $this->email, $this->nombre,$this->direcc, $this->telefono, $hashedPassword);
         
         // Ejecutamos la consulta y verificamos si se ejecutó correctamente.
         if ($stmt->execute()) {
@@ -126,7 +95,7 @@ class Productos {
     // Método para leer todos los usuarios.
     public function readAll() {
         // Consulta SQL para seleccionar todos los registros de la tabla de usuarios.
-        $query = "SELECT * FROM " . $this->table_name1;
+        $query = "SELECT * FROM " . $this->table_name;
         
         // Ejecutamos la consulta y almacenamos el resultado.
         $result = $this->conn->query($query);
@@ -136,13 +105,13 @@ class Productos {
     // Método para leer un usuario específico por su ID.
     public function readOne() {
         // Consulta SQL para seleccionar un registro específico por ID.
-        $query = "SELECT * FROM " . $this->table_name1 . " WHERE sku=? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE idemp = ? LIMIT 0,1";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Unimos el ID al parámetro de la consulta SQL.
-        $stmt->bind_param("i", $this->sku);
+        $stmt->bind_param("i", $this->idemp);
         
         // Ejecutamos la consulta.
         $stmt->execute();
@@ -155,14 +124,16 @@ class Productos {
     // Método para actualizar un usuario existente.
     public function update() {
         // Consulta SQL para actualizar un registro en la tabla de usuarios.
-        $query = "UPDATE " . $this->table_name1 . " SET nombre=?, descripcion=?, oferta=? ,fecof=?, estado=?, origen=?, precio=?, stock=? WHERE sku=?";
+        $query = "UPDATE " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, contraseña=? WHERE idemp=?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
+        // Aplicamos un hash a la nueva contraseña.
+        $hashedPassword = password_hash($this->contraseña, PASSWORD_DEFAULT);
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("ssidssiis", $this->Nombre,$this->descripcion,$this->oferta,$this->fecof,$this->estado,$this->origen,$this->Precio,$this->Cantidad, $this->sku);
+        $stmt->bind_param("sssisi", $this->email, $this->nombre,$this->direcc, $this->telefono, $hashedPassword, $this->idemp);
         
         // Ejecutamos la consulta y retornamos el resultado (true si fue exitoso, false si no lo fue).
         return $stmt->execute();
@@ -171,13 +142,13 @@ class Productos {
     // Método para eliminar un usuario por su ID.
     public function delete() {
         // Consulta SQL para eliminar un registro específico por ID.
-        $query = "DELETE FROM " . $this->table_name1 . " WHERE sku = ?";
+        $query = "DELETE FROM " . $this->table_name . " WHERE idemp = ?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Unimos el ID al parámetro de la consulta SQL.
-        $stmt->bind_param("i", $this->sku);
+        $stmt->bind_param("i", $this->idemp);
         
         // Ejecutamos la consulta y retornamos el resultado (true si fue exitoso, false si no lo fue).
         return $stmt->execute();
