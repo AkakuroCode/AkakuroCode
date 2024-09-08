@@ -1,6 +1,6 @@
 <?php
 // Incluimos el controlador de Producto.
-require_once 'controllers/ProductoControllers.php';
+require_once 'controller/ProductoControllers.php';
 
 // Creamos una instancia del controlador de Producto.
 $controller = new ProductoController();
@@ -20,7 +20,7 @@ switch ($action) {
         break;
     case 'list': // Si la acción es 'list'.
         $productos = $controller->readAll(); // Se llama al método 'readAll' del controlador para obtener todos los Productos.
-        include 'views/listarProducto.php'; // Se incluye la vista que lista todos los Productos.
+        include 'views/listarProductos.php'; // Se incluye la vista que lista todos los Productos.
         break;
     case 'edit': // Si la acción es 'edit'.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Si la solicitud se realizó mediante POST.

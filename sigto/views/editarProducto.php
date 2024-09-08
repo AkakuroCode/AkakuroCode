@@ -7,8 +7,8 @@
 </head>
 <body>
     <h1>Editar Producto</h1>
-    <form action="?action=edit&id=<?php echo $producto['sku']; ?>" method="post">
-        <input type="hidden" name="id" value="<?php echo $producto['idProductos']; ?>">
+    <form action="?action=edit&idProd=<?php echo $producto['idProd']; ?>" method="post">
+        <input type="hidden" name="idProd" value="<?php echo $producto['idProd']; ?>">
         <label for="Nombre">Nombre:</label>
         <input type="Nombre" name="Nombre" value="<?php echo $producto['Nombre']; ?>" required><br>
         <label for="Cantidad">Cantidad de producto:</label>
