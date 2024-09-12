@@ -1,6 +1,6 @@
 <?php
 // Incluimos el modelo Empresa.
-require_once 'sigto\models\Empresas.php';
+require_once '/Users/51245320/Desktop/UTU/ProyectoSIGTO/ProgDiseño/AkakuroCode/sigto/models/Empresas.php';
 
 class EmpresaController {
     // Método para crear un nuevo empresa$empresa.

@@ -37,11 +37,11 @@ class Empresa {
         $this->nombre = $nombre; // Asignamos el email del usuario.
     }
     public function getDirecc() {
-        return $this->direcc; // Retornamos el email del usuario.
+        return $this->direccion; // Retornamos el email del usuario.
     }
 
     public function setDirecc($direccion) {
-        $this->direcc = $direccion; // Asignamos el email del usuario.
+        $this->direccion = $direccion; // Asignamos el email del usuario.
     }
     public function getEmail() {
         return $this->email; // Retornamos el email del usuario.
@@ -61,11 +61,11 @@ class Empresa {
     }
 
     public function getContraseña() {
-        return $this->contraseña; // Retornamos la contraseña del usuario.
+        return $this->passw; // Retornamos la contraseña del usuario.
     }
 
     public function setContraseña($passw) {
-        $this->contraseña = $passw; // Asignamos la contraseña del usuario.
+        $this->passw = $passw; // Asignamos la contraseña del usuario.
     }
 
     // Método para crear un nuevo usuario.
@@ -77,10 +77,10 @@ class Empresa {
         $stmt = $this->conn->prepare($query);
         
         // Aplicamos un hash a la contraseña para almacenarla de manera segura.
-        $hashedPassword = password_hash($this->contraseña, PASSWORD_DEFAULT);
+        $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("sssis", $this->email, $this->nombre,$this->direcc, $this->telefono, $hashedPassword);
+        $stmt->bind_param("sssis", $this->email, $this->nombre,$this->direccion, $this->telefono, $hashedPassword);
         
         // Ejecutamos la consulta y verificamos si se ejecutó correctamente.
         if ($stmt->execute()) {
@@ -124,17 +124,17 @@ class Empresa {
     // Método para actualizar un usuario existente.
     public function update() {
         // Consulta SQL para actualizar un registro en la tabla de usuarios.
-        $query = "UPDATE " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, contraseña=? WHERE idemp =?";
+        $query = "UPDATE " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, passw=? WHERE idemp =?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
         
         // Aplicamos un hash a la nueva contraseña.
-        $hashedPassword = password_hash($this->contraseña, PASSWORD_DEFAULT);
+        $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("sssisi", $this->email, $this->nombre,$this->direcc, $this->telefono, $hashedPassword, $this->idemp);
-        
+        $stmt->bind_param("sssisi", $this->email, $this->nombre, $this->direccion, $this->telefono, $hashedPassword, $this->idemp);
+
         // Ejecutamos la consulta y retornamos el resultado (true si fue exitoso, false si no lo fue).
         return $stmt->execute();
     }
@@ -154,4 +154,5 @@ class Empresa {
         return $stmt->execute();
     }
 }
+
 ?>

@@ -1,6 +1,6 @@
 <?php
 // Incluimos el modelo producto.
-require_once 'C:\xampp\htdocs\AkakuroCode\AkakuroCode\sigto\models\Productos.php';
+require_once 'models\Productos.php';
 
 class ProductoController {
     // Método para crear un nuevo productos.
