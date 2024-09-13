@@ -1,6 +1,6 @@
 <?php
 // Incluimos el archivo de configuración de la base de datos.
-require '.\config/Database.php';
+require './config/Database.php';
 
 class Empresa {
     // Conexión a la base de datos y nombre de la tabla.

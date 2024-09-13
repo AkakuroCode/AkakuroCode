@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['productos'])) {
-    $_SESSION['productos'] = [];
+if (!isset($_SESSION['producto'])) {
+    $_SESSION['producto'] = [];
 }
 
 // Funciones
@@ -14,16 +14,16 @@ function agregarProducto($nombre, $cantidad, $valor, $modelo,$estado) {
         'modelo' => $modelo,
         'estado' => $estado
     ];
-    $_SESSION['productos'][] = $producto;
+    $_SESSION['producto'][] = $producto;
     return "Producto agregado exitosamente.";
 }
 
 function mostrarProductos() {
-    return $_SESSION['productos'];
+    return $_SESSION['producto'];
 }
 
 function actualizarProducto($modelo, $nombre, $cantidad, $valor,$estado) {
-    foreach ($_SESSION['productos'] as &$producto) {
+    foreach ($_SESSION['producto'] as &$producto) {
         if ($producto['modelo'] === $modelo) {
             $producto['nombre'] = $nombre;
             $producto['cantidad'] = $cantidad;

@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
     <h1>Editar Usuario</h1>
     <form action="?action=edit&idemp=<?php echo $empresa['idemp']; ?>" method="post">
-        <input type="hidden" name="idemp" value="<?php echo $usuario['idemp']; ?>">
+        <input type="hidden" name="idemp" value="<?php echo $empresa['idemp']; ?>">
         <label for="email">Email:</label>
         <input type="email" name="email" value="<?php echo $empresa['email']; ?>" required><br>
         <label for="nombre">Nombre:</label>
