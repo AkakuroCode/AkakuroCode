@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"> 
     <title>Lista de Usuarios Empresa</title>
-    <link rel="stylesheet" href="C:\xampp\htdocs\AkakuroCode\sigto\assets\css\style.css"> <!-- Enlace a la hoja de estilos CSS externa -->
+    <link rel="stylesheet" href="./assets/css/style.css"> <!-- Enlace a la hoja de estilos CSS externa -->
 </head>
 <body>
     <h1>Lista de Usuarios</h1> <!-- Título principal de la página -->

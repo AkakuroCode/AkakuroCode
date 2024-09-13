@@ -1,6 +1,6 @@
 <?php
 // Incluimos el controlador de Producto.
-require_once 'C:\xampp\htdocs\AkakuroCode\sigto\controller\EmpresaController.php';
+require_once '.\controller\EmpresaController.php';
 
 // Creamos una instancia del controlador de Producto.
 $controller = new EmpresaController();

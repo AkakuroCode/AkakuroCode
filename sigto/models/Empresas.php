@@ -1,6 +1,6 @@
 <?php
 // Incluimos el archivo de configuración de la base de datos.
-require 'config/Database.php';
+require '.\config/Database.php';
 
 class Empresa {
     // Conexión a la base de datos y nombre de la tabla.
@@ -105,7 +105,7 @@ class Empresa {
     // Método para leer un usuario específico por su ID.
     public function readOne() {
         // Consulta SQL para seleccionar un registro específico por ID.
-        $query = "SELECT * FROM " . $this->table_name . " WHERE idemp = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE idemp=? LIMIT 0,1";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
@@ -124,7 +124,7 @@ class Empresa {
     // Método para actualizar un usuario existente.
     public function update() {
         // Consulta SQL para actualizar un registro en la tabla de usuarios.
-        $query = "UPDATE " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, passw=? WHERE idemp =?";
+        $query = "UPDATE " . $this->table_name . " SET email=?, nombre=?, direccion=?, telefono=?, passw=? WHERE idemp=?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);

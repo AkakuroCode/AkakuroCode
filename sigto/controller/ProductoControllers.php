@@ -1,17 +1,17 @@
 <?php
 // Incluimos el modelo producto.
-require_once 'models\Productos.php';
+require_once 'C:\Users\51245320\Desktop\UTU\ProyectoSIGTO\ProgDiseño\AkakuroCode\sigto\models\Productos.php';
 
 class ProductoController {
     // Método para crear un nuevo productos.
     public function create($data1) {
         $producto = new Productos(); // Creamos una nueva instancia del modelo producto.
-        $producto->setNom($data1['Nombre']); // Asignamos el nombre del producto utilizando el dato proporcionado.
-        $producto->setDesc($data1['Descripcion']);
-        $producto->setEstado($data1['Estado']);
-        $producto->setOrigen($data1['Origen']);
-        $producto->setPrecio($data1['Precio']);
-        $producto->setCantidad($data1['Cantidad']); 
+        $producto->setNom($data1['nombre']); // Asignamos el nombre del producto utilizando el dato proporcionado.
+        $producto->setDesc($data1['descripcion']);
+        $producto->setEstado($data1['estado']);
+        $producto->setOrigen($data1['origen']);
+        $producto->setPrecio($data1['precio']);
+        $producto->setCantidad($data1['cantidad']); 
      if ($producto->create()) { // Intentamos crear el producto en la base de datos.
             return "Producto creado exitosamente."; // Si la creación fue exitosa, devolvemos un mensaje de éxito.
         } else {
@@ -35,15 +35,15 @@ class ProductoController {
     // Método para actualizar un producto existente.
     public function update($data1) {
         $producto = new Productos(); // Creamos una nueva instancia del modelo producto.
-        $producto->setIdProd($data1['idProd']); // Asignamos el ID del producto que se va a actualizar.
-        $producto->setNom($data1['Nombre']); 
-        $producto->setDesc($data1['Descripcion']);
-        $producto->setOferta($data1['Oferta']);
-        $producto->setFecof($data1['Fecof']);
-        $producto->setEstado($data1['Estado']);
-        $producto->setOrigen($data1['Origen']);
-        $producto->setPrecio($data1['Precio']); 
-        $producto->setCantidad($data1['Cantidad']); 
+        $producto->setIdProd($data1['sku']); // Asignamos el ID del producto que se va a actualizar.
+        $producto->setNom($data1['nombre']); 
+        $producto->setDesc($data1['descripcion']);
+        $producto->setOferta($data1['oferta']);
+        $producto->setFecof($data1['fecof']);
+        $producto->setEstado($data1['estado']);
+        $producto->setOrigen($data1['origen']);
+        $producto->setPrecio($data1['precio']); 
+        $producto->setCantidad($data1['stock']); 
         if ($producto->update()) { // Intentamos actualizar el producto en la base de datos.
             return "Producto actualizado exitosamente."; // Si la actualización fue exitosa, devolvemos un mensaje de éxito.
         } else {
