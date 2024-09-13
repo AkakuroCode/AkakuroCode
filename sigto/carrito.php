@@ -2,7 +2,7 @@
 
 
 // Incluimos el controlador de Producto.
-require_once $_SERVER['DOCUMENT_ROOT'].'/sigto\controller\ProductoControllers.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/sigto/controller/ProductoControllers.php';
 
 // Creamos una instancia del controlador de Producto.
 $controller = new ProductoController();

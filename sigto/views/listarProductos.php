@@ -45,6 +45,6 @@
         </tbody>
     </table> <!-- Fin de la tabla -->
 
-    <a class="button" href="?action=create">Crear Nuevo prod$producto</a> <!-- Enlace para crear un nuevo pro$producto -->
+    <a class="button" href="?action=create">Crear Nuevo Producto</a> <!-- Enlace para crear un nuevo pro$producto -->
 </body>
 </html>
