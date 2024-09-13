@@ -8,7 +8,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/sigto\controller\ProductoControllers.ph
 $controller = new ProductoController();
 // Determinamos la acción a realizar (crear, listar, editar, eliminar).
 $action = isset($_GET['action']) ? $_GET['action'] : 'list'; // Si se pasa un parámetro 'action', se asigna su valor; de lo contrario, se usa 'list' como predeterminado.
-$sku = isset($_GET['idProd']) ? $_GET['idProd'] : null; // Si se pasa un parámetro 'id', se asigna su valor; de lo contrario, se asigna null.
+$sku = isset($_GET['sku']) ? $_GET['sku'] : null; // Si se pasa un parámetro 'id', se asigna su valor; de lo contrario, se asigna null.
 
 // Manejo de las acciones dependiendo de la solicitud.
 switch ($action) {

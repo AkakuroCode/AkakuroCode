@@ -95,7 +95,7 @@ class Empresa {
     // Método para leer todos los usuarios.
     public function readAll() {
         // Consulta SQL para seleccionar todos los registros de la tabla de usuarios.
-        $query = "SELECT * FROM " . $this->table_name;
+        $query = "SELECT * FROM " . $this->table_name; 
         
         // Ejecutamos la consulta y almacenamos el resultado.
         $result = $this->conn->query($query);
