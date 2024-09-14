@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Crear Producto</title>
-    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <h1>Crear Producto</h1>
@@ -16,10 +16,13 @@
         <input type="Estado" name="Estado" required><br>
         <label for="Origen">Origen:</label>
         <input type="Origen" name="Origen" required><br>
-        <label for="Cantidad">Cantidad:</label>
-        <input type="text" name="Precio" required><br>
-        <input type="text" name="Cantidad" required><br>
         <label for="Precio">Precio:</label>
+        <input type="text" name="Precio" required><br>
+        <label for="Cantidad">Cantidad:</label><br>
+        <input type="text" name="Cantidad" required><br>
+    
+       
+       
         <input type="submit" value="Crear">
     </form>
     <a class="button" href="?action=list">Volver a la lista</a>

@@ -1,6 +1,6 @@
 <?php
 // Incluimos el archivo de configuración de la base de datos.
-require 'C:\xampp\htdocs\AkakuroCode\AkakuroCode\sigto\config\Database.php';
+require '.\config\Database.php';
 
 class Productos {
     // Conexión a la base de datos y nombre de la tabla.
@@ -10,13 +10,13 @@ class Productos {
     // Atributos privados.
     private $sku;
     private $id_emp;
-    private $Nombre;
+    private $nombre;
     private $descripcion;
     private $oferta;
     private $fecof;
     private $estado;
     private $origen;
-    private $Precio;
+    private $precio;
     private $stock;
 
     
@@ -37,18 +37,18 @@ class Productos {
     }
     
     public function getid_emp(){
-        return $this->$id_emp; // retornamos el id_emp del producto 
+        return $this->id_emp; // retornamos el id_emp del producto 
     }
     public function setid_emp($id_emp){
         $this->id_emp = $id_emp; // asignamos el idemp de producto
     }
 
     public function getNom() {
-        return $this->Nombre; // Retornamos el email del producto
+        return $this->nombre; // Retornamos el email del producto
     }
 
-    public function setNom($Nombre) {
-        $this->Nombre = $Nombre; // Asignamos el email del producto
+    public function setNom($nombre) {
+        $this->nombre = $nombre; // Asignamos el email del producto
     }
     public function getDesc(){
         return $this->descripcion;
@@ -59,44 +59,44 @@ class Productos {
 
     }
     public function getOferta(){
-        return $this->$oferta;
+        return $this->oferta;
     }
     public function setOferta($oferta){
         $this->oferta = $oferta;
     }
     public function getFecof(){
-        return $this->$fecof;
+        return $this->fecof;
     }
     public function setFecof($fecof){
         $this->fecof = $fecof;
     }
     public function getEstado(){
-        return $this->$estado;
+        return $this->estado;
     }
     public function setEstado($estado){
         $this->estado = $estado;
     }
     public function getOrigen(){
-        return $this->$origen;
+        return $this->origen;
     }
     public function setOrigen($origen){
         $this->origen = $origen;
     }
 
     public function getCantidad() {
-        return $this->Cantidad; // 
+        return $this->stock; // 
     }
 
     public function setCantidad($stock) {
-        $this->Cantidad = $stock; // 
+        $this->stock = $stock; // 
     }
 
     public function getPrecio() {
-        return $this->Precio; // 
+        return $this->precio; // 
     }
 
-    public function setPrecio($Precio) {
-        $this->Precio = $Precio; // Asignamos el número de celular del producto
+    public function setPrecio($precio) {
+        $this->precio = $precio; // Asignamos el número de celular del producto
     }
 
 
@@ -111,7 +111,7 @@ class Productos {
         $stmt = $this->conn->prepare($query);
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("ssssii", $this->Nombre,$this->descripcion,$this->estado, $this->origen,$this->Precio,$this->Cantidad);
+        $stmt->bind_param("ssssii", $this->nombre,$this->descripcion,$this->estado, $this->origen,$this->precio,$this->stock);
         
         // Ejecutamos la consulta y verificamos si se ejecutó correctamente.
         if ($stmt->execute()) {
@@ -162,7 +162,7 @@ class Productos {
         
         
         // Unimos los valores a los parámetros de la consulta SQL.
-        $stmt->bind_param("ssidssiis", $this->Nombre,$this->descripcion,$this->oferta,$this->fecof,$this->estado,$this->origen,$this->Precio,$this->Cantidad, $this->sku);
+        $stmt->bind_param("ssiissiis", $this->nombre,$this->descripcion,$this->oferta,$this->fecof,$this->estado,$this->origen,$this->precio,$this->stock, $this->sku);
         
         // Ejecutamos la consulta y retornamos el resultado (true si fue exitoso, false si no lo fue).
         return $stmt->execute();
@@ -171,7 +171,7 @@ class Productos {
     // Método para eliminar un usuario por su ID.
     public function delete() {
         // Consulta SQL para eliminar un registro específico por ID.
-        $query = "DELETE FROM " . $this->table_name1 . " WHERE sku = ?";
+        $query = "DELETE FROM " . $this->table_name1 . " WHERE sku=?";
         
         // Preparamos la consulta SQL.
         $stmt = $this->conn->prepare($query);
