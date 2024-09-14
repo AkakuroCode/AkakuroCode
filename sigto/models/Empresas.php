@@ -27,50 +27,50 @@ class Empresa {
     }
 
     public function setIdEmp($idemp) {
-        $this->idemp = $idemp; // Asignamos el ID del usuario.
+        $this->idemp = $idemp; // Asignamos el ID de la empresa.
     }
     public function getNombre() {
-        return $this->nombre; // Retornamos el email del usuario.
+        return $this->nombre; // Retornamos nombre de la empresa
     }
 
     public function setNombre($nombre) {
-        $this->nombre = $nombre; // Asignamos el email del usuario.
+        $this->nombre = $nombre; // Asignamos nombre de la empresa
     }
     public function getDirecc() {
-        return $this->direcc; // Retornamos el email del usuario.
+        return $this->direcc; // Retornamos direccion de la empresa
     }
 
     public function setDirecc($direccion) {
-        $this->direcc = $direccion; // Asignamos el email del usuario.
+        $this->direcc = $direccion; // Asignamos direccion de la empresa
     }
     public function getEmail() {
-        return $this->email; // Retornamos el email del usuario.
+        return $this->email; // Retornamos el email de la empresa
     }
 
     public function setEmail($email) {
-        $this->email = $email; // Asignamos el email del usuario.
+        $this->email = $email; // Asignamos el email de la empresa
     }
 
 
     public function getTelefono() {
-        return $this->telefono; // Retornamos el número de celular del usuario.
+        return $this->telefono; // Retornamos el número de celular de la empresa
     }
 
     public function setTelefono($telefono) {
-        $this->telefono = $telefono; // Asignamos el número de celular del usuario.
+        $this->telefono = $telefono; // Asignamos el número de celular de la empresa
     }
 
     public function getContraseña() {
-        return $this->contraseña; // Retornamos la contraseña del usuario.
+        return $this->contraseña; // Retornamos la contraseña de la empresa
     }
 
     public function setContraseña($passw) {
-        $this->contraseña = $passw; // Asignamos la contraseña del usuario.
+        $this->contraseña = $passw; // Asignamos la contraseña de la empresa
     }
 
-    // Método para crear un nuevo usuario.
+    // Método para crear un nuevo usuario empresa.
     public function create() {
-        // Creamos una consulta SQL para insertar un nuevo registro en la tabla de usuarios.
+        // Creamos una consulta SQL para insertar un nuevo registro en la tabla de empresa.
         $query = "INSERT INTO " . $this->table_name . " SET email=?, nombre=?,direccion=?, telefono=?, passw=?";
         
         // Preparamos la consulta SQL.
