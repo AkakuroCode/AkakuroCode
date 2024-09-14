@@ -1,39 +1,50 @@
-?php
+<?php
 require_once 'models/Usuario.php';
 
 class UsuarioController {
 
     public function create($data) {
-        $usuario = new Usuario();
-        $usuario->setEmail($data['email']);
-        $usuario->setNombreUsuario($data['nombreUsuario']);
-        $usuario->setCelular($data['celular']);
-        $usuario->setContrasena($data['contrasena']);
-        if ($usuario->create()) {
-            return "Usuario creado exitosamente.";
-        } else {
-            return "Error al crear usuario.";
+        try {
+            $usuario = new Usuario();
+            $usuario->setNombre($data['nombre']);
+            $usuario->setApellido($data['apellido']);
+            $usuario->setFecnac($data['fecnac']); // Aquí se validará la fecha
+            $usuario->setDireccion($data['direccion']);
+            $usuario->setTelefono($data['telefono']);
+            $usuario->setEmail($data['email']);
+            $usuario->setPassw($data['passw']);
+            
+            if ($usuario->create()) {
+                return "Usuario creado exitosamente.";
+            } else {
+                return "Error al crear usuario.";
+            }
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
         }
     }
+    
 
     public function readAll() {
         $usuario = new Usuario();
         return $usuario->readAll();
     }
 
-    public function readOne($id) {
+    public function readOne($idus) {
         $usuario = new Usuario();
-        $usuario->setId($id);
+        $usuario->setId($idus);
         return $usuario->readOne();
     }
 
     public function update($data) {
         $usuario = new Usuario();
-        $usuario->setId($data['id']);
-        $usuario->setEmail($data['email']);
-        $usuario->setNombreUsuario($data['nombreUsuario']);
-        $usuario->setCelular($data['celular']);
-        $usuario->setContrasena($data['contrasena']);
+            $usuario->setNombre($data['nombre']);
+            $usuario->setApellido($data['apellido']);
+            $usuario->setFecnac($data['fecnac']); // Aquí se validará la fecha
+            $usuario->setDireccion($data['direccion']);
+            $usuario->setTelefono($data['telefono']);
+            $usuario->setEmail($data['email']);
+            $usuario->setPassw($data['passw']);
         if ($usuario->update()) {
             return "Usuario actualizado exitosamente.";
         } else {
@@ -41,9 +52,9 @@ class UsuarioController {
         }
     }
 
-    public function delete($id) {
+    public function delete($idus) {
         $usuario = new Usuario();
-        $usuario->setId($id);
+        $usuario->setId($idus);
         if ($usuario->delete()) {
             return "Usuario eliminado exitosamente.";
         } else {
@@ -53,12 +64,12 @@ class UsuarioController {
 
     public function login($data) {
         $usuario = new Usuario();
-        $usuario->setNombreUsuario($data['nombreUsuario']);
-        $usuario->setContrasena($data['contrasena']);
+        $usuario->setEmail($data["email"]);
+        $usuario->setPassw($data['passw']);
         $result = $usuario->login();
         if ($result) {
             // Login exitoso
-            $_SESSION['usuario'] = $result['nombreUsuario'];
+            $_SESSION['usuario'] = $result['email'];
             return true;
         } else {
             // Login fallido
