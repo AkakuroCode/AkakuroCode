@@ -21,7 +21,7 @@
                 </form>
 
                 <p>¿No tienes cuenta? <a href="crearusuario.php">Regístrate aquí</a></p>
-                <a href="../index.html">Volver al Inicio</a>
+                <a href="./index.html">Volver al Inicio</a>
             </div>
     </div>
 

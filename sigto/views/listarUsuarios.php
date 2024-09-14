@@ -48,8 +48,8 @@
     <?php endif; ?>
     
     <br>
-    <a href="?action=create">Crear Nuevo Usuario</a>
+    <a href="crearUsuario.php">Crear Nuevo Usuario</a>
     <br>
-    <a href="?action=logout">Cerrar Sesión</a>
+    <a href="logout.php">Cerrar Sesión</a>
 </body>
 </html>

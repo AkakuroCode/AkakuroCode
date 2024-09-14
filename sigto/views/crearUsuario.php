@@ -39,6 +39,7 @@
 
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Crear">
+        <a href="../index.html">Volver al Inicio</a>
     </form>
 </body>
 </html>

@@ -101,17 +101,23 @@ class Usuario {
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " SET nombre=?, apellido=?, fecnac=?, direccion=?, telefono=?, email=?, passw=?";
         $stmt = $this->conn->prepare($query);
-
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
         $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
         $stmt->bind_param("ssissss", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword);
-
+    
         if ($stmt->execute()) {
             return true;
         } else {
-            echo "Error: " . $stmt->error;
+            echo "Error en la ejecución: " . $stmt->error;
             return false;
         }
     }
+    
 
     public function readAll() {
         $query = "SELECT * FROM " . $this->table_name;
@@ -133,7 +139,7 @@ class Usuario {
         $stmt = $this->conn->prepare($query);
 
         $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
-        $stmt->bind_param("ssissss", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword, $this->idus);
+        $stmt->bind_param("ssissssi", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword, $this->idus);
 
         return $stmt->execute();
     }

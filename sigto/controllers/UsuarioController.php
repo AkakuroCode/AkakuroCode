@@ -68,14 +68,15 @@ class UsuarioController {
         $usuario->setPassw($data['passw']);
         $result = $usuario->login();
         if ($result) {
-            // Login exitoso
+            // Login exitoso, retornar true
             $_SESSION['usuario'] = $result['email'];
             return true;
         } else {
-            // Login fallido
+            // Login fallido, retornar false
             return false;
         }
     }
+    
 }
 
 ?>

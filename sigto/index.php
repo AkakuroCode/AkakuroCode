@@ -59,23 +59,23 @@ switch ($action) {
         header('Location: ?action=list');
         exit;
     
-    case 'login': // Iniciar sesión
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Si se envía el formulario de login, llama al método 'login' del controlador
-            $loginResult = $controller->login($_POST);
-            if ($loginResult) {
-                // Si el login es exitoso, redirige a la lista de usuarios
-                header('Location: ?action=list');
-                exit;
-            } else {
-                // Si el login falla, establece un mensaje de error
-                $error = "Nombre de usuario o contraseña incorrectos.";
+        case 'login': // Iniciar sesión
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Si se envía el formulario de login, llama al método 'login' del controlador
+                $loginResult = $controller->login($_POST);
+                if ($loginResult) {
+                    // Si el login es exitoso, redirige a maincliente.html
+                    header('Location: ./views/maincliente.html');
+                    exit;
+                } else {
+                    // Si el login falla, establece un mensaje de error
+                    $error = "Nombre de usuario o contraseña incorrectos.";
+                }
             }
-        }
-        // Muestra el formulario de login
-        include './views/loginUsuario.php';
-        break;
-
+            // Muestra el formulario de login con el mensaje de error si es necesario
+            include '../views/loginUsuario.php';
+            break;
+  
     case 'logout': // Cerrar sesión
         // Destruye la sesión y redirige al formulario de login
         session_destroy();

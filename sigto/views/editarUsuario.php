@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/login.css">
 </head>
 <body>
     <h1>Editar Usuario</h1>
@@ -38,7 +38,8 @@
 
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Actualizar">
+        <a class="button" href="?action=list">Volver a la lista</a>
     </form>
-    <a class="button" href="?action=list">Volver a la lista</a>
+    
 </body>
 </html>
