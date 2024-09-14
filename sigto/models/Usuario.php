@@ -1,5 +1,5 @@
 <?php
-require 'config/Database.php';
+require './config/Database.php';
 
 class Usuario {
     private $conn;
@@ -99,7 +99,7 @@ class Usuario {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . " SET nombre=?, apellido=?, direccion=?, telefono=?, email=?, passw=?";
+        $query = "INSERT INTO " . $this->table_name . " SET nombre=?, apellido=?, fecnac=?, direccion=?, telefono=?, email=?, passw=?";
         $stmt = $this->conn->prepare($query);
 
         $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
