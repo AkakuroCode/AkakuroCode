@@ -1,5 +1,5 @@
 <?php
-require './config/Database.php';
+require_once __DIR__ . '/../config/Database.php';
 
 class Usuario {
     private $conn;
@@ -122,7 +122,16 @@ class Usuario {
     public function readAll() {
         $query = "SELECT * FROM " . $this->table_name;
         $result = $this->conn->query($query);
-        return $result;
+    
+        if ($result && $result->num_rows > 0) {
+            $usuario = [];
+            while ($row = $result->fetch_assoc()) {
+                $usuario[] = $row;
+            }
+            return $usuario;
+        } else {
+            return []; // Si no hay resultados, retorna un array vacío
+        }
     }
 
     public function readOne() {

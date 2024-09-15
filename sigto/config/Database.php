@@ -1,25 +1,48 @@
 <?php
 class Database {
-    // Propiedades privadas para almacenar los detalles de conexión a la base de datos.
-    private $host = "127.0.0.1"; // Dirección del host de la base de datos.
-    private $db_name = "oceantrade"; // Nombre de la base de datos.
-    private $username = "root"; // Nombre de usuario para la conexión a la base de datos.
-    private $password = ""; // Contraseña para la conexión a la base de datos.
-    private $conn; // Variable para almacenar la conexión a la base de datos.
+    private $host = "localhost";
+    private $database = "oceantrade";
+    private $user = "root";
+    private $password = "";
+    private $conn; // Variable para almacenar la conexión
 
-    // Método público para obtener la conexión a la base de datos.
+    // Método para obtener la conexión
     public function getConnection() {
-        // Inicializar la conexión como nula.
-        $this->conn = null;
+        // Reportar errores de MySQLi
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        // Intentar la conexión
         try {
-            // Intentar establecer la conexión a la base de datos utilizando mysqli.
-            $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
-        } catch (Exception $e) {
-            // Capturar cualquier excepción que ocurra y mostrar un mensaje de error.
-            echo "Error en la conexión: " . $e->getMessage();
+            $this->conn = new mysqli($this->host, $this->user, $this->password, $this->database);
+            $this->conn->set_charset("utf8"); // Establecer el conjunto de caracteres
+
+        } catch (mysqli_sql_exception $e) {
+            // Manejar errores de conexión
+            die("Error en la conexión a la base de datos: " . $e->getMessage());
         }
 
-        // Retornar la conexión a la base de datos (puede ser nula si hubo un error).
         return $this->conn;
     }
+
+    // Método para cerrar la conexión
+    public function closeConnection() {
+        if ($this->conn) {
+            $this->conn->close();
+        }
+    }
 }
+
+// Instancia de la clase Database
+$db = new Database();
+
+// Obtener la conexión
+$conn = $db->getConnection();
+
+// Verificar la conexión
+if ($conn) {
+    echo "Conexión exitosa a la base de datos.";
+}
+
+// Cerrar la conexión (opcional, cuando ya no la necesites)
+// $db->closeConnection();
+?>

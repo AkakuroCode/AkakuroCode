@@ -1,5 +1,6 @@
 <?php
-require_once './models/Usuario.php';
+require_once __DIR__ . '/../models/Usuario.php';
+
 
 class UsuarioController {
 
@@ -8,7 +9,7 @@ class UsuarioController {
             $usuario = new Usuario();
             $usuario->setNombre($data['nombre']);
             $usuario->setApellido($data['apellido']);
-            $usuario->setFecnac($data['fecnac']); // Aquí se validará la fecha
+            $usuario->setFecnac($data['fecnac']);
             $usuario->setDireccion($data['direccion']);
             $usuario->setTelefono($data['telefono']);
             $usuario->setEmail($data['email']);
@@ -40,7 +41,7 @@ class UsuarioController {
         $usuario = new Usuario();
             $usuario->setNombre($data['nombre']);
             $usuario->setApellido($data['apellido']);
-            $usuario->setFecnac($data['fecnac']); // Aquí se validará la fecha
+            $usuario->setFecnac($data['fecnac']);
             $usuario->setDireccion($data['direccion']);
             $usuario->setTelefono($data['telefono']);
             $usuario->setEmail($data['email']);

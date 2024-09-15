@@ -3,7 +3,7 @@
 session_start();
 
 // Incluye el archivo del controlador 'UsuarioController.php'
-require_once './controllers/UsuarioController.php';
+require_once __DIR__ . '/controllers/UsuarioController.php';
 
 // Crea una instancia del controlador de usuario
 $controller = new UsuarioController();
@@ -36,7 +36,7 @@ switch ($action) {
     
     case 'list': // Listar todos los usuarios
         // Obtiene la lista de usuarios llamando al método readAll() del controlador
-        $usuarios = $controller->readAll();
+        $usuario = $controller->readAll();
         include './views/listarUsuarios.php';
         break;
 
@@ -73,7 +73,7 @@ switch ($action) {
                 }
             }
             // Muestra el formulario de login con el mensaje de error si es necesario
-            include '../views/loginUsuario.php';
+            include './views/loginUsuario.php';
             break;
   
     case 'logout': // Cerrar sesión
@@ -84,7 +84,7 @@ switch ($action) {
 
     default: // Acción por defecto: listar usuarios
         // Si la acción no coincide con ninguno de los casos anteriores, muestra la lista de usuarios
-        $usuarios = $controller->readAll();
+        $usuario = $controller->readAll();
         include './views/listarUsuarios.php';
         break;
 }
