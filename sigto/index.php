@@ -12,7 +12,7 @@ $controller = new UsuarioController();
 $action = isset($_GET['action']) ? $_GET['action'] : 'login';
 
 // Obtiene el ID del usuario desde la URL, si existe
-$id = isset($_GET['idus']) ? $_GET['idus'] : null;
+$idus = isset($_GET['idus']) ? $_GET['idus'] : null;
 
 // Si no hay un usuario en sesión y la acción no es 'login', redirige al formulario de login
 if (!isset($_SESSION['usuario']) && $action !== 'login') {
@@ -48,14 +48,14 @@ switch ($action) {
             exit;
         } else {
             // Si no, obtiene los datos del usuario y muestra el formulario de edición
-            $usuario = $controller->readOne($id);
+            $usuario = $controller->readOne($idus);
             include './views/editarUsuario.php';
         }
         break;
 
     case 'delete': // Eliminar un usuario
         // Llama al método 'delete' del controlador y muestra el resultado
-        echo $controller->delete($id);
+        echo $controller->delete($idus);
         header('Location: ?action=list');
         exit;
     
