@@ -30,7 +30,7 @@ switch ($action) {
             exit;
         } else {
             // Si no, muestra el formulario de creación de usuario
-            include './views/crearUsuario.php';
+            include './sigto/views/crearUsuario.php';
         }
         break;
     

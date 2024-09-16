@@ -20,7 +20,7 @@
                     <p id="loginError" class="error-message"></p>
                 </form>
 
-                <p>¿No tienes cuenta? <a href="crearusuario.php">Regístrate aquí</a></p>
+                <p>¿No tienes cuenta? <a href="./views/crearUsuario.php">Regístrate aquí</a></p>
                 <a href="./index.html">Volver al Inicio</a>
             </div>
     </div>
