@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Crear Usuario</h1>
-    <form action="?action=create" method="post">
+    <form action="/sigto/index.php?action=create" method="POST">
         <!-- Campo para el nombre -->
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" required><br>

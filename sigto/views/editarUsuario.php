@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Editar Usuario</h1>
-    <form action="?action=edit" method="post">
+    <form action="../index.php?action=edit" method="post">
         <!-- Campo para el nombre -->
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" value="<?php echo $usuario['nombre']; ?>" required><br>

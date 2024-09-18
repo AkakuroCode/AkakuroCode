@@ -34,8 +34,8 @@
                     <td><?php echo $row['telefono']; ?></td>
                     <td><?php echo $row['email']; ?></td>
                     <td>
-                        <a href="?action=edit&idus=<?php echo $row['idus']; ?>">Editar</a>
-                        <a href="?action=delete&idus=<?php echo $row['idus']; ?>">Eliminar</a>
+                        <a href="../index.php?action=edit&idus=<?php echo $row['idus']; ?>">Editar</a>
+                        <a href="../index.php?action=delete&idus=<?php echo $row['idus']; ?>">Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -47,9 +47,9 @@
             </tbody>
         </table>
 
-    
+            
     <br>
-    <a href="crearUsuario.php">Crear Nuevo Usuario</a>
+    <a href="../index.php?action=create">Crear Nuevo Usuario</a>
     <br>
     <a href="logout.php">Cerrar Sesión</a>
 </body>
