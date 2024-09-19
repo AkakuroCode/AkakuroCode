@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Editar Usuario</h1>
-    <form action="../index.php?action=edit" method="post">
+    <form action="?action=edit&idus=<?php echo $usuario['idus']; ?>" method="post">
         <!-- Campo para el nombre -->
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" value="<?php echo $usuario['nombre']; ?>" required><br>
@@ -26,7 +26,7 @@
 
         <!-- Campo para el teléfono -->
         <label for="telefono">Teléfono:</label>
-        <input type="tel" name="telefono" value="<?php echo $usuario['telefono']; ?>" required><br>
+        <input type="telefono" name="telefono" value="<?php echo $usuario['telefono']; ?>" required><br>
 
         <!-- Campo para el email -->
         <label for="email">Email:</label>

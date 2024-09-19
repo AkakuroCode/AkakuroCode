@@ -10,18 +10,18 @@
     <div class="box">
         <img class="logologin" src="/sigto/assets/images/logo completo.png" alt="oceanTrade logo">
             <div>
-                <form idus="loginForm">
-                    <h2>Ingresar</h2>
-                    <label for="username">Email:</label>
-                    <input type="text" idus="email" name="email" required>
-                    <label for="password">Contraseña:</label>
-                    <input type="password" idus="passw" name="password" required>
-                    <button type="submit">Ingresar</button>
-                    <p idus="loginError" class="error-message"></p>
-                </form>
-
+            <form id="loginForm" method="POST" action="?action=login">
+             <h2>Ingresar</h2>
+             <label for="email">Email:</label>
+             <input type="text" id="email" name="email" required>
+             <label for="passw">Contraseña:</label>
+             <input type="password" id="passw" name="passw" required>
+             <button type="submit">Ingresar</button>
+             <?php if (isset($error)) { ?>
+             <p id="loginError" class="error-message"><?php echo $error; ?></p><?php } ?>
+            </form>
                 <p>¿No tienes cuenta? <a href="/sigto/index.php?action=create">Regístrate aquí</a></p>
-                <a href="./index.html">Volver al Inicio</a>
+                <a href="/sigto/index.html">Volver al Inicio</a>
             </div>
     </div>
 

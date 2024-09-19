@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Crear Usuario</title>
-    <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="stylesheet" href="/sigto/assets/css/login.css">
 
 </head>
 <body>
-    <h1>Crear Usuario</h1>
+   
     <form action="/sigto/index.php?action=create" method="POST">
+    <h1>Crear Usuario</h1>
         <!-- Campo para el nombre -->
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" required><br>
@@ -27,7 +28,7 @@
 
         <!-- Campo para el teléfono -->
         <label for="telefono">Teléfono:</label>
-        <input type="tel" name="telefono" required><br>
+        <input type="telefono" name="telefono" required><br>
 
         <!-- Campo para el email -->
         <label for="email">Email:</label>
@@ -39,7 +40,7 @@
 
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Crear">
-        <a href="../index.html">Volver al Inicio</a>
+        <a href="../sigto/index.html">Volver al Inicio</a>
     </form>
 </body>
 </html>

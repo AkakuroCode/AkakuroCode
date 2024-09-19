@@ -5,7 +5,6 @@ require_once __DIR__ . '/../models/Usuario.php';
 class UsuarioController {
 
     public function create($data) {
-        try {
             $usuario = new Usuario();
             $usuario->setNombre($data['nombre']);
             $usuario->setApellido($data['apellido']);
@@ -14,14 +13,10 @@ class UsuarioController {
             $usuario->setTelefono($data['telefono']);
             $usuario->setEmail($data['email']);
             $usuario->setPassw($data['passw']);
-            
             if ($usuario->create()) {
                 return "Usuario creado exitosamente.";
             } else {
                 return "Error al crear usuario.";
-            }
-        } catch (Exception $e) {
-            return "Error: " . $e->getMessage();
         }
     }
     

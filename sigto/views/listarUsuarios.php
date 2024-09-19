@@ -24,18 +24,18 @@
             </thead>
             <tbody>
             <?php if (!empty($usuario)): ?>
-            <?php foreach ($usuario as $row): ?>
+            <?php foreach ($usuario as $usuario): ?>
                 <tr>
-                    <td><?php echo $row['idus']; ?></td>
-                    <td><?php echo $row['nombre']; ?></td>
-                    <td><?php echo $row['apellido']; ?></td>
-                    <td><?php echo $row['fecnac']; ?></td>
-                    <td><?php echo $row['direccion']; ?></td>
-                    <td><?php echo $row['telefono']; ?></td>
-                    <td><?php echo $row['email']; ?></td>
+                    <td><?php echo $usuario['idus']; ?></td>
+                    <td><?php echo $usuario['nombre']; ?></td>
+                    <td><?php echo $usuario['apellido']; ?></td>
+                    <td><?php echo $usuario['fecnac']; ?></td>
+                    <td><?php echo $usuario['direccion']; ?></td>
+                    <td><?php echo $usuario['telefono']; ?></td>
+                    <td><?php echo $usuario['email']; ?></td>
                     <td>
-                        <a href="../index.php?action=edit&idus=<?php echo $row['idus']; ?>">Editar</a>
-                        <a href="../index.php?action=delete&idus=<?php echo $row['idus']; ?>">Eliminar</a>
+                        <a href="../index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
+                        <a href="../index.php?action=delete&idus=<?php echo $usuario['idus']; ?>">Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -14,11 +14,12 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'login';
 // Obtiene el ID del usuario desde la URL, si existe
 $idus = isset($_GET['idus']) ? $_GET['idus'] : null;
 
-// Si no hay un usuario en sesión y la acción no es 'login', redirige al formulario de login
-if (!isset($_SESSION['usuario']) && $action !== 'login') {
+// Si no hay un usuario en sesión y la acción no es 'login' ni 'create', redirige al formulario de login
+if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create') {
     header('Location: ?action=login');
     exit; // Termina el script después de redirigir
 }
+
 
 // Controla las diferentes acciones posibles utilizando una estructura switch
 switch ($action) {
@@ -30,14 +31,14 @@ switch ($action) {
             exit;
         } else {
             // Si no, muestra el formulario de creación de usuario
-            include './sigto/views/crearUsuario.php';
+            include __DIR__ . '/views/crearUsuario.php';
         }
         break;
     
     case 'list': // Listar todos los usuarios
         // Obtiene la lista de usuarios llamando al método readAll() del controlador
         $usuario = $controller->readAll();
-        include './views/listarUsuarios.php';
+        include __DIR__ . '/views/listarUsuarios.php';
         break;
 
     case 'edit': // Editar un usuario existente
@@ -49,7 +50,7 @@ switch ($action) {
         } else {
             // Si no, obtiene los datos del usuario y muestra el formulario de edición
             $usuario = $controller->readOne($idus);
-            include './views/editarUsuario.php';
+            include __DIR__ . '/views/editarUsuario.php';
         }
         break;
 
@@ -59,21 +60,22 @@ switch ($action) {
         header('Location: ?action=list');
         exit;
     
-        case 'login': // Iniciar sesión
+    case 'login': // Iniciar sesión
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Si se envía el formulario de login, llama al método 'login' del controlador
                 $loginResult = $controller->login($_POST);
                 if ($loginResult) {
                     // Si el login es exitoso, redirige a maincliente.html
-                    header('Location: ./views/maincliente.html');
+                    header('Location: sigto/views/maincliente.html');
                     exit;
                 } else {
                     // Si el login falla, establece un mensaje de error
                     $error = "Nombre de usuario o contraseña incorrectos.";
+                    var_dump($error); // Para depurar
                 }
             }
             // Muestra el formulario de login con el mensaje de error si es necesario
-            include './views/loginUsuario.php';
+            include __DIR__ . '/views/loginUsuario.php';
             break;
   
     case 'logout': // Cerrar sesión
@@ -85,7 +87,7 @@ switch ($action) {
     default: // Acción por defecto: listar usuarios
         // Si la acción no coincide con ninguno de los casos anteriores, muestra la lista de usuarios
         $usuario = $controller->readAll();
-        include './views/listarUsuarios.php';
+        include __DIR__ . '/views/listarUsuarios.php';
         break;
 }
 ?>

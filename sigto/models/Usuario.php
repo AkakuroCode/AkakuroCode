@@ -119,20 +119,15 @@ class Usuario {
     }
     
 
-    public function readAll() {
-        $query = "SELECT * FROM " . $this->table_name;
-        $result = $this->conn->query($query);
+   // Método para leer todos los usuarios.
+   public function readAll() {
+    // Consulta SQL para seleccionar todos los registros de la tabla de usuarios.
+    $query = "SELECT * FROM " . $this->table_name; 
     
-        if ($result && $result->num_rows > 0) {
-            $usuario = [];
-            while ($row = $result->fetch_assoc()) {
-                $usuario[] = $row;
-            }
-            return $usuario;
-        } else {
-            return []; // Si no hay resultados, retorna un array vacío
-        }
-    }
+    // Ejecutamos la consulta y almacenamos el resultado.
+    $result = $this->conn->query($query);
+    return $result; // Retornamos el resultado de la consulta.
+}
 
     public function readOne() {
         $query = "SELECT * FROM " . $this->table_name . " WHERE idus = ? LIMIT 0,1";
