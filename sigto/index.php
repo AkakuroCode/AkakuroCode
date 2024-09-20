@@ -71,7 +71,6 @@ switch ($action) {
                 } else {
                     // Si el login falla, establece un mensaje de error
                     $error = "Nombre de usuario o contraseña incorrectos.";
-                    var_dump($error); // Para depurar
                 }
             }
             // Muestra el formulario de login con el mensaje de error si es necesario

@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="../assets/css/login.css">
 </head>
 <body>
-    <h1>Editar Usuario</h1>
+    
     <form action="?action=edit&idus=<?php echo $usuario['idus']; ?>" method="post">
+    <h1>Editar Usuario</h1>
         <!-- Campo para el nombre -->
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" value="<?php echo $usuario['nombre']; ?>" required><br>
