@@ -108,7 +108,7 @@ class Usuario {
         }
     
         $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
-        $stmt->bind_param("ssissss", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword);
+        $stmt->bind_param("sssssss", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword);
     
         if ($stmt->execute()) {
             return true;
