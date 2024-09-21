@@ -39,7 +39,7 @@
 
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Actualizar">
-        <a class="button" href="?action=list">Volver a la lista</a>
+        <a class="button" href="/sigto/index.php?action=list">Volver a la lista</a>
     </form>
     
 </body>

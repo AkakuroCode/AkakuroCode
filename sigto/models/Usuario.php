@@ -118,15 +118,16 @@ class Usuario {
         }
     }
     
-
-   // Método para leer todos los usuarios.
-   public function readAll() {
-    // Consulta SQL para seleccionar todos los registros de la tabla de usuarios.
-    $query = "SELECT * FROM " . $this->table_name; 
-    
-    // Ejecutamos la consulta y almacenamos el resultado.
-    $result = $this->conn->query($query);
-    return $result; // Retornamos el resultado de la consulta.
+    public function readAll() {
+        $query = "SELECT * FROM " . $this->table_name;
+        $result = $this->conn->query($query);
+        
+        if (!$result) {
+            echo "Error en la consulta SQL: " . $this->conn->error;
+            return false;
+        }
+        
+        return $result;
 }
 
     public function readOne() {
@@ -139,12 +140,14 @@ class Usuario {
     }
 
     public function update() {
-        $query = "UPDATE " . $this->table_name . " SET nombre=?, apellido=?, fecnac=?, direccion=?, telefono=?, email=?, passw=? WHERE idus=?";
+        $query = "UPDATE " . $this->table_name . " 
+                  SET nombre=?, apellido=?, fecnac=?, direccion=?, telefono=?, email=?, passw=? 
+                  WHERE idus=?";
         $stmt = $this->conn->prepare($query);
-
+    
         $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
-        $stmt->bind_param("ssissssi", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword, $this->idus);
-
+        $stmt->bind_param("sssssssi", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword, $this->idus);
+    
         return $stmt->execute();
     }
 
@@ -162,12 +165,14 @@ class Usuario {
         $stmt->execute();
         $result = $stmt->get_result();
         $usuario = $result->fetch_assoc();
-
+    
+        // Verificar si el usuario existe y si la contraseña es correcta
         if ($usuario && password_verify($this->passw, $usuario['passw'])) {
             return $usuario;
         } else {
             return false;
         }
     }
+    
 }
 ?>

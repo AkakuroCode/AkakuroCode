@@ -20,10 +20,14 @@ class UsuarioController {
         }
     }
     
-
     public function readAll() {
         $usuario = new Usuario();
-        return $usuario->readAll();
+        $result = $usuario->readAll();
+        
+        if (!$result) {
+            return "No se pudieron obtener los usuarios.";
+        }
+        return $result;
     }
 
     public function readOne($idus) {
@@ -34,6 +38,7 @@ class UsuarioController {
 
     public function update($data) {
         $usuario = new Usuario();
+            $usuario->setId($data['idus']);        
             $usuario->setNombre($data['nombre']);
             $usuario->setApellido($data['apellido']);
             $usuario->setFecnac($data['fecnac']);

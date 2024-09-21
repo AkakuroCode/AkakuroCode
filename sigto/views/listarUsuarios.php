@@ -1,30 +1,41 @@
+<?php
+require_once __DIR__ . '/../controllers/UsuarioController.php';
+
+// Instancia del controlador de usuario
+$usuarioController = new UsuarioController();
+
+// Obtener todos los usuarios
+$usuarios = $usuarioController->readAll();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Usuarios</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
-<body>
+<div class="panel-gestion">
     <h1>Lista de Usuarios</h1>
     
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Fecha de Nacimiento</th>
-                    <th>Dirección</th>
-                    <th>Teléfono</th>
-                    <th>Email</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php if (!empty($usuario)): ?>
-            <?php foreach ($usuario as $usuario): ?>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if ($usuarios && $usuarios->num_rows > 0): ?>
+            <?php while ($usuario = $usuarios->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo $usuario['idus']; ?></td>
                     <td><?php echo $usuario['nombre']; ?></td>
@@ -38,19 +49,20 @@
                         <a href="../index.php?action=delete&idus=<?php echo $usuario['idus']; ?>">Eliminar</a>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endwhile; ?>
         <?php else: ?>
             <tr>
                 <td colspan="8">No hay usuarios registrados.</td>
             </tr>
         <?php endif; ?>
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-            
     <br>
     <a href="../index.php?action=create">Crear Nuevo Usuario</a>
     <br>
-    <a href="logout.php">Cerrar Sesión</a>
+    <a href="../index.php?action=logout">Cerrar Sesión</a>
+
+    </div>
 </body>
 </html>
