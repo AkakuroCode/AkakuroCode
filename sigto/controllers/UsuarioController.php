@@ -38,20 +38,30 @@ class UsuarioController {
 
     public function update($data) {
         $usuario = new Usuario();
-            $usuario->setId($data['idus']);        
-            $usuario->setNombre($data['nombre']);
-            $usuario->setApellido($data['apellido']);
-            $usuario->setFecnac($data['fecnac']);
-            $usuario->setDireccion($data['direccion']);
-            $usuario->setTelefono($data['telefono']);
-            $usuario->setEmail($data['email']);
-            $usuario->setPassw($data['passw']);
+        $usuario->setId($data['idus']); // Asegurarse de establecer el ID del usuario
+        $usuario->setNombre($data['nombre']);
+        $usuario->setApellido($data['apellido']);
+        $usuario->setFecnac($data['fecnac']);
+        $usuario->setDireccion($data['direccion']);
+        $usuario->setTelefono($data['telefono']);
+        $usuario->setEmail($data['email']);
+        
+        // Verificar si se proporcionó una nueva contraseña
+        if (!empty($data['passw'])) {
+            $usuario->setPassw($data['passw']); // Si se ingresó una nueva contraseña, la actualizamos
+        } else {
+            // Si no se ingresó una nueva contraseña, obtenemos la actual de la base de datos
+            $usuarioData = $usuario->readOne();
+            $usuario->setPassw($usuarioData['passw']); // Mantener la contraseña actual
+        }
+    
         if ($usuario->update()) {
             return "Usuario actualizado exitosamente.";
         } else {
             return "Error al actualizar usuario.";
         }
     }
+    
 
     public function delete($idus) {
         $usuario = new Usuario();
@@ -66,17 +76,23 @@ class UsuarioController {
     public function login($data) {
         $usuario = new Usuario();
         $usuario->setEmail($data["email"]);
-        $usuario->setPassw($data['passw']);
-        $result = $usuario->login();
+        
+        // Buscar el usuario en la base de datos por su email
+        $result = $usuario->login();  // Supongo que este método devuelve los datos del usuario, incluida la contraseña hasheada
+        
         if ($result) {
-            // Login exitoso, retornar true
-            $_SESSION['usuario'] = $result['email'];
-            return true;
-        } else {
-            // Login fallido, retornar false
-            return false;
+            var_dump($result['passw']);  // Muestra la contraseña hasheada
+            var_dump($data['passw']);    // Muestra la contraseña que ingresó el usuario
+            if (password_verify($data['passw'], $result['passw'])) {
+                session_start();
+                $_SESSION['usuario'] = $result['email'];
+                return true;
+            } else {
+                return false;
+            }
         }
     }
+    
     
 }
 

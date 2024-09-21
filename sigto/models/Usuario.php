@@ -159,20 +159,25 @@ class Usuario {
     }
 
     public function login() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE email = ?";
+        // Supongamos que tienes una conexión a la base de datos en $this->conn
+        $query = "SELECT * FROM cliente WHERE email = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("s", $this->email);
+        $stmt->bind_param("s", $this->email);  // Usa el email proporcionado en el setEmail
         $stmt->execute();
         $result = $stmt->get_result();
-        $usuario = $result->fetch_assoc();
     
-        // Verificar si el usuario existe y si la contraseña es correcta
-        if ($usuario && password_verify($this->passw, $usuario['passw'])) {
-            return $usuario;
+        if ($result->num_rows > 0) {
+            // Retornar los datos del usuario, incluyendo la contraseña hasheada
+            return $result->fetch_assoc();
         } else {
+            // No se encontró el usuario
             return false;
         }
     }
+    
+    
+    
+    
     
 }
 ?>

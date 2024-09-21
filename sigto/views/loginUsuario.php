@@ -10,7 +10,7 @@
     <div class="box">
         <img class="logologin" src="/sigto/assets/images/logo completo.png" alt="oceanTrade logo">
             <div>
-            <form id="loginForm" method="POST" action="?action=login">
+            <form id="loginForm" method="POST" action="/sigto/index.php?action=login">
              <h2>Ingresar</h2>
              <label for="email">Email:</label>
              <input type="text" id="email" name="email" required>

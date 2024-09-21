@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
-    <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="stylesheet" href="../sigto/assets/css/login.css">
 </head>
 <body>
     
-    <form action="?action=edit&idus=<?php echo $usuario['idus']; ?>" method="post">
+    <form action="sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>" method="post">
     <h1>Editar Usuario</h1>
+
+        <!-- Campo oculto para el idus -->
+        <input type="hidden" name="idus" value="<?php echo $usuario['idus']; ?>">
+
         <!-- Campo para el nombre -->
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" value="<?php echo $usuario['nombre']; ?>" required><br>

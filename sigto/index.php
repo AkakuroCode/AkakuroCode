@@ -15,7 +15,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'login';
 $idus = isset($_GET['idus']) ? $_GET['idus'] : null;
 
 // Si no hay un usuario en sesión y la acción no es 'login' ni 'create', redirige al formulario de login
-if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create') {
+if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' && $action !== 'edit' && $action !== 'delete') {
     header('Location: ?action=login');
     exit; // Termina el script después de redirigir
 }
@@ -27,7 +27,7 @@ switch ($action) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Si se envía el formulario de creación (método POST), llama al método 'create' del controlador
             echo $controller->create($_POST);
-            header('Location: ?action=list');
+            header('Location: /sigto/index.php?action=list');
             exit;
         } else {
             // Si no, muestra el formulario de creación de usuario
@@ -60,23 +60,21 @@ switch ($action) {
         header('Location: ?action=list');
         exit;
     
-    case 'login': // Iniciar sesión
+    case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Si se envía el formulario de login, llama al método 'login' del controlador
+                var_dump($_POST);  // Para ver si se están recibiendo los datos del formulario
                 $loginResult = $controller->login($_POST);
                 if ($loginResult) {
-                    // Si el login es exitoso, redirige a maincliente.html
-                    header('Location: sigto/views/maincliente.html');
+                    header('Location: /sigto/index.php?action=list');
                     exit;
                 } else {
-                    // Si el login falla, establece un mensaje de error
                     $error = "Nombre de usuario o contraseña incorrectos.";
                 }
             }
-            // Muestra el formulario de login con el mensaje de error si es necesario
             include __DIR__ . '/views/loginUsuario.php';
             break;
-  
+        
+
     case 'logout': // Cerrar sesión
         // Destruye la sesión y redirige al formulario de login
         session_destroy();
