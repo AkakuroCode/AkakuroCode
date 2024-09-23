@@ -7,7 +7,7 @@
 </head>
 <body>
     
-    <form action="sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>" method="post">
+    <form action="../sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>" method="post">
     <h1>Editar Usuario</h1>
 
         <!-- Campo oculto para el idus -->

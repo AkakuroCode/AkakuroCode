@@ -9,13 +9,13 @@ require_once __DIR__ . '/controllers/UsuarioController.php';
 $controller = new UsuarioController();
 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
-$action = isset($_GET['action']) ? $_GET['action'] : 'login';
+$action = isset($_GET['action']) ? $_GET['action'] : 'default';
 
 // Obtiene el ID del usuario desde la URL, si existe
 $idus = isset($_GET['idus']) ? $_GET['idus'] : null;
 
 // Si no hay un usuario en sesión y la acción no es 'login' ni 'create', redirige al formulario de login
-if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' && $action !== 'edit' && $action !== 'delete') {
+if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' && $action !== 'edit' && $action !== 'delete'&& $action !== 'default') {
     header('Location: ?action=login');
     exit; // Termina el script después de redirigir
 }
@@ -84,7 +84,7 @@ switch ($action) {
     default: // Acción por defecto: listar usuarios
         // Si la acción no coincide con ninguno de los casos anteriores, muestra la lista de usuarios
         $usuario = $controller->readAll();
-        include __DIR__ . '/views/listarUsuarios.php';
+        include __DIR__ . '/index.html';
         break;
 }
 ?>
