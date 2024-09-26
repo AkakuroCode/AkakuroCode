@@ -75,21 +75,17 @@ class UsuarioController {
 
     public function login($data) {
         $usuario = new Usuario();
-        $usuario->setEmail($data["email"]);
+        $usuario->setEmail($data['email']);
+        $result = $usuario->login();
         
-        // Buscar el usuario en la base de datos por su email
-        $result = $usuario->login();  // Supongo que este método devuelve los datos del usuario, incluida la contraseña hasheada
-        
-        if ($result) {
-            var_dump($result['passw']);  // Muestra la contraseña hasheada
-            var_dump($data['passw']);    // Muestra la contraseña que ingresó el usuario
-            if (password_verify($data['passw'], $result['passw'])) {
-                session_start();
-                $_SESSION['usuario'] = $result['email'];
-                return true;
-            } else {
-                return false;
-            }
+        var_dump($result); // Aquí haces el var_dump para ver qué devuelve la base de datos
+    
+        if ($result && password_verify($data['passw'], $result['passw'])) {
+            session_start();
+            $_SESSION['usuario'] = $result['email'];
+            return true;
+        } else {
+            return false;
         }
     }
     

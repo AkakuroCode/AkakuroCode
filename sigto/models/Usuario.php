@@ -159,18 +159,15 @@ class Usuario {
     }
 
     public function login() {
-        // Supongamos que tienes una conexión a la base de datos en $this->conn
-        $query = "SELECT * FROM cliente WHERE email = ?";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE email = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("s", $this->email);  // Usa el email proporcionado en el setEmail
+        $stmt->bind_param("s", $this->email);
         $stmt->execute();
         $result = $stmt->get_result();
-    
+        
         if ($result->num_rows > 0) {
-            // Retornar los datos del usuario, incluyendo la contraseña hasheada
             return $result->fetch_assoc();
         } else {
-            // No se encontró el usuario
             return false;
         }
     }

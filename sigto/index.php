@@ -65,7 +65,7 @@ switch ($action) {
                 var_dump($_POST);  // Para ver si se están recibiendo los datos del formulario
                 $loginResult = $controller->login($_POST);
                 if ($loginResult) {
-                    header('Location: /sigto/index.php?action=list');
+                    header('Location: /sigto/views/maincliente.html');
                     exit;
                 } else {
                     $error = "Nombre de usuario o contraseña incorrectos.";
