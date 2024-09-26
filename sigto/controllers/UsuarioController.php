@@ -78,7 +78,6 @@ class UsuarioController {
         $usuario->setEmail($data['email']);
         $result = $usuario->login();
         
-        var_dump($result); // Aquí haces el var_dump para ver qué devuelve la base de datos
     
         if ($result && password_verify($data['passw'], $result['passw'])) {
             session_start();

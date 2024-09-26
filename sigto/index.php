@@ -62,7 +62,6 @@ switch ($action) {
     
     case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                var_dump($_POST);  // Para ver si se están recibiendo los datos del formulario
                 $loginResult = $controller->login($_POST);
                 if ($loginResult) {
                     header('Location: /sigto/views/maincliente.html');
