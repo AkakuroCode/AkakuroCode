@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Incluye Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/reclamos.css">
     
     <title>Document</title>
@@ -23,7 +23,7 @@
                     </form>
                     <a href="index.html">Inicio</a>
                     <a href="/sigto/views/nosotrosvisitante.html">Nosotros</a>
-                    <a href="./views/loginUsuario.php">Ingresar</a>
+                    <a href="/sigto/views/loginUsuario.php">Ingresar</a>
                 </div>
             </div>
         </nav>
@@ -67,7 +67,7 @@
         </div>
 
         <p class="relleno">Más Vendidos</p>
-        <img src="assets/images/productos2.png" alt="futuro catalogo de productos principal">
+        <img src="/sigto/assets/images/productos2.png" alt="futuro catalogo de productos principal">
     </main>
     <br><br><br><br><br><br>
     <footer>
@@ -78,7 +78,7 @@
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
                 <br>
-                <a href="reclamos.html">Reclamos</a>
+                <a href="/sigto/views/reclamos.html">Reclamos</a>
             </div>
             <div class="footer-item">
                 <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>

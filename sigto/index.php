@@ -83,7 +83,7 @@ switch ($action) {
     default: // Acción por defecto: listar usuarios
         // Si la acción no coincide con ninguno de los casos anteriores, muestra la lista de usuarios
         $usuario = $controller->readAll();
-        include __DIR__ . '/index.html';
+        include __DIR__ . '/views/mainvisitante.php';
         break;
 }
 ?>
