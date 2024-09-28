@@ -1,4 +1,4 @@
-<a?php
+<?php
 require_once __DIR__ . '/../controllers/UsuarioController.php';
 require_once __DIR__ . '/../controllers/EmpresaController.php';
 

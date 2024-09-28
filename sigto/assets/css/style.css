@@ -168,7 +168,6 @@ input[type="text"], input[type="number"],input[type="list"] , button {
 }
 
 button {
-    font-family: Arial, Helvetica;
     background-color: #0267FF;
     color: white;
     border: none;
@@ -176,14 +175,6 @@ button {
     cursor: pointer;
 }
 
-a{
-    font-family: Arial, Helvetica;
-    background-color: #0267FF;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-}
 
 button:hover {
     background-color: #0267FF;
