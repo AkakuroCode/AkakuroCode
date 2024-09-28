@@ -27,6 +27,18 @@ function isEmailRegistered($email) {
         return true; // El email ya está registrado en la tabla empresa
     }
 
-    return false; // El email no está registrado en ninguna tabla
+    // Verificar en la tabla admin
+    $queryAdmin = "SELECT idad FROM admin WHERE email = ?";
+    $stmt = $conn->prepare($queryAdmin);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows > 0) {
+        return true; // Email ya registrado en la tabla admin
+    }
+
+    return false; // Email no registrado en ninguna tabla
+
+
 }
 ?>

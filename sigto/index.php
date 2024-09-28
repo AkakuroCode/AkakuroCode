@@ -5,11 +5,12 @@ session_start();
 // Incluye el archivo del controlador 'UsuarioController.php'
 require_once __DIR__ . '/controllers/UsuarioController.php';
 require_once __DIR__ . '/controllers/EmpresaController.php';
-
+require_once __DIR__ . '/controllers/AdminController.php';
 
 // Crea una instancia del controlador de usuario
 $controller = new UsuarioController();
 $controller2 = new EmpresaController();
+$controller3 = new AdminController();
 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
 $action = isset($_GET['action']) ? $_GET['action'] : 'default';
@@ -17,6 +18,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'default';
 // Obtiene el ID del usuario desde la URL, si existe
 $idus = isset($_GET['idus']) ? $_GET['idus'] : null;
 $idemp = isset($_GET['idemp']) ? $_GET['idemp'] : null;
+$idad = isset($_GET['idad']) ? $_GET['idad'] : null;
 
 // Si no hay un usuario en sesión y la acción no es 'login' ni 'create', redirige al formulario de login
 if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' && $action !== 'edit' && $action !== 'delete' && $action !== 'default') {
@@ -24,6 +26,10 @@ if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' 
     exit; // Termina el script después de redirigir
 }
 if (!isset($_SESSION['empresa']) && $action !== 'login' && $action !== 'create2' && $action !== 'edit2' && $action !== 'delete2' && $action !== 'default') {
+    header('Location: ?action=login');
+    exit; // Termina el script después de redirigir
+}
+if (!isset($_SESSION['admin']) && $action !== 'login' && $action !== 'create2' && $action !== 'edit2' && $action !== 'delete2' && $action !== 'default') {
     header('Location: ?action=login');
     exit; // Termina el script después de redirigir
 }
@@ -99,7 +105,7 @@ switch ($action) {
             header('Location: ?action=list');
         exit;    
     
-    case 'login': 
+        case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
@@ -120,14 +126,23 @@ switch ($action) {
                         header('Location: /sigto/views/mainempresa.php');
                         exit;
                     } else {
-                        // Si falla tanto para usuario como para empresa, mostrar un mensaje de error
-                        $error = "Email o contraseña incorrectos.";
+                        // Si no es usuario ni empresa, intentamos iniciar sesión como admin
+                        $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
+        
+                        if ($loginAdmin) {
+                            // Si el login es exitoso para un admin, redirigir a la vista de admin
+                            header('Location: /sigto/views/listarUsuarios.php');
+                            exit;
+                        } else {
+                            // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
+                            $error = "Email o contraseña incorrectos.";
+                        }
                     }
                 }
             }
             // Incluir la vista de login con el posible mensaje de error
             include __DIR__ . '/views/loginUsuario.php';
-        break;
+            break;
         
         
 
