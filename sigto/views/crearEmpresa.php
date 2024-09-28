@@ -2,35 +2,27 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Crear Usuario</title>
+    <title>Crear Empresa</title>
     <link rel="stylesheet" href="/sigto/assets/css/login.css">
-
 </head>
 <body>
    
-    <form action="/sigto/index.php?action=create" method="POST">
-    <h1>Crear Usuario</h1>
-        <!-- Campo para el nombre -->
-        <label for="nombre">Nombre:</label>
+    <form action="/sigto/index.php?action=create2" method="POST">
+    <h1>Crear Empresa</h1>
+    
+        <!-- Campo para el nombre de la empresa -->
+        <label for="nombre">Nombre de la Empresa:</label>
         <input type="text" name="nombre" required><br>
 
-        <!-- Campo para el apellido -->
-        <label for="apellido">Apellido:</label>
-        <input type="text" name="apellido" required><br>
-
-        <!-- Campo para la fecha de nacimiento -->
-        <label for="fecnac">Fecha de Nacimiento:</label>
-        <input type="date" name="fecnac" required><br>
-
-        <!-- Campo para la dirección -->
+        <!-- Campo para la dirección de la empresa -->
         <label for="direccion">Dirección:</label>
         <input type="text" name="direccion" required><br>
 
-        <!-- Campo para el teléfono -->
+        <!-- Campo para el teléfono de la empresa -->
         <label for="telefono">Teléfono:</label>
-        <input type="telefono" name="telefono" required><br>
+        <input type="text" name="telefono" required><br>
 
-        <!-- Campo para el email -->
+        <!-- Campo para el email de la empresa -->
         <label for="email">Email:</label>
         <input type="email" name="email" required><br>
 
@@ -38,9 +30,14 @@
         <label for="passw">Contraseña:</label>
         <input type="password" name="passw" required><br>
 
+        <!-- Campo para la cuenta de banco -->
+        <label for="cuentabanco">Cuenta de Banco:</label>
+        <input type="text" name="cuentabanco" required><br>
+
         <!-- Botón para enviar el formulario -->
-        <input type="submit" value="Crear">
+        <input type="submit" value="Crear Empresa">
         <a href="/sigto/views/mainvisitante.php">Volver al Inicio</a>
     </form>
+
 </body>
 </html>

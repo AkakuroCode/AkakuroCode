@@ -15,7 +15,7 @@
         <nav class="mi-navbar">
             <div class="mi-navbar-container">
                 <h1>
-                    <img class="mi-navbar-logo" src="assets/images/navbar logo 2.png" alt="OceanTrade">
+                    <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
                 </h1>
                 <div class="mi-navbar-items">
                     <form action="ruta/destino" method="GET" class="search-form">

@@ -21,6 +21,7 @@
              <p id="loginError" class="error-message"><?php echo $error; ?></p><?php } ?>
             </form>
                 <p>¿No tienes cuenta? <a href="/sigto/index.php?action=create">Regístrate aquí</a></p>
+                <a href="/sigto/index.php?action=create2">Regístra tu empresa</a>
                 <a href="mainvisitante.php">Volver al Inicio</a>
             </div>
     </div>

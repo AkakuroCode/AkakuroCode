@@ -27,13 +27,25 @@ switch ($action) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Si se envía el formulario de creación (método POST), llama al método 'create' del controlador
             echo $controller->create($_POST);
-            header('Location: /sigto/index.php?action=list');
+            header('Location: /sigto/index.php?action=login');
             exit;
         } else {
             // Si no, muestra el formulario de creación de usuario
             include __DIR__ . '/views/crearUsuario.php';
         }
         break;
+
+        case 'create2': // Crear un nuevo usuario
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Si se envía el formulario de creación (método POST), llama al método 'create' del controlador
+                echo $controller->create($_POST);
+                header('Location: /sigto/index.php?action=login');
+                exit;
+            } else {
+                // Si no, muestra el formulario de creación de usuario
+                include __DIR__ . '/views/crearEmpresa.php';
+            }
+            break;    
     
     case 'list': // Listar todos los usuarios
         // Obtiene la lista de usuarios llamando al método readAll() del controlador

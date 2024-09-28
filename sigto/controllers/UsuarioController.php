@@ -1,22 +1,28 @@
 <?php
 require_once __DIR__ . '/../models/Usuario.php';
+require_once __DIR__ . '/../models/Utils.php'; // Incluye el archivo Utils.php
 
 
 class UsuarioController {
 
     public function create($data) {
-            $usuario = new Usuario();
-            $usuario->setNombre($data['nombre']);
-            $usuario->setApellido($data['apellido']);
-            $usuario->setFecnac($data['fecnac']);
-            $usuario->setDireccion($data['direccion']);
-            $usuario->setTelefono($data['telefono']);
-            $usuario->setEmail($data['email']);
-            $usuario->setPassw($data['passw']);
-            if ($usuario->create()) {
-                return "Usuario creado exitosamente.";
-            } else {
-                return "Error al crear usuario.";
+        // Verificar si el email ya está registrado en cliente o empresa
+        if (isEmailRegistered($data['email'])) {
+            return "El email ya está registrado en el sistema.";
+        }
+        
+        $usuario = new Usuario();
+        $usuario->setNombre($data['nombre']);
+        $usuario->setApellido($data['apellido']);
+        $usuario->setFecnac($data['fecnac']);
+        $usuario->setDireccion($data['direccion']);
+        $usuario->setTelefono($data['telefono']);
+        $usuario->setEmail($data['email']);
+        $usuario->setPassw($data['passw']);
+        if ($usuario->create()) {
+            return "Usuario creado exitosamente.";
+        } else {
+            return "Error al crear usuario.";
         }
     }
     
