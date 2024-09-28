@@ -14,9 +14,10 @@
                     <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
                    </h1>
                     <div class="mi-navbar-items">
-                    <a href="mainvisitante.php">Inicio</a>
-                    <a href="nosotrosvisitante.html">Nosotros</a>
-                    <a href="loginUsuario.php">Ingresar</a>
+                    <a href="mainempresa.php">Inicio</a>
+                    <a href="agregarProd.html">Agregar Producto</a>
+                    <a href="nosotrosempresa.php">Nosotros</a>
+                    <a href="../index.php?action=logout">Salir</a>
                     </div>
                     
             </div>
@@ -62,17 +63,16 @@
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
                 <br>
-                <a href="reclamos.html">Reclamos</a>
+                <a href="reclamosempresa.php">Reclamos</a>
             </div>
             <div class="footer-item">
                 <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>
-
             </div>
-
+            
             <div class="footer-redes">
-                <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png"  alt="Facebook"></a>
-                <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png"  alt="Twitter"></a>
-                <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png"  alt="Instagram"></a>
+                <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png" alt="Facebook"></a>
+                <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png" alt="Twitter"></a>
+                <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png" alt="Instagram"></a>
             </div>
         </div>
     </footer>

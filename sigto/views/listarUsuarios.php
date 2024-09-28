@@ -1,18 +1,21 @@
 <?php
 require_once __DIR__ . '/../controllers/UsuarioController.php';
+require_once __DIR__ . '/../controllers/EmpresaController.php';
 
 // Instancia del controlador de usuario
 $usuarioController = new UsuarioController();
+$usuarios = $usuarioController->readAll(); // Obtener todos los usuarios
 
-// Obtener todos los usuarios
-$usuarios = $usuarioController->readAll();
+// Instancia del controlador de empresa
+$empresaController = new EmpresaController();
+$empresas = $empresaController->readAll(); // Obtener todas las empresas
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Usuarios</title>
+    <title>Lista de Usuarios y Empresas</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
@@ -59,10 +62,50 @@ $usuarios = $usuarioController->readAll();
     </table>
 
     <br>
-    <a href="../index.php?action=create">Crear Nuevo Usuario</a>
+    <br>
+
+    <h1>Lista de Empresas</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre de la Empresa</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Cuenta de Banco</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if ($empresas && $empresas->num_rows > 0): ?>
+            <?php while ($empresa = $empresas->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo $empresa['idemp']; ?></td>
+                    <td><?php echo $empresa['nombre']; ?></td>
+                    <td><?php echo $empresa['direccion']; ?></td>
+                    <td><?php echo $empresa['telefono']; ?></td>
+                    <td><?php echo $empresa['email']; ?></td>
+                    <td><?php echo $empresa['cuentabanco']; ?></td>
+                    <td>
+                        <a href="../index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
+                        <a href="../index.php?action=delete2&idemp=<?php echo $empresa['idemp']; ?>">Eliminar</a>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="7">No hay empresas registradas.</td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
+
+    <br>
     <br>
     <a href="../index.php?action=logout">Cerrar Sesión</a>
 
-    </div>
+</div>
 </body>
 </html>

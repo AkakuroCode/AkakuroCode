@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/reclamos.css">
     
-    <title>Document</title>
+    <title>Página Principal</title>
 </head>
 <body>
     <header>
@@ -21,8 +21,8 @@
                     <form action="ruta/destino" method="GET" class="search-form">
                         <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                     </form>
-                    <a href="index.html">Inicio</a>
-                    <a href="/sigto/views/nosotrosvisitante.html">Nosotros</a>
+                    <a href="mainvisitante.php">Inicio</a>
+                    <a href="/sigto/views/nosotrosvisitante.php">Nosotros</a>
                     <a href="/sigto/views/loginUsuario.php">Ingresar</a>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
                 <br>
-                <a href="/sigto/views/reclamos.html">Reclamos</a>
+                <a href="/sigto/views/reclamosvisitante.php">Reclamos</a>
             </div>
             <div class="footer-item">
                 <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>

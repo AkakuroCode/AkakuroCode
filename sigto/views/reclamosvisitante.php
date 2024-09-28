@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/reclamos.css">
-    <title>Document</title>
+    <title>Reclamos</title>
 </head>
 <body>
     <header>
@@ -18,8 +18,8 @@
                         <form action="ruta/destino" method="GET" class="search-form"> <!-- Ajusta 'action' y 'method' según el backend -->
                             <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                         </form>
-                    <a href="maincliente.html">Inicio</a>
-                    <a href="loginUsuario.php">Salir</a>
+                    <a href="mainvisitante.php">Inicio</a>
+                    <a href="../index.php?action=logout">Salir</a>
                     </div>
                     
             </div>

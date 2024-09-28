@@ -13,24 +13,25 @@
         <nav class="mi-navbar">
            <div class="mi-navbar-container">
                    <h1>
-                    <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo.png" alt="OceanTrade">
+                    <img class="mi-navbar-logo2" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
                    </h1>
                     <div class="mi-navbar-items">
-                        <form action="ruta/destino" method="GET" class="search-form">
+                        <form action="ruta/destino" method="GET" class="search-form"> <!-- Ajusta 'action' y 'method' según el backend -->
                             <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                         </form>
-                    <a href="maincliente.html">Inicio</a>
-                    <a href="carrito.html">Carrito</a>
-                    <a href="nosotroscliente.html">Nosotros</a>
-                    <a href="loginUsuario.php">Salir</a>
+                    <a href="mainempresa.php">Inicio</a>
+                    <a href="/sigto/views/agregarProd.html">Agregar Producto</a>
+                    <a href="nosotrosempresa.php">Nosotros</a>
+                    <a href="../index.php?action=logout">Salir</a>
                     </div>
+                    
             </div>
         </nav>
     </header>
     
     <main>
-        <!-- Carrusel de Bootstrap -->
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+         <!-- Carrusel de Bootstrap -->
+         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -64,9 +65,8 @@
                 <span class="sr-only">Siguiente</span>
             </a>
         </div>
-
         <p class="relleno">Más Vendidos</p>
-        <img src="/sigto/assets/images/productos2.png" alt="futuro catalogo de productos principal">
+        <img src="/sigto/assets/images/productos2.png"  alt="futuro catalogo de productos principal"> <!-- imagen de prueba prueba para el mockup-->
     </main>
     <br><br><br><br><br><br>
     <footer>
@@ -77,26 +77,26 @@
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
                 <br>
-                <a href="reclamos.html">Reclamos</a>
+                <a href="reclamosempresa.php">Reclamos</a>
             </div>
             <div class="footer-item">
                 <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>
+
             </div>
-            
+
             <div class="footer-redes">
-                <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png" alt="Facebook"></a>
-                <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png" alt="Twitter"></a>
-                <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png" alt="Instagram"></a>
+                <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png"  alt="Facebook"></a>
+                <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png"  alt="Twitter"></a>
+                <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png"  alt="Instagram"></a>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts necesarios -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Tu script personalizado -->
-    <script src="/sigto/assets/js/script.js"></script>
+     <!-- Scripts necesarios -->
+     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+    <script src="/assets/js/script.js"></script>
 </body>
 </html>

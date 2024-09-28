@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
-    <title>Document</title>
+    <title>Nosotros Cliente</title>
 </head>
 <body>
     <header>
@@ -14,9 +14,9 @@
                     <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
                    </h1>
                     <div class="mi-navbar-items">
-                    <a href="maincliente.html">Inicio</a>
-                    <a href="nosotroscliente.html">Nosotros</a>
-                    <a href="loginUsuario.php">Salir</a>
+                    <a href="maincliente.php">Inicio</a>
+                    <a href="nosotroscliente.php">Nosotros</a>
+                    <a href="../index.php?action=logout">Salir</a>
                     </div>
                     
             </div>
@@ -62,7 +62,7 @@
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
                 <br>
-                <a href="reclamos.html">Reclamos</a>
+                <a href="reclamoscliente.php">Reclamos</a>
             </div>
             <div class="footer-item">
                 <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>
