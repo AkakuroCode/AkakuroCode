@@ -1,11 +1,7 @@
 <?php
 require_once __DIR__ . '/../controllers/ProductoController.php';
-session_start();
 
-// Verificar si el usuario está autenticado como empresa
-if (!isset($_SESSION['empresa'])) {
-    die("Acceso denegado. Solo las empresas pueden agregar productos.");
-}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validar y procesar el formulario
@@ -13,8 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $descripcion = $_POST['descripcion'];
     $oferta = $_POST['oferta'];
     $fecof = $_POST['fecof'];
-    $estado = $_POST['estado'];
-    $origen = $_POST['origen'];
+    $estado = $_POST['estado']; // Estado ya será un radio button
+    $origen = $_POST['origen']; // Origen ya será un radio button
+    $precio = $_POST['precio'];
     $stock = $_POST['stock'];
 
     // Manejo de la imagen
@@ -47,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'fecof' => $fecof,
         'estado' => $estado,
         'origen' => $origen,
+        'precio' => $precio,
         'stock' => $stock,
         'imagen' => $nombreImagen
     ];
@@ -64,25 +62,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="/sigto/assets/css/login.css">
 </head>
 <body>
-    <h1>Agregar Producto</h1>
     <form action="agregarproducto.php" method="post" enctype="multipart/form-data">
+    <h1>Agregar Producto</h1>
+
     <label for="nombre">Nombre del Producto:</label>
     <input type="text" id="nombre" name="nombre" required>
 
     <label for="descripcion">Descripción:</label>
     <textarea id="descripcion" name="descripcion" required></textarea>
 
-    <label for="oferta">Oferta:</label>
-    <input type="text" id="oferta" name="oferta">
+    <label for="oferta">Oferta (Descuento en %):</label>
+    <input type="number" id="oferta" name="oferta" min="0" max="100" step="1" placeholder="Ej: 10 para 10%" value="0">
+
 
     <label for="fecof">Fecha de Oferta:</label>
     <input type="date" id="fecof" name="fecof">
 
     <label for="estado">Estado:</label>
-    <input type="text" id="estado" name="estado">
+    <div>
+        <input type="radio" id="nuevo" name="estado" value="Nuevo" required>
+        <label for="nuevo">Nuevo</label>
+        
+        <input type="radio" id="usado" name="estado" value="Usado" required>
+        <label for="usado">Usado</label>
+    </div>
 
     <label for="origen">Origen:</label>
-    <input type="text" id="origen" name="origen">
+    <div>
+        <input type="radio" id="nacional" name="origen" value="Nacional" required>
+        <label for="nacional">Nacional</label>
+
+        <input type="radio" id="internacional" name="origen" value="Internacional" required>
+        <label for="internacional">Internacional</label>
+    </div>
 
     <label for="precio">Precio:</label> <!-- Nuevo campo para precio -->
     <input type="number" id="precio" name="precio" step="0.01" required> <!-- Campo de precio -->
@@ -91,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="number" id="stock" name="stock" required>
 
     <label for="imagen">Imagen:</label>
-    <input type="file" id="imagen" name="imagen">
+    <input type="file" id="imagen" name="imagen" accept="image/*">
 
     <input type="submit" value="Agregar Producto">
 </form>

@@ -105,7 +105,7 @@ switch ($action) {
             header('Location: ?action=list');
         exit;    
     
-        case 'login': 
+    case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
@@ -121,21 +121,23 @@ switch ($action) {
                     // Si no es usuario, intentamos iniciar sesión como empresa
                     $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
                     
-                    if ($loginEmpresa) {
+                if ($loginEmpresa) {
+                        $_SESSION['empresa'] = true; // Indicar que el usuario es una empresa
+                        $_SESSION['idemp'] = $loginEmpresa['idemp']; // Almacenar el ID de la empresa en la sesión
                         // Si el login es exitoso para una empresa, redirigir a la vista de empresa
                         header('Location: /sigto/views/mainempresa.php');
                         exit;
-                    } else {
+                } else {
                         // Si no es usuario ni empresa, intentamos iniciar sesión como admin
                         $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
         
-                        if ($loginAdmin) {
-                            // Si el login es exitoso para un admin, redirigir a la vista de admin
-                            header('Location: /sigto/views/listarUsuarios.php');
-                            exit;
-                        } else {
-                            // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
-                            $error = "Email o contraseña incorrectos.";
+                if ($loginAdmin) {
+                        // Si el login es exitoso para un admin, redirigir a la vista de admin
+                        header('Location: /sigto/views/listarUsuarios.php');
+                        exit;
+                } else {
+                        // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
+                        $error = "Email o contraseña incorrectos.";
                         }
                     }
                 }
