@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($imagen['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $imagen['tmp_name'];
         $nombreImagen = basename($imagen['name']);
-        $rutaDestino = __DIR__ . '/../images/' . $nombreImagen;
+        $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
 
         // Verificar el tamaño de la imagen
         if ($imagen['size'] > 2000000) { // 2MB límite
@@ -61,35 +61,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Agregar Producto</title>
+    <link rel="stylesheet" href="/sigto/assets/css/login.css">
 </head>
 <body>
     <h1>Agregar Producto</h1>
-    <form action="" method="POST" enctype="multipart/form-data">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" required><br>
+    <form action="agregarproducto.php" method="post" enctype="multipart/form-data">
+    <label for="nombre">Nombre del Producto:</label>
+    <input type="text" id="nombre" name="nombre" required>
 
-        <label for="descripcion">Descripción:</label>
-        <textarea name="descripcion" required></textarea><br>
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" name="descripcion" required></textarea>
 
-        <label for="oferta">Oferta:</label>
-        <input type="text" name="oferta"><br>
+    <label for="oferta">Oferta:</label>
+    <input type="text" id="oferta" name="oferta">
 
-        <label for="fecof">Fecha de Oferta:</label>
-        <input type="date" name="fecof"><br>
+    <label for="fecof">Fecha de Oferta:</label>
+    <input type="date" id="fecof" name="fecof">
 
-        <label for="estado">Estado:</label>
-        <input type="text" name="estado" required><br>
+    <label for="estado">Estado:</label>
+    <input type="text" id="estado" name="estado">
 
-        <label for="origen">Origen:</label>
-        <input type="text" name="origen" required><br>
+    <label for="origen">Origen:</label>
+    <input type="text" id="origen" name="origen">
 
-        <label for="stock">Stock:</label>
-        <input type="number" name="stock" required><br>
+    <label for="precio">Precio:</label> <!-- Nuevo campo para precio -->
+    <input type="number" id="precio" name="precio" step="0.01" required> <!-- Campo de precio -->
 
-        <label for="imagen">Imagen:</label>
-        <input type="file" name="imagen" accept="image/*" required><br>
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock" required>
 
-        <button type="submit">Agregar Producto</button>
-    </form>
+    <label for="imagen">Imagen:</label>
+    <input type="file" id="imagen" name="imagen">
+
+    <input type="submit" value="Agregar Producto">
+</form>
+
 </body>
 </html>

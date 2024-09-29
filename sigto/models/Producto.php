@@ -3,7 +3,7 @@ require_once __DIR__ . '/../config/Database.php';
 
 class Producto {
     private $conn;
-    private $table_name = "productos";
+    private $table_name = "producto";
 
     private $sku; // Este es autoincremental
     private $idemp;
@@ -13,6 +13,7 @@ class Producto {
     private $fecof; // fecha de oferta
     private $estado;
     private $origen;
+    private $precio; // Nuevo campo para el precio
     private $stock;
     private $imagen; // Nombre de la imagen del producto
 
@@ -85,6 +86,14 @@ class Producto {
         $this->origen = $origen;
     }
 
+    public function getPrecio() { // Nuevo método para obtener el precio
+        return $this->precio;
+    }
+
+    public function setPrecio($precio) { // Nuevo método para establecer el precio
+        $this->precio = $precio;
+    }
+
     public function getStock() {
         return $this->stock;
     }
@@ -103,7 +112,7 @@ class Producto {
 
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, oferta=?, fecof=?, estado=?, origen=?, stock=?, imagen=?";
+                  SET idemp=?, nombre=?, descripcion=?, oferta=?, fecof=?, estado=?, origen=?, precio=?, stock=?, imagen=?";
         $stmt = $this->conn->prepare($query);
 
         if (!$stmt) {
@@ -111,7 +120,7 @@ class Producto {
             return false;
         }
 
-        $stmt->bind_param("issssisss", $this->idemp, $this->nombre, $this->descripcion, $this->oferta, $this->fecof, $this->estado, $this->origen, $this->stock, $this->imagen);
+        $stmt->bind_param("ississsiis", $this->idemp, $this->nombre, $this->descripcion, $this->oferta, $this->fecof, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen);
 
         if ($stmt->execute()) {
             return true;
@@ -144,11 +153,11 @@ class Producto {
 
     public function update() {
         $query = "UPDATE " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, oferta=?, fecof=?, estado=?, origen=?, stock=?, imagen=? 
+                  SET idemp=?, nombre=?, descripcion=?, oferta=?, fecof=?, estado=?, origen=?, precio=?, stock=?, imagen=? 
                   WHERE sku=?";
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bind_param("issssisssi", $this->idemp, $this->nombre, $this->descripcion, $this->oferta, $this->fecof, $this->estado, $this->origen, $this->stock, $this->imagen, $this->sku);
+        $stmt->bind_param("ississsiis", $this->idemp, $this->nombre, $this->descripcion, $this->oferta, $this->fecof, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen, $this->sku);
 
         return $stmt->execute();
     }

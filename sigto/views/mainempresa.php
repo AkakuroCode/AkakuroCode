@@ -20,7 +20,7 @@
                             <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                         </form>
                     <a href="mainempresa.php">Inicio</a>
-                    <a href="/sigto/views/agregarProd.html">Agregar Producto</a>
+                    <a href="/sigto/views/agregarproducto.php">Agregar Producto</a>
                     <a href="nosotrosempresa.php">Nosotros</a>
                     <a href="../index.php?action=logout">Salir</a>
                     </div>

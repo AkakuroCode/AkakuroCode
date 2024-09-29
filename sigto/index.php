@@ -21,7 +21,7 @@ $idemp = isset($_GET['idemp']) ? $_GET['idemp'] : null;
 $idad = isset($_GET['idad']) ? $_GET['idad'] : null;
 
 // Si no hay un usuario en sesión y la acción no es 'login' ni 'create', redirige al formulario de login
-if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' && $action !== 'edit' && $action !== 'delete' && $action !== 'default') {
+if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'edit' && $action !== 'delete' && $action !== 'default') {
     header('Location: ?action=login');
     exit; // Termina el script después de redirigir
 }
