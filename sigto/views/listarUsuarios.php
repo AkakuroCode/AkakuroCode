@@ -104,7 +104,10 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
 
     <br>
     <br>
-    <a href="../index.php?action=logout">Cerrar Sesión</a>
+
+    <a href="../index.php?action=logout">
+    <button type="button">Cerrar Sesión</button>
+    </a>
 
 </div>
 </body>
