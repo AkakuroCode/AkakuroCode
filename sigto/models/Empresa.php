@@ -146,10 +146,12 @@ class Empresa {
         $result = $stmt->get_result();
         
         if ($result->num_rows > 0) {
+            // Devolvemos toda la información de la empresa, incluido el idemp
             return $result->fetch_assoc();
         } else {
             return false;
         }
     }
+    
 }
 ?>

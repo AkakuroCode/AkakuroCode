@@ -105,46 +105,58 @@ switch ($action) {
             header('Location: ?action=list');
         exit;    
     
-    case 'login': 
+        case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
         
                 // Primero intentamos iniciar sesión como usuario
                 $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
-                
+        
                 if ($loginUsuario) {
-                    // Si el login es exitoso para un usuario, redirigir a la vista de cliente
+                    // Si el login es exitoso para un usuario, establecer rol de usuario
+                    $_SESSION['role'] = 'usuario';
+                    $_SESSION['idus'] = $loginUsuario['idusuario'];  // Almacenar ID del usuario
+                    $_SESSION['email'] = $email;  // Almacenar email del usuario
+                    // Redirigir a la vista de cliente
                     header('Location: /sigto/views/maincliente.php');
                     exit;
                 } else {
                     // Si no es usuario, intentamos iniciar sesión como empresa
                     $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
-                    
+
                 if ($loginEmpresa) {
-                        $_SESSION['empresa'] = true; // Indicar que el usuario es una empresa
-                        $_SESSION['idemp'] = $loginEmpresa['idemp']; // Almacenar el ID de la empresa en la sesión
-                        // Si el login es exitoso para una empresa, redirigir a la vista de empresa
-                        header('Location: /sigto/views/mainempresa.php');
-                        exit;
+                    // Ahora puedes guardar el 'idemp' correctamente
+                    $_SESSION['role'] = 'empresa';
+                    $_SESSION['idemp'] = $loginEmpresa['idemp'];  // Almacenar el ID de la empresa
+                    $_SESSION['email'] = $email;  // Almacenar el email de la empresa
+                    // Redirigir a la vista de empresa
+                    header('Location: /sigto/views/mainempresa.php');
+                    exit;
                 } else {
                         // Si no es usuario ni empresa, intentamos iniciar sesión como admin
                         $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
         
-                if ($loginAdmin) {
-                        // Si el login es exitoso para un admin, redirigir a la vista de admin
-                        header('Location: /sigto/views/listarUsuarios.php');
-                        exit;
-                } else {
-                        // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
-                        $error = "Email o contraseña incorrectos.";
+                        if ($loginAdmin) {
+                            // Si el login es exitoso para un admin, establecer rol de admin
+                            $_SESSION['role'] = 'admin';
+                            $_SESSION['idad'] = $loginAdmin['idad'];  // Almacenar ID del admin
+                            $_SESSION['email'] = $email;  // Almacenar email del admin
+                            // Redirigir a la vista de admin
+                            header('Location: /sigto/views/listarUsuarios.php');
+                            exit;
+                        } else {
+                            // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
+                            $error = "Email o contraseña incorrectos.";
                         }
                     }
                 }
             }
+        
             // Incluir la vista de login con el posible mensaje de error
             include __DIR__ . '/views/loginUsuario.php';
             break;
+        
         
         
 

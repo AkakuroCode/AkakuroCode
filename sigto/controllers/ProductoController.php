@@ -6,16 +6,22 @@ require_once __DIR__ . '/../models/Empresa.php';
 class ProductoController {
 
     public function create($data) {
-          // Inicia la sesión solo si no está activa
-          if (session_status() === PHP_SESSION_NONE) {
+        // Inicia la sesión solo si no está activa
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        var_dump($_SESSION); // Esto mostrará todos los valores actuales almacenados en la sesión
-        // También podrías agregar die() si quieres que se detenga la ejecución en este punto para ver la salida
-        die();
+    
         // Verifica si el usuario está autenticado como empresa
-        if (!isset($_SESSION['empresa']) || !isset($_SESSION['idemp'])) {
+        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'empresa' || !isset($_SESSION['idemp'])) {
             return "Acceso denegado. Solo las empresas pueden agregar productos.";
+        }
+    
+        // Verifica que la fecha 'fecof' no sea anterior a la actual
+        $fechaActual = new DateTime();
+        $fechaOferta = new DateTime($data['fecof']);
+        
+        if ($fechaOferta < $fechaActual) {
+            return "La fecha de la oferta no puede ser anterior a la fecha actual.";
         }
     
         $producto = new Producto();
@@ -25,14 +31,19 @@ class ProductoController {
         $producto->setFecof($data['fecof']);
         $producto->setEstado($data['estado']);
         $producto->setOrigen($data['origen']);
-        $producto->setPrecio($data['precio']);
         $producto->setStock($data['stock']);
-    
-        // Si se ha especificado una oferta, calcula el precio con descuento
+        
+        // Si se ha especificado una oferta, verificar si la fecha de oferta ha llegado
         $oferta = isset($data['oferta']) ? (float)$data['oferta'] : 0;
+        
         if ($oferta > 0) {
-            $precioConDescuento = $data['precio'] - ($data['precio'] * ($oferta / 100));
-            $producto->setPrecio($precioConDescuento);
+            // Solo aplicar la oferta si la fecha actual es igual o mayor a 'fecof'
+            if ($fechaActual >= $fechaOferta) {
+                $precioConDescuento = $data['precio'] - ($data['precio'] * ($oferta / 100));
+                $producto->setPrecio($precioConDescuento);
+            } else {
+                $producto->setPrecio($data['precio']); // Precio sin descuento hasta que llegue la fecha de la oferta
+            }
         } else {
             $producto->setPrecio($data['precio']);
         }

@@ -106,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="file" id="imagen" name="imagen" accept="image/*">
 
     <input type="submit" value="Agregar Producto">
+    <a href="/sigto/views/mainempresa.php">Volver al Inicio</a>
 </form>
 
 </body>

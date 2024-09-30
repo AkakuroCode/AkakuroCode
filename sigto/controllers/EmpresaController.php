@@ -80,13 +80,12 @@ class EmpresaController {
     public function login($data) {
         $empresa = new Empresa();
         $empresa->setEmail($data['email']);
-        $result = $empresa->login();
-
+        $result = $empresa->login();  // Traer todos los datos de la empresa
+    
         if ($result) {
             if (password_verify($data['passw'], $result['passw'])) {
-                session_start();
-                $_SESSION['empresa'] = $result['email'];
-                return true;
+                // Aquí devolvemos los datos completos de la empresa en lugar de solo true
+                return $result; 
             } else {
                 return false;
             }
@@ -94,5 +93,6 @@ class EmpresaController {
             return false;
         }
     }
+    
 }
 ?>
