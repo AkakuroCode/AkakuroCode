@@ -1,5 +1,6 @@
 <?php
 // Inicia una sesión o reanuda la sesión existente
+date_default_timezone_set('America/Argentina/Buenos_Aires');
 session_start();
 
 // Incluye el archivo del controlador 'UsuarioController.php'

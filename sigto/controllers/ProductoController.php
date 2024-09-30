@@ -17,8 +17,8 @@ class ProductoController {
         }
     
         // Verifica que la fecha 'fecof' no sea anterior a la actual
-        $fechaActual = new DateTime();
-        $fechaOferta = new DateTime($data['fecof']);
+        $fechaActual = date('Y-m-d'); // Fecha actual del sistema
+        $fechaOferta = $data['fecof'];
         
         if ($fechaOferta < $fechaActual) {
             return "La fecha de la oferta no puede ser anterior a la fecha actual.";
