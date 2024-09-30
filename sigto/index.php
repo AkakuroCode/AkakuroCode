@@ -7,11 +7,13 @@ session_start();
 require_once __DIR__ . '/controllers/UsuarioController.php';
 require_once __DIR__ . '/controllers/EmpresaController.php';
 require_once __DIR__ . '/controllers/AdminController.php';
+require_once __DIR__ . '/controllers/ProductoController.php';
 
 // Crea una instancia del controlador de usuario
 $controller = new UsuarioController();
 $controller2 = new EmpresaController();
 $controller3 = new AdminController();
+$controller4 = new ProductoController();
 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
 $action = isset($_GET['action']) ? $_GET['action'] : 'default';
@@ -26,7 +28,7 @@ if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' 
     header('Location: ?action=login');
     exit; // Termina el script después de redirigir
 }
-if (!isset($_SESSION['empresa']) && $action !== 'login' && $action !== 'create2' && $action !== 'edit2' && $action !== 'delete2' && $action !== 'default') {
+if (!isset($_SESSION['empresa']) && $action !== 'login' && $action !== 'list2' && $action !== 'create2' && $action !== 'edit2' && $action !== 'delete2' && $action !== 'default') {
     header('Location: ?action=login');
     exit; // Termina el script después de redirigir
 }
@@ -68,6 +70,11 @@ switch ($action) {
         include __DIR__ . '/views/listarUsuarios.php';
         break;
 
+    case 'list2': // Redirigir a la lista de productos
+        // Aquí podrías cargar una vista específica para listar productos
+        include __DIR__ . '/views/listarproductos.php'; // Asegúrate de que esta vista exista
+        break;
+
     case 'edit': // Editar un usuario existente
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Si se envía el formulario de edición (método POST), llama al método 'update' del controlador
@@ -94,6 +101,21 @@ switch ($action) {
             }
         break;
 
+        case 'edit3': // Editar un producto existente
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Si se envía el formulario de edición (método POST), llama al método 'actualizar' del controlador
+                $productoController = new ProductoController();
+                $productoController->update($_POST); // Llama al método de actualización del controlador
+                header('Location: index.php?action=list');
+                exit;
+            } else {
+                // Si no, muestra el formulario de edición de producto
+                $productoController = new ProductoController();
+                $productoController->readOne($sku); // Muestra el formulario para editar el producto
+            }
+            break;
+    
+
     case 'delete': // Eliminar un usuario
         // Llama al método 'delete' del controlador y muestra el resultado
         echo $controller->delete($idus);
@@ -104,7 +126,13 @@ switch ($action) {
             // Llama al método 'delete' del controlador y muestra el resultado
             echo $controller2->delete($idemp);
             header('Location: ?action=list');
-        exit;    
+        exit;  
+        
+    case 'delete3': // Eliminar un producto existente
+            $productoController = new ProductoController();
+            $productoController->delete($sku); // Llama al método de eliminación del controlador
+            header('Location: index.php?action=list');
+            exit;
     
         case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
