@@ -21,6 +21,7 @@
                         </form>
                     <a href="mainempresa.php">Inicio</a>
                     <a href="/sigto/views/agregarproducto.php">Agregar Producto</a>
+                    <a href="../index.php?action=list2">Ver mis productos</a>
                     <a href="nosotrosempresa.php">Nosotros</a>
                     <a href="../index.php?action=logout">Salir</a>
                     </div>

@@ -7,11 +7,13 @@ session_start();
 require_once __DIR__ . '/controllers/UsuarioController.php';
 require_once __DIR__ . '/controllers/EmpresaController.php';
 require_once __DIR__ . '/controllers/AdminController.php';
+require_once __DIR__ . '/controllers/ProductoController.php';
 
 // Crea una instancia del controlador de usuario
 $controller = new UsuarioController();
 $controller2 = new EmpresaController();
 $controller3 = new AdminController();
+$controller4 = new ProductoController();
 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
 $action = isset($_GET['action']) ? $_GET['action'] : 'default';
@@ -21,18 +23,22 @@ $idus = isset($_GET['idus']) ? $_GET['idus'] : null;
 $idemp = isset($_GET['idemp']) ? $_GET['idemp'] : null;
 $idad = isset($_GET['idad']) ? $_GET['idad'] : null;
 
-// Si no hay un usuario en sesión y la acción no es 'login' ni 'create', redirige al formulario de login
-if (!isset($_SESSION['usuario']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'edit' && $action !== 'delete' && $action !== 'default') {
+// Verificación para usuarios
+if ($_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !== 'default') {
     header('Location: ?action=login');
-    exit; // Termina el script después de redirigir
+    exit;
 }
-if (!isset($_SESSION['empresa']) && $action !== 'login' && $action !== 'create2' && $action !== 'edit2' && $action !== 'delete2' && $action !== 'default') {
+
+// Verificación para empresas
+if ($_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'default') {
     header('Location: ?action=login');
-    exit; // Termina el script después de redirigir
+    exit;
 }
-if (!isset($_SESSION['admin']) && $action !== 'login' && $action !== 'create2' && $action !== 'edit2' && $action !== 'delete2' && $action !== 'default') {
+
+// Verificación para admins
+if ($_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'default') {
     header('Location: ?action=login');
-    exit; // Termina el script después de redirigir
+    exit;
 }
 
 // Controla las diferentes acciones posibles utilizando una estructura switch
@@ -67,6 +73,16 @@ switch ($action) {
         $empresa = $controller2->readAll();
         include __DIR__ . '/views/listarUsuarios.php';
         break;
+    
+        case 'list2': // Redirigir a la lista de productos
+            if ($_SESSION['role'] !== 'empresa') {
+                header('Location: ?action=login');
+                exit;
+            }
+            $empresa = $controller2->readAll();
+            $producto = $controller4->readAll();
+            include __DIR__ . '/views/listarproductos.php'; // Asegúrate de que esta vista exista
+            break; 
 
     case 'edit': // Editar un usuario existente
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -94,6 +110,20 @@ switch ($action) {
             }
         break;
 
+        case 'edit3': // Editar un producto existente
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Si se envía el formulario de edición (método POST), llama al método 'update' del controlador
+                echo $controller4->update($_POST);
+                header('Location: ?action=list2'); // Redirigir a la lista de productos
+                exit;
+            } else {
+                // Si no, muestra el formulario de edición del producto
+                $sku = $_GET['sku']; // Obtener el SKU del producto a editar
+                $productoSeleccionado = $controller4->readOne($sku);
+                include __DIR__ . '/views/editarProducto.php'; // Carga la vista para editar el producto
+            }
+            break;
+
     case 'delete': // Eliminar un usuario
         // Llama al método 'delete' del controlador y muestra el resultado
         echo $controller->delete($idus);
@@ -104,7 +134,13 @@ switch ($action) {
             // Llama al método 'delete' del controlador y muestra el resultado
             echo $controller2->delete($idemp);
             header('Location: ?action=list');
-        exit;    
+        exit;
+    
+    case 'delete3': // Eliminar un producto
+            $sku = $_GET['sku']; // Obtener el SKU del producto a eliminar
+            echo $controller4->delete($sku);
+            header('Location: ?action=list2'); // Redirigir a la lista de productos
+        exit;
     
         case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
