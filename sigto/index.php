@@ -24,19 +24,19 @@ $idemp = isset($_GET['idemp']) ? $_GET['idemp'] : null;
 $idad = isset($_GET['idad']) ? $_GET['idad'] : null;
 
 // Verificación para usuarios
-if ($_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !== 'default') {
+if ($_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !=='create' && $action !=='create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }
 
 // Verificación para empresas
-if ($_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'default') {
+if ($_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !=='create' && $action !=='create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }
 
 // Verificación para admins
-if ($_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'default') {
+if ($_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !=='create' && $action !=='create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }

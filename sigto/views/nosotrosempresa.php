@@ -14,9 +14,9 @@
                     <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
                    </h1>
                     <div class="mi-navbar-items">
-                    <a href="mainempresa.php">Inicio</a>
-                    <a href="agregarProd.html">Agregar Producto</a>
-                    <a href="nosotrosempresa.php">Nosotros</a>
+                    <a href="/sigto/views/mainempresa.php">Inicio</a>
+                    <a href="/sigto/views/agregarproducto.php">Agregar Producto</a>
+                    <a href="/sigto/views/nosotrosempresa.php">Nosotros</a>
                     <a href="../index.php?action=logout">Salir</a>
                     </div>
                     
