@@ -5,17 +5,15 @@ class Producto {
     private $conn;
     private $table_name = "producto";
 
-    private $sku; // Este es autoincremental
+    private $sku; // Autoincremental
     private $idemp;
     private $nombre;
     private $descripcion;
-    private $oferta;
-    private $fecof; // fecha de oferta
     private $estado;
     private $origen;
-    private $precio; // Nuevo campo para el precio
+    private $precio;
     private $stock;
-    private $imagen; // Nombre de la imagen del producto
+    private $imagen;
 
     public function __construct() {
         $database = new Database();
@@ -54,22 +52,6 @@ class Producto {
         $this->descripcion = $descripcion;
     }
 
-    public function getOferta() {
-        return $this->oferta;
-    }
-
-    public function setOferta($oferta) {
-        $this->oferta = $oferta;
-    }
-
-    public function getFecof() {
-        return $this->fecof;
-    }
-
-    public function setFecof($fecof) {
-        $this->fecof = $fecof;
-    }
-
     public function getEstado() {
         return $this->estado;
     }
@@ -86,11 +68,11 @@ class Producto {
         $this->origen = $origen;
     }
 
-    public function getPrecio() { // Nuevo método para obtener el precio
+    public function getPrecio() {
         return $this->precio;
     }
 
-    public function setPrecio($precio) { // Nuevo método para establecer el precio
+    public function setPrecio($precio) {
         $this->precio = $precio;
     }
 
@@ -110,9 +92,10 @@ class Producto {
         $this->imagen = $imagen;
     }
 
+    // Método para crear un producto
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, oferta=?, fecof=?, estado=?, origen=?, precio=?, stock=?, imagen=?";
+                  SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=?";
         $stmt = $this->conn->prepare($query);
 
         if (!$stmt) {
@@ -120,28 +103,44 @@ class Producto {
             return false;
         }
 
-        $stmt->bind_param("ississsiis", $this->idemp, $this->nombre, $this->descripcion, $this->oferta, $this->fecof, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen);
+        $stmt->bind_param("issssiis", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen);
 
         if ($stmt->execute()) {
-            return true;
+            // Devolver el último ID insertado
+            return $this->conn->insert_id;  // Esto devuelve el `sku` generado
         } else {
             echo "Error en la ejecución: " . $stmt->error;
             return false;
         }
     }
 
-    public function readAll() {
-        $query = "SELECT * FROM " . $this->table_name;
+    public function readAllProducts() {
+        $query = "SELECT p.*, o.porcentaje_oferta, o.preciooferta, o.fecha_inicio, o.fecha_fin
+                  FROM producto p
+                  LEFT JOIN ofertas o ON p.sku = o.sku"; // Unimos la tabla de ofertas para mostrar la oferta si existe
         $result = $this->conn->query($query);
-
+    
         if (!$result) {
             echo "Error en la consulta SQL: " . $this->conn->error;
             return false;
         }
-
+    
+        return $result;
+    }
+    // Método para obtener todos los productos
+    public function readByEmpresa($idemp) {
+        $query = "SELECT p.*, o.porcentaje_oferta, o.preciooferta, o.fecha_inicio, o.fecha_fin 
+                  FROM producto p
+                  LEFT JOIN ofertas o ON p.sku = o.sku
+                  WHERE p.idemp = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $idemp);
+        $stmt->execute();
+        $result = $stmt->get_result();
         return $result;
     }
 
+    // Método para obtener un solo producto por su SKU
     public function readOne() {
         $query = "SELECT * FROM " . $this->table_name . " WHERE sku = ? LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
@@ -151,17 +150,19 @@ class Producto {
         return $result->fetch_assoc();
     }
 
+    // Método para actualizar un producto
     public function update() {
         $query = "UPDATE " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, oferta=?, fecof=?, estado=?, origen=?, precio=?, stock=?, imagen=? 
+                  SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=? 
                   WHERE sku=?";
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bind_param("ississsiis", $this->idemp, $this->nombre, $this->descripcion, $this->oferta, $this->fecof, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen, $this->sku);
+        $stmt->bind_param("issssiisi", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen, $this->sku);
 
         return $stmt->execute();
     }
 
+    // Método para eliminar un producto
     public function delete() {
         $query = "DELETE FROM " . $this->table_name . " WHERE sku = ?";
         $stmt = $this->conn->prepare($query);

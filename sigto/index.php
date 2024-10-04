@@ -24,19 +24,19 @@ $idemp = isset($_GET['idemp']) ? $_GET['idemp'] : null;
 $idad = isset($_GET['idad']) ? $_GET['idad'] : null;
 
 // Verificación para usuarios
-if ($_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !=='create' && $action !=='create2' && $action !== 'default') {
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }
 
 // Verificación para empresas
-if ($_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !=='create' && $action !=='create2' && $action !== 'default') {
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }
 
 // Verificación para admins
-if ($_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !=='create' && $action !=='create2' && $action !== 'default') {
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }
@@ -203,9 +203,7 @@ switch ($action) {
         header('Location: ?action=login');
         exit;
 
-    default: // Acción por defecto: listar usuarios
-        // Si la acción no coincide con ninguno de los casos anteriores, muestra la lista de usuarios
-        $usuario = $controller->readAll();
+    default:
         include __DIR__ . '/views/mainvisitante.php';
     break;
 }

@@ -1,3 +1,14 @@
+<?php
+require_once __DIR__ . '/../controllers/ProductoController.php';
+
+$productoController = new ProductoController();
+$productos = $productoController->readAll(); // Recupera todos los productos
+
+if (!$productos) {
+    echo "No se encontraron productos.";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,8 +78,26 @@
         </div>
 
         <p class="relleno">Más Vendidos</p>
-        <img src="/sigto/assets/images/productos2.png" alt="futuro catalogo de productos principal">
-    </main>
+        <!-- Catálogo de productos -->
+    <div class="container mt-5">
+        <h2>Productos Disponibles</h2>
+        <div class="row">
+            <?php foreach ($productos as $producto): ?>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                            <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                            <p class="card-text"><strong>Precio: </strong>US$<?php echo htmlspecialchars($producto['precio']); ?></p>
+                            <p class="card-text"><strong>Oferta: </strong><?php echo htmlspecialchars($producto['oferta']); ?>%</p>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</main>
     <br><br><br><br><br><br>
     <footer>
         <div class="footer-container">

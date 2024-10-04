@@ -3,9 +3,14 @@ require_once __DIR__ . '/../controllers/ProductoController.php';
 
 $productoController = new ProductoController();
 
+// Verifica si la sesión de empresa está activa
+if (!isset($_SESSION['idemp'])) {
+    echo "No tienes permiso para acceder a esta página.";
+    exit;
+}
 
-// Obtener todos los productos
-$productos = $productoController->readAll();
+// Obtener productos solo de la empresa logueada
+$productos = $productoController->readAllByEmpresa($_SESSION['idemp']);
 
 if (!$productos) {
     echo "No se encontraron productos.";
@@ -53,7 +58,9 @@ if (!$productos) {
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Oferta</th>
-                <th>Fecha de Oferta</th>
+                <th>Precio con Oferta</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Fin</th>
                 <th>Estado</th>
                 <th>Origen</th>
                 <th>Precio</th>
@@ -67,17 +74,34 @@ if (!$productos) {
                     <td><?php echo htmlspecialchars($producto['sku']); ?></td>
                     <td><?php echo htmlspecialchars($producto['nombre']); ?></td>
                     <td><?php echo htmlspecialchars($producto['descripcion']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['oferta']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['fecof']); ?></td>
+
+                    <!-- Mostrar oferta solo si existe -->
+                    <td>
+                        <?php 
+                        echo isset($producto['porcentaje_oferta']) ? htmlspecialchars($producto['porcentaje_oferta']) . "%" : "Sin oferta"; 
+                        ?>
+                    </td>
+
+                    <!-- Precio con oferta o precio normal -->
+                    <td>
+                        <?php 
+                        echo isset($producto['preciooferta']) ? htmlspecialchars($producto['preciooferta']) : htmlspecialchars($producto['precio']);
+                        ?>
+                    </td>
+
+                    <!-- Fechas de la oferta -->
+                    <td><?php echo isset($producto['fecha_inicio']) ? htmlspecialchars($producto['fecha_inicio']) : "N/A"; ?></td>
+                    <td><?php echo isset($producto['fecha_fin']) ? htmlspecialchars($producto['fecha_fin']) : "N/A"; ?></td>
+
                     <td><?php echo htmlspecialchars($producto['estado']); ?></td>
                     <td><?php echo htmlspecialchars($producto['origen']); ?></td>
                     <td><?php echo htmlspecialchars($producto['precio']); ?></td>
                     <td><?php echo htmlspecialchars($producto['stock']); ?></td>
                     <td><img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" style="width: 100px; height: auto;"></td>
                     <td>
-                <a href="?action=edit3&sku=<?php echo $producto['sku']; ?>">Editar</a>
-                <a href="?action=delete3&sku=<?php echo $producto['sku']; ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</a>
-            </td>
+                        <a href="?action=edit3&sku=<?php echo $producto['sku']; ?>">Editar</a>
+                        <a href="?action=delete3&sku=<?php echo $producto['sku']; ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</a>
+                    </td>
                 </tr>
             <?php endwhile; ?>
         </tbody>

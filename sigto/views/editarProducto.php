@@ -17,12 +17,6 @@
         <label for="descripcion">Descripción:</label>
         <textarea id="descripcion" name="descripcion" required><?php echo htmlspecialchars($productoSeleccionado['descripcion']); ?></textarea>
 
-        <label for="oferta">Oferta (Descuento en %):</label>
-        <input type="number" id="oferta" name="oferta" value="<?php echo htmlspecialchars($productoSeleccionado['oferta']); ?>" min="0" max="100">
-
-        <label for="fecof">Fecha de Oferta:</label>
-        <input type="date" id="fecof" name="fecof" value="<?php echo htmlspecialchars($productoSeleccionado['fecof']); ?>" required>
-
         <label for="estado">Estado:</label>
         <input type="radio" id="nuevo" name="estado" value="Nuevo" <?php echo $productoSeleccionado['estado'] == 'Nuevo' ? 'checked' : ''; ?>> Nuevo
         <input type="radio" id="usado" name="estado" value="Usado" <?php echo $productoSeleccionado['estado'] == 'Usado' ? 'checked' : ''; ?>> Usado
@@ -41,6 +35,32 @@
         <input type="file" id="imagen" name="imagen">
         <input type="hidden" name="imagenActual" value="<?php echo htmlspecialchars($productoSeleccionado['imagen']); ?>">
         <img src="/sigto/assets/images/<?php echo htmlspecialchars($productoSeleccionado['imagen']); ?>" alt="<?php echo htmlspecialchars($productoSeleccionado['nombre']); ?>" style="width: 100px; height: auto;">
+
+        <!-- Sección de Oferta -->
+        <h2>Editar Oferta</h2>
+
+        <?php if (isset($ofertaSeleccionada)): ?>
+            <!-- Mostrar detalles de la oferta actual si existe -->
+            <label for="oferta">Oferta Actual (Descuento en %):</label>
+            <input type="number" id="oferta" name="oferta" value="<?php echo htmlspecialchars($ofertaSeleccionada['porcentaje_oferta']); ?>" min="0" max="100">
+
+            <label for="fecha_inicio">Fecha de inicio de la oferta:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?php echo htmlspecialchars($ofertaSeleccionada['fecha_inicio']); ?>">
+
+            <label for="fecha_fin">Fecha de fin de la oferta:</label>
+            <input type="date" id="fecha_fin" name="fecha_fin" value="<?php echo htmlspecialchars($ofertaSeleccionada['fecha_fin']); ?>">
+
+        <?php else: ?>
+            <!-- Si no existe una oferta previa, permitir crear una nueva -->
+            <label for="oferta">Nueva Oferta (Descuento en %):</label>
+            <input type="number" id="oferta" name="oferta" min="0" max="100">
+
+            <label for="fecha_inicio">Fecha de inicio de la oferta:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio">
+
+            <label for="fecha_fin">Fecha de fin de la oferta:</label>
+            <input type="date" id="fecha_fin" name="fecha_fin">
+        <?php endif; ?>
 
         <button type="submit">Actualizar Producto</button>
         <a href="/sigto/views/mainempresa.php">Volver al Inicio</a>
