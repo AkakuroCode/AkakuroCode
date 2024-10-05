@@ -69,7 +69,7 @@
         <?php endif; ?>
 
         <button type="submit">Actualizar Producto</button>
-        <a href="/sigto/views/mainempresa.php">Volver al Inicio</a>
+        <a href="?action=list2">Volver a la lista</a>
     </form>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Producto.php';
+require_once __DIR__ . '/../controllers/OfertaController.php'; // Asegurarnos de incluir el modelo Oferta
 
 class ProductoController {
 
@@ -24,7 +25,7 @@ class ProductoController {
         $producto->setPrecio($data['precio']);
         $producto->setImagen($data['imagen']);
 
-          // Intentar crear el producto
+        // Intentar crear el producto
         $skuGenerado = $producto->create();
 
         if ($skuGenerado) {
@@ -72,19 +73,62 @@ class ProductoController {
         $producto->setOrigen($data['origen']);
         $producto->setStock($data['stock']);
         $producto->setPrecio($data['precio']);
+    
+        // Manejar la imagen
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            $imagen = $_FILES['imagen'];
+            $tmp_name = $imagen['tmp_name'];
+            $nombreImagen = basename($imagen['name']);
+            $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
 
-        // Actualizar imagen si se proporciona
-        if (isset($data['imagen']) && $data['imagen'] !== null) {
-            $producto->setImagen($data['imagen']);
+            // Verificar el tamaño de la imagen
+            if ($imagen['size'] > 2000000) {
+                return "La imagen es demasiado grande. El tamaño máximo permitido es 2MB.";
+            }
+
+            // Mover la imagen a la carpeta de destino
+            if (!move_uploaded_file($tmp_name, $rutaDestino)) {
+                return "Error al subir la imagen.";
+            }
+
+            // Establecer la nueva imagen en el producto
+            $producto->setImagen($nombreImagen);
+        } else {
+            // Mantener la imagen actual si no se sube una nueva
+            $producto->setImagen($data['imagenActual']);
         }
-
+    
+        // Validar y actualizar la oferta
+        $ofertaController = new OfertaController();
+    
+        if (isset($data['oferta']) && $data['oferta'] > 0) {
+            $fechaInicio = $data['fecha_inicio'];
+            $fechaFin = $data['fecha_fin'];
+    
+            // Validación de fecha
+            if ($fechaInicio && $fechaFin && $fechaInicio < $fechaFin) {
+                $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
+                $dataOferta = [
+                    'sku' => $data['sku'],
+                    'porcentaje_oferta' => $data['oferta'],
+                    'preciooferta' => $precioOferta,
+                    'fecha_inicio' => $fechaInicio,
+                    'fecha_fin' => $fechaFin
+                ];
+                $ofertaController->update($dataOferta); // Actualizamos la oferta
+            } else {
+                return "Error: La fecha de inicio debe ser anterior a la fecha de fin.";
+            }
+        }
+    
         if ($producto->update()) {
             return "Producto actualizado exitosamente.";
         } else {
             return "Error al actualizar producto.";
         }
     }
-
+    
+    
     public function delete($sku) {
         $producto = new Producto();
         $producto->setSku($sku);

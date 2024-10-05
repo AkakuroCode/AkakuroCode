@@ -11,6 +11,8 @@ if (!$productos) {
     echo "No se encontraron productos.";
     exit;
 }
+
+$fechaActual = date('Y-m-d'); // Obtener la fecha actual
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -96,11 +98,12 @@ if (!$productos) {
                                 <?php
                                 // Verificar si el producto tiene una oferta activa
                                 $oferta = $ofertaController->readBySku($producto['sku']);
-                                if ($oferta) {
+                                
+                                if ($oferta && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
                                     $precioOferta = $oferta['preciooferta'];
-                                    echo "<p class='card-text'><strong>Precio: </strong><span style='text-decoration: line-through;'>US$" . htmlspecialchars($producto['precio']) . "</span></p>";
+                                    echo "<p class='card-text'><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
                                     echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
-                                    echo "<p class='card-text'><strong>Precio con oferta: </strong>US${precioOferta}</p>";
+                                    echo "<p class='card-text'><strong>Precio con oferta: </strong>US$" . htmlspecialchars($precioOferta) . "</p>";
                                 } else {
                                     echo "<p class='card-text'><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
                                     echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
