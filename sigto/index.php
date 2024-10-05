@@ -84,6 +84,11 @@ switch ($action) {
             include __DIR__ . '/views/listarproductos.php'; // Asegúrate de que esta vista exista
             break; 
 
+    case 'list2': // Redirigir a la lista de productos
+        // Aquí podrías cargar una vista específica para listar productos
+        include __DIR__ . '/views/listarproductos.php'; // Asegúrate de que esta vista exista
+        break;
+
     case 'edit': // Editar un usuario existente
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Si se envía el formulario de edición (método POST), llama al método 'update' del controlador
