@@ -43,7 +43,7 @@ if (!$productos) {
                     <a href="/sigto/views/mainempresa.php">Inicio</a>
                     <a href="/sigto/views/agregarproducto.php">Agregar Producto</a>
                     <a href="/sigto/views/nosotrosempresa.php">Nosotros</a>
-                    <a href="../index.php?action=logout">Salir</a>
+                    <a href="/sigto/index.php?action=logout">Salir</a>
                     </div>
                     
             </div>
