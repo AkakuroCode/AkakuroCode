@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../models/Producto.php';
-require_once __DIR__ . '/../controllers/OfertaController.php'; // Asegurarnos de incluir el modelo Oferta
+require_once __DIR__ . '/../controllers/OfertaController.php';
+require_once __DIR__ . '/../controllers/CategoriaController.php'; 
 
 class ProductoController {
 
@@ -45,25 +46,10 @@ class ProductoController {
     
         return $result;
     }
-    
+
     public function asignarCategoria($sku, $idcat) {
-        // Usar la conexión actual en lugar de crear una nueva instancia de Producto
-        $query = "INSERT INTO pertenece (sku, idcat) VALUES (?, ?)";
-        $stmt = $this->conn->prepare($query);
-    
-        if (!$stmt) {
-            echo "Error en la preparación de la consulta: " . $this->conn->error;
-            return false;
-        }
-    
-        $stmt->bind_param("ii", $sku, $idcat);
-    
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            echo "Error al insertar la relación en la tabla pertenece: " . $stmt->error;
-            return false;
-        }
+        $producto = new Producto(); // Instanciar el modelo de Producto
+        return $producto->asignarCategoria($sku, $idcat); // Llamar al método del modelo
     }
 
     public function readAllByEmpresa($idemp) {
@@ -83,6 +69,7 @@ class ProductoController {
         return $producto->readOne();
     }
 
+    // Función para actualizar el producto
     public function update($data) {
         $producto = new Producto();
         $producto->setSku($data['sku']);
@@ -94,38 +81,37 @@ class ProductoController {
         $producto->setStock($data['stock']);
         $producto->setPrecio($data['precio']);
     
-        // Manejar la imagen
+        // Verificar si se ha subido una nueva imagen
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            $imagen = $_FILES['imagen'];
-            $tmp_name = $imagen['tmp_name'];
-            $nombreImagen = basename($imagen['name']);
+            // Procesar la nueva imagen
+            $tmp_name = $_FILES['imagen']['tmp_name'];
+            $nombreImagen = basename($_FILES['imagen']['name']);
             $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
 
-            // Verificar el tamaño de la imagen
-            if ($imagen['size'] > 2000000) {
-                return "La imagen es demasiado grande. El tamaño máximo permitido es 2MB.";
+            // Mover la nueva imagen a la carpeta de destino
+            if (move_uploaded_file($tmp_name, $rutaDestino)) {
+                // Establecer la nueva imagen en el producto
+                $producto->setImagen($nombreImagen);
+            } else {
+                return "Error al subir la nueva imagen.";
             }
-
-            // Mover la imagen a la carpeta de destino
-            if (!move_uploaded_file($tmp_name, $rutaDestino)) {
-                return "Error al subir la imagen.";
-            }
-
-            // Establecer la nueva imagen en el producto
-            $producto->setImagen($nombreImagen);
         } else {
-            // Mantener la imagen actual si no se sube una nueva
+            // Mantener la imagen actual si no se ha subido una nueva
             $producto->setImagen($data['imagenActual']);
         }
-    
+
+        // Solo eliminar y asignar nueva categoría si se selecciona una nueva
+        if (isset($data['categoria']) && $data['categoria'] !== "") {
+            $producto->eliminarCategoria($data['sku']); // Elimina la categoría anterior del producto
+            $producto->asignarCategoria($data['sku'], $data['categoria']); // Asigna la nueva categoría
+        }
+
         // Validar y actualizar la oferta
         $ofertaController = new OfertaController();
-    
         if (isset($data['oferta']) && $data['oferta'] > 0) {
-            $fechaInicio = $data['fecha_inicio'];
-            $fechaFin = $data['fecha_fin'];
-    
-            // Validación de fecha
+            $fechaInicio = !empty($data['fecha_inicio']) ? $data['fecha_inicio'] : $data['fecha_inicio_actual'];
+            $fechaFin = !empty($data['fecha_fin']) ? $data['fecha_fin'] : $data['fecha_fin_actual'];
+
             if ($fechaInicio && $fechaFin && $fechaInicio < $fechaFin) {
                 $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
                 $dataOferta = [
@@ -139,16 +125,29 @@ class ProductoController {
             } else {
                 return "Error: La fecha de inicio debe ser anterior a la fecha de fin.";
             }
+        } else {
+            // Si no se cambia el porcentaje de oferta, recalcular el precio de oferta en función del nuevo precio
+            $ofertaActual = $ofertaController->readBySku($data['sku']);
+            if ($ofertaActual) {
+                $precioOferta = $data['precio'] - ($data['precio'] * ($ofertaActual['porcentaje_oferta'] / 100));
+                $dataOferta = [
+                    'sku' => $data['sku'],
+                    'porcentaje_oferta' => $ofertaActual['porcentaje_oferta'],
+                    'preciooferta' => $precioOferta,
+                    'fecha_inicio' => $ofertaActual['fecha_inicio'],
+                    'fecha_fin' => $ofertaActual['fecha_fin']
+                ];
+                $ofertaController->update($dataOferta); // Actualizamos la oferta con el nuevo precio
+            }
         }
-    
+
         if ($producto->update()) {
             return "Producto actualizado exitosamente.";
         } else {
             return "Error al actualizar producto.";
         }
     }
-    
-    
+
     public function delete($sku) {
         $producto = new Producto();
         $producto->setSku($sku);
@@ -159,4 +158,3 @@ class ProductoController {
         }
     }
 }
-?>
