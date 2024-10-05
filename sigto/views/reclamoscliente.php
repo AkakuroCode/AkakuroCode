@@ -29,25 +29,33 @@
         <main>
             <section class="reclamo-form">
                 <h2>Enviar Reclamo</h2>
-                <form action="/enviar-reclamo" method="POST">
-                    <div class="form-group">
-                        <label for="email">Correo Electrónico:</label>
-                        <input type="email" id="email" name="email" placeholder="Ingrese su correo" required>
-                    </div>
+                <form action="" method="GET" onsubmit="enviarReclamo()">
+        <div>
+            <label for="asunto">Asunto</label>
+            <input type="text" id="asunto" name="asunto" placeholder="Ingrese su asunto" required>
+        </div>
 
-                    <div class="form-group">
-                        <label for="asunto">Asunto</label>
-                        <input type="text" id="asunto" class="input-text" placeholder="Ingrese su asunto" name="asunto" required>
-                    </div>
+        <div>
+            <label for="reclamo">Escriba su reclamo:</label>
+            <textarea id="reclamo" name="reclamo" rows="5" placeholder="Escriba su reclamo aquí..." required></textarea>
+        </div>
 
-                    <div class="form-group">
-                        <label for="reclamo">Escriba su reclamo:</label>
-                        <textarea id="reclamo" name="reclamo" rows="5" placeholder="Escriba su reclamo aquí..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit">Enviar Reclamo</button>
-                    </div>
-                </form>
+        <div>
+            <button type="submit">Enviar Reclamo</button>
+        </div>
+    </form>
+
+    <script>
+        function enviarReclamo() {
+            var asunto = document.getElementById("asunto").value;
+            var mensaje = document.getElementById("reclamo").value;
+
+            var mailto_link = "mailto:akakurocode@gmail.com?subject=" + encodeURIComponent(asunto) + "&body=" + encodeURIComponent(mensaje);
+
+            window.location.href = mailto_link;
+            return false; // Evitar que el formulario se envíe de la manera tradicional
+        }
+    </script>
             </section>
         </main>
           
