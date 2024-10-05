@@ -1,3 +1,17 @@
+<?php
+require_once __DIR__ . '/../controllers/ProductoController.php';
+require_once __DIR__ . '/../controllers/OfertaController.php';
+
+$productoController = new ProductoController();
+$productos = $productoController->readAll(); // Recupera todos los productos
+
+$ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
+
+if (!$productos) {
+    echo "No se encontraron productos.";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,24 +20,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/reclamos.css">
-    <title>Document</title>
+    <title>Inicio</title>
 </head>
 <body>
     <header>
         <nav class="mi-navbar">
-           <div class="mi-navbar-container">
-                   <h1>
+            <div class="mi-navbar-container">
+                <h1>
                     <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo.png" alt="OceanTrade">
-                   </h1>
-                    <div class="mi-navbar-items">
-                        <form action="ruta/destino" method="GET" class="search-form">
-                            <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
-                        </form>
+                </h1>
+                <div class="mi-navbar-items">
+                    <form action="ruta/destino" method="GET" class="search-form">
+                        <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
+                    </form>
                     <a href="maincliente.php">Inicio</a>
                     <a href="carrito.html">Carrito</a>
                     <a href="nosotroscliente.php">Nosotros</a>
                     <a href="../index.php?action=logout">Salir</a>
-                    </div>
+                </div>
             </div>
         </nav>
     </header>
@@ -66,8 +80,46 @@
         </div>
 
         <p class="relleno">Más Vendidos</p>
-        <img src="/sigto/assets/images/productos2.png" alt="futuro catalogo de productos principal">
+        
+        <!-- Catálogo de productos -->
+        <div class="container mt-5">
+            <h2>Productos Disponibles</h2>
+            <div class="row">
+                <?php foreach ($productos as $producto): ?>
+                    <div class="col-md-3 mb-4">
+                        <div class="card h-100">
+                            <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                                <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+
+                                <?php
+                                // Verificar si el producto tiene una oferta activa
+                                $oferta = $ofertaController->readBySku($producto['sku']);
+                                if ($oferta) {
+                                    $precioOferta = $oferta['preciooferta'];
+                                    echo "<p class='card-text'><strong>Precio: </strong><span style='text-decoration: line-through;'>US$" . htmlspecialchars($producto['precio']) . "</span></p>";
+                                    echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
+                                    echo "<p class='card-text'><strong>Precio con oferta: </strong>US${precioOferta}</p>";
+                                } else {
+                                    echo "<p class='card-text'><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
+                                    echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
+                                }
+                                ?>
+
+                                <!-- Botón de Comprar -->
+                                <form action="comprar.php" method="POST">
+                                    <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
+                                    <button type="submit" class="btn btn-primary">Comprar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </main>
+
     <br><br><br><br><br><br>
     <footer>
         <div class="footer-container">

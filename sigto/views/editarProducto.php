@@ -17,13 +17,19 @@
         <label for="descripcion">Descripción:</label>
         <textarea id="descripcion" name="descripcion" required><?php echo htmlspecialchars($productoSeleccionado['descripcion']); ?></textarea>
 
+        <!-- Cambiado a select -->
         <label for="estado">Estado:</label>
-        <input type="radio" id="nuevo" name="estado" value="Nuevo" <?php echo $productoSeleccionado['estado'] == 'Nuevo' ? 'checked' : ''; ?>> Nuevo
-        <input type="radio" id="usado" name="estado" value="Usado" <?php echo $productoSeleccionado['estado'] == 'Usado' ? 'checked' : ''; ?>> Usado
+        <select id="estado" name="estado" required>
+            <option value="Nuevo" <?php echo $productoSeleccionado['estado'] == 'Nuevo' ? 'selected' : ''; ?>>Nuevo</option>
+            <option value="Usado" <?php echo $productoSeleccionado['estado'] == 'Usado' ? 'selected' : ''; ?>>Usado</option>
+        </select>
 
+        <!-- Cambiado a select -->
         <label for="origen">Origen:</label>
-        <input type="radio" id="nacional" name="origen" value="Nacional" <?php echo $productoSeleccionado['origen'] == 'Nacional' ? 'checked' : ''; ?>> Nacional
-        <input type="radio" id="internacional" name="origen" value="Internacional" <?php echo $productoSeleccionado['origen'] == 'Internacional' ? 'checked' : ''; ?>> Internacional
+        <select id="origen" name="origen" required>
+            <option value="Nacional" <?php echo $productoSeleccionado['origen'] == 'Nacional' ? 'selected' : ''; ?>>Nacional</option>
+            <option value="Internacional" <?php echo $productoSeleccionado['origen'] == 'Internacional' ? 'selected' : ''; ?>>Internacional</option>
+        </select>
 
         <label for="precio">Precio:</label>
         <input type="number" id="precio" name="precio" step="0.01" value="<?php echo htmlspecialchars($productoSeleccionado['precio']); ?>" required>

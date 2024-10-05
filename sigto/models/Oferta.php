@@ -3,12 +3,12 @@ require_once __DIR__ . '/../config/Database.php';
 
 class Oferta {
     private $conn;
-    private $table_name = "ofertas";
+    private $table_name = "ofertas"; // Asegúrate de que el nombre sea correcto
 
     private $idof;
     private $sku;
-    private $porcentajeOferta;
-    private $precioOferta;
+    private $porcentajeOferta; // Campo para el porcentaje de oferta
+    private $precioOferta; // Campo para el precio con descuento
     private $fechaInicio;
     private $fechaFin;
 
@@ -69,17 +69,17 @@ class Oferta {
     // Método para crear una nueva oferta
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  (sku, oferta, preciooferta, fecha_inicio, fecha_fin) 
+                  (sku, porcentaje_oferta, preciooferta, fecha_inicio, fecha_fin) 
                   VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-
+    
         if (!$stmt) {
             echo "Error en la preparación de la consulta: " . $this->conn->error;
             return false;
         }
-
+    
         $stmt->bind_param("iidss", $this->sku, $this->porcentajeOferta, $this->precioOferta, $this->fechaInicio, $this->fechaFin);
-
+    
         if ($stmt->execute()) {
             return true;
         } else {
@@ -87,30 +87,28 @@ class Oferta {
             return false;
         }
     }
-
-    // Método para actualizar una oferta existente
+    
     public function update() {
         $query = "UPDATE " . $this->table_name . " 
-                  SET oferta=?, preciooferta=?, fecha_inicio=?, fecha_fin=? 
+                  SET porcentaje_oferta=?, preciooferta=?, fecha_inicio=?, fecha_fin=? 
                   WHERE sku=?";
         $stmt = $this->conn->prepare($query);
-
+    
         if (!$stmt) {
             echo "Error en la preparación de la consulta: " . $this->conn->error;
             return false;
         }
-
+    
         $stmt->bind_param("idssi", $this->porcentajeOferta, $this->precioOferta, $this->fechaInicio, $this->fechaFin, $this->sku);
-
+    
         return $stmt->execute();
     }
-
+    
     // Método para eliminar una oferta
-    public function delete() {
+    public function deleteBySku() {
         $query = "DELETE FROM " . $this->table_name . " WHERE sku = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $this->sku);
-
         return $stmt->execute();
     }
 

@@ -2,19 +2,19 @@
 require_once __DIR__ . '/../models/Oferta.php';
 
 class OfertaController {
-    
+
     public function create($data) {
         $oferta = new Oferta();
         $oferta->setSku($data['sku']);
-        $oferta->setPorcentajeOferta($data['oferta']);
-        $oferta->setPrecioOferta($data['precio'] - ($data['precio'] * ($data['oferta'] / 100)));
+        $oferta->setPorcentajeOferta($data['porcentaje_oferta']);
+        $oferta->setPrecioOferta($data['preciooferta']);
         $oferta->setFechaInicio($data['fecha_inicio']);
         $oferta->setFechaFin($data['fecha_fin']);
 
         if ($oferta->create()) {
-            return "Oferta creada exitosamente.";
+            return ['status' => 'success', 'message' => 'Oferta creada exitosamente.'];
         } else {
-            return "Error al crear la oferta.";
+            return ['status' => 'error', 'message' => 'Error al crear la oferta.'];
         }
     }
 
@@ -26,33 +26,34 @@ class OfertaController {
         if ($resultado) {
             return $resultado;
         } else {
-            return "No se encontraron ofertas.";
+            return ['status' => 'error', 'message' => 'No se encontraron ofertas.'];
         }
     }
 
     public function update($data) {
         $oferta = new Oferta();
         $oferta->setSku($data['sku']);
-        $oferta->setPorcentajeOferta($data['oferta']);
-        $oferta->setPrecioOferta($data['precio'] - ($data['precio'] * ($data['oferta'] / 100)));
+        $oferta->setPorcentajeOferta($data['porcentaje_oferta']);
+        $oferta->setPrecioOferta($data['preciooferta']);
         $oferta->setFechaInicio($data['fecha_inicio']);
         $oferta->setFechaFin($data['fecha_fin']);
 
         if ($oferta->update()) {
-            return "Oferta actualizada exitosamente.";
+            return ['status' => 'success', 'message' => 'Oferta actualizada exitosamente.'];
         } else {
-            return "Error al actualizar la oferta.";
+            return ['status' => 'error', 'message' => 'Error al actualizar la oferta.'];
         }
     }
 
-    public function delete($sku) {
+    // Nuevo método para eliminar las ofertas relacionadas con un producto (por SKU)
+    public function deleteBySku($sku) {
         $oferta = new Oferta();
         $oferta->setSku($sku);
 
-        if ($oferta->delete()) {
-            return "Oferta eliminada exitosamente.";
+        if ($oferta->deleteBySku()) {
+            return ['status' => 'success', 'message' => 'Ofertas eliminadas exitosamente.'];
         } else {
-            return "Error al eliminar la oferta.";
+            return ['status' => 'error', 'message' => 'Error al eliminar las ofertas.'];
         }
     }
 }

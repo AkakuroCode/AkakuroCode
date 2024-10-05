@@ -67,17 +67,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ofertaController = new OfertaController();
         $dataOferta = [
             'sku' => $skuGenerado, // Usamos el SKU del producto creado
-            'porcentaje_oferta' => $oferta,
-            'precio_oferta' => $precioOferta,
+            'porcentaje_oferta' => $oferta, // Usa 'porcentaje_oferta'
+            'preciooferta' => $precioOferta, // Usa 'precio_oferta'
             'fecha_inicio' => $fechaInicio,
             'fecha_fin' => $fechaFin
         ];
+        
 
         $resultadoOferta = $ofertaController->create($dataOferta);
 
-        if ($resultadoOferta['status'] !== 'success') {
-            die("Error al crear la oferta: " . $resultadoOferta['message']);
+        if (!$resultadoOferta) {
+            die("Error al crear la oferta.");
         }
+        
     }
 
     echo "Producto y oferta creados con éxito."; // Mensaje de resultado
@@ -103,22 +105,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <textarea id="descripcion" name="descripcion" required></textarea>
 
         <label for="estado">Estado:</label>
-        <div>
-            <input type="radio" id="nuevo" name="estado" value="Nuevo" required>
-            <label for="nuevo">Nuevo</label>
-            
-            <input type="radio" id="usado" name="estado" value="Usado" required>
-            <label for="usado">Usado</label>
-        </div>
+        <select name="estado" id="estado" required>
+            <option value="">Estado del producto</option>
+            <option value="nuevo">Nuevo</option>
+            <option value="usado">Usado</option>
+        </select>
 
         <label for="origen">Origen:</label>
-        <div>
-            <input type="radio" id="nacional" name="origen" value="Nacional" required>
-            <label for="nacional">Nacional</label>
-
-            <input type="radio" id="internacional" name="origen" value="Internacional" required>
-            <label for="internacional">Internacional</label>
-        </div>
+        <select name="origen" id="origen" required>
+            <option value="">Origen del producto</option>
+            <option value="nacional">Nacional</option>
+            <option value="internacional">Internacional</option>
+        </select>
 
         <label for="precio">Precio:</label>
         <input type="number" id="precio" name="precio" step="0.01" required>

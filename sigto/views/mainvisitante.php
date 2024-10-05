@@ -1,8 +1,11 @@
 <?php
 require_once __DIR__ . '/../controllers/ProductoController.php';
+require_once __DIR__ . '/../controllers/OfertaController.php';
 
 $productoController = new ProductoController();
 $productos = $productoController->readAll(); // Recupera todos los productos
+
+$ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
 
 if (!$productos) {
     echo "No se encontraron productos.";
@@ -79,25 +82,38 @@ if (!$productos) {
 
         <p class="relleno">Más Vendidos</p>
         <!-- Catálogo de productos -->
-    <div class="container mt-5">
-        <h2>Productos Disponibles</h2>
-        <div class="row">
-            <?php foreach ($productos as $producto): ?>
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100">
-                        <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
-                            <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                            <p class="card-text"><strong>Precio: </strong>US$<?php echo htmlspecialchars($producto['precio']); ?></p>
-                            <p class="card-text"><strong>Oferta: </strong><?php echo htmlspecialchars($producto['oferta']); ?>%</p>
+        <div class="container mt-5">
+            <h2>Productos Disponibles</h2>
+            <div class="row">
+                <?php foreach ($productos as $producto): ?>
+                    <div class="col-md-3 mb-4">
+                        <div class="card h-100">
+                            <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                                <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                                
+                                <?php
+                                // Verificar si el producto tiene una oferta activa
+                                $oferta = $ofertaController->readBySku($producto['sku']);
+                                if ($oferta) {
+                                    $precioOferta = $oferta['preciooferta'];
+                                    echo "<p class='card-text'><strong>Precio: </strong><span style='text-decoration: line-through;'>US$" . htmlspecialchars($producto['precio']) . "</span></p>";
+                                    echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
+                                    echo "<p class='card-text'><strong>Precio con oferta: </strong>US${precioOferta}</p>";
+                                } else {
+                                    echo "<p class='card-text'><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
+                                    echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
+                                }
+                                ?>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
+
     <br><br><br><br><br><br>
     <footer>
         <div class="footer-container">
@@ -120,6 +136,7 @@ if (!$productos) {
             </div>
         </div>
     </footer>
+
     <!-- Incluye Bootstrap JS y jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
