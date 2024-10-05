@@ -32,7 +32,7 @@
                 <form action="" method="GET" onsubmit="enviarReclamo()">
         <div>
             <label for="asunto">Asunto</label>
-            <input type="text" id="asunto" name="asunto" placeholder="Ingrese su asunto" required>
+            <input type="text" id="asunto" name="asunto" placeholder="Ingrese su asunto..." required>
         </div>
 
         <div>
@@ -44,7 +44,7 @@
             <button type="submit">Enviar Reclamo</button>
         </div>
     </form>
-
+    <h6>Si no se envia correctamente el reclamo a través de su aplicación de correo, <br>puede mandar un mail manualmente con el asunto "reclamo"<br> al mail <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a></h6>
     <script>
         function enviarReclamo() {
             var asunto = document.getElementById("asunto").value;
