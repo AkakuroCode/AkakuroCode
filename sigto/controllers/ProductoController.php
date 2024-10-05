@@ -45,6 +45,26 @@ class ProductoController {
     
         return $result;
     }
+    
+    public function asignarCategoria($sku, $idcat) {
+        // Usar la conexión actual en lugar de crear una nueva instancia de Producto
+        $query = "INSERT INTO pertenece (sku, idcat) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmt->bind_param("ii", $sku, $idcat);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            echo "Error al insertar la relación en la tabla pertenece: " . $stmt->error;
+            return false;
+        }
+    }
 
     public function readAllByEmpresa($idemp) {
         $producto = new Producto();

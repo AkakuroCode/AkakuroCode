@@ -1,15 +1,20 @@
 <?php
+require_once __DIR__ . '/../controllers/CategoriaController.php';
 require_once __DIR__ . '/../controllers/ProductoController.php';
-require_once __DIR__ . '/../controllers/OfertaController.php'; // Controlador de ofertas
+require_once __DIR__ . '/../controllers/OfertaController.php';
+
+$categoriaController = new CategoriaController();
+$categorias = $categoriaController->getAllCategorias();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validar y procesar el formulario
     $nombre = $_POST['nombre'];
     $descripcion = $_POST['descripcion'];
-    $estado = $_POST['estado']; // Estado ya será un radio button
-    $origen = $_POST['origen']; // Origen ya será un radio button
+    $estado = $_POST['estado'];
+    $origen = $_POST['origen'];
     $precio = $_POST['precio'];
     $stock = $_POST['stock'];
+    $idcat = $_POST['idcat']; // El ID de la categoría seleccionada
 
     // Oferta
     $oferta = $_POST['oferta'];
@@ -25,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
 
         // Verificar el tamaño de la imagen
-        if ($imagen['size'] > 2000000) { // 2MB límite
+        if ($imagen['size'] > 2000000) {
             die("La imagen es demasiado grande. El tamaño máximo permitido es 2MB.");
         }
 
@@ -53,36 +58,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $resultadoProducto = $productoController->create($dataProducto);
 
     if (isset($resultadoProducto['status']) && $resultadoProducto['status'] === 'success') {
-        $skuGenerado = $resultadoProducto['sku']; // Captura el SKU generado
+        $skuGenerado = $resultadoProducto['sku'];
+
+        // Asignar el producto a la categoría seleccionada en la tabla 'pertenece'
+        $productoController->asignarCategoria($skuGenerado, $idcat);
     } else {
         die("Error al crear el producto: " . $resultadoProducto['message']);
     }
 
-    // Si se especifica una oferta, creamos la oferta
+    // Crear la oferta si existe
     if ($oferta > 0) {
-        // Calculamos el precio con oferta (precio - porcentaje de descuento)
         $precioOferta = $precio - ($precio * ($oferta / 100));
-
-        // Creamos la oferta
         $ofertaController = new OfertaController();
         $dataOferta = [
-            'sku' => $skuGenerado, // Usamos el SKU del producto creado
-            'porcentaje_oferta' => $oferta, // Usa 'porcentaje_oferta'
-            'preciooferta' => $precioOferta, // Usa 'precio_oferta'
+            'sku' => $skuGenerado,
+            'porcentaje_oferta' => $oferta,
+            'preciooferta' => $precioOferta,
             'fecha_inicio' => $fechaInicio,
             'fecha_fin' => $fechaFin
         ];
-        
 
         $resultadoOferta = $ofertaController->create($dataOferta);
-
         if (!$resultadoOferta) {
             die("Error al crear la oferta.");
         }
-        
     }
 
-    echo "Producto y oferta creados con éxito."; // Mensaje de resultado
+    echo "Producto y oferta creados con éxito.";
 }
 ?>
 
@@ -118,6 +120,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="internacional">Internacional</option>
         </select>
 
+        <label for="categoria">Categoría:</label>
+        <select name="idcat" id="categoria" required>
+            <option value="">Seleccionar categoría</option>
+            <?php foreach ($categorias as $categoria): ?>
+                <option value="<?php echo $categoria['idcat']; ?>"><?php echo $categoria['nombre']; ?></option>
+            <?php endforeach; ?>
+        </select>
+
         <label for="precio">Precio:</label>
         <input type="number" id="precio" name="precio" step="0.01" required>
 
@@ -131,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Datos de la Oferta</h2>
 
         <label for="oferta">Oferta (Descuento en %):</label>
-        <input type="number" id="oferta" name="oferta" min="0" max="100" step="1" placeholder="Ej: 10 para 10%" value="0">
+        <input type="number" id="oferta" name="oferta" min="0" max="100" step="1" value="0">
 
         <label for="fecha_inicio">Fecha de inicio de la oferta:</label>
         <input type="date" id="fecha_inicio" name="fecha_inicio">
