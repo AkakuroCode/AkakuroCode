@@ -9,7 +9,7 @@
 <body>
     <div class="box">
         <img class="logologin" src="/sigto/assets/images/logo completo.png" alt="oceanTrade logo">
-            <div>
+            
                 <form id="loginForm" method="POST" action="/sigto/index.php?action=login">
                     <h2>Ingresar</h2>
                     <label for="email">Email:</label>
@@ -20,10 +20,12 @@
                     <?php if (isset($error)) { ?><p id="loginError" class="error-message">
                     <?php echo $error; ?></p><?php } ?>
                 </form>
-                <p>¿No tienes cuenta? <a href="/sigto/index.php?action=create">Regístrate aquí</a></p>
-                <a href="/sigto/index.php?action=create2">Regístra tu empresa</a>
-                <a href="/sigto/views/mainvisitante.php">Volver al Inicio</a>
-            </div>
+                <div class="registro">
+                    <p>¿No tienes cuenta? Regístrate aquí:</p>
+                    <a id="registro" href="/sigto/index.php?action=create">Regístrate aquí</a>
+                    <a id="registro" href="/sigto/index.php?action=create2">Regístra tu empresa</a>
+                    <a id="registro" href="/sigto/views/mainvisitante.php">Volver al Inicio</a>
+                </div>
     </div>
 
 </body>
