@@ -114,6 +114,45 @@ class Producto {
         }
     }
 
+    public function asignarCategoria($sku, $idcat) {
+        // Usar la conexión actual en lugar de crear una nueva instancia de Producto
+        $query = "INSERT INTO pertenece (sku, idcat) VALUES (?, ?)";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmt->bind_param("ii", $sku, $idcat);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            echo "Error al insertar la relación en la tabla pertenece: " . $stmt->error;
+            return false;
+        }
+    }
+    // Método para eliminar la categoría actual antes de asignar una nueva
+    public function eliminarCategoria($sku) {
+        $query = "DELETE FROM pertenece WHERE sku = ?";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmt->bind_param("i", $sku);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            echo "Error al eliminar la categoría: " . $stmt->error;
+            return false;
+        }
+    }
+
     public function readAllProducts() {
         $query = "SELECT p.*, o.porcentaje_oferta, o.preciooferta, o.fecha_inicio, o.fecha_fin
                   FROM producto p
@@ -138,6 +177,14 @@ class Producto {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result;
+    }
+    public function getCategoriaBySku($sku) {
+        $query = "SELECT idcat FROM pertenece WHERE sku = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $sku);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
 
     // Método para obtener un solo producto por su SKU
