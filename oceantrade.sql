@@ -62,6 +62,7 @@ CREATE TABLE producto (
     origen ENUM('Nacional', 'Internacional') NOT NULL,
     precio INT(10) DEFAULT 1 NOT NULL CHECK (precio > 0) ,
     stock TINYINT(3) NOT NULL,
+    visible TINYINT(1) DEFAULT 1,
     FOREIGN KEY (idemp) REFERENCES empresa(idemp)
 );
 

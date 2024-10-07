@@ -74,7 +74,7 @@ switch ($action) {
         include __DIR__ . '/views/listarUsuarios.php';
         break;
     
-        case 'list2': // Redirigir a la lista de productos
+    case 'list2': // Redirigir a la lista de productos
             if ($_SESSION['role'] !== 'empresa') {
                 header('Location: ?action=login');
                 exit;
@@ -82,7 +82,7 @@ switch ($action) {
             $empresa = $controller2->readAll();
             $producto = $controller4->readAll();
             include __DIR__ . '/views/listarproductos.php'; // Asegúrate de que esta vista exista
-            break; 
+        break; 
 
     case 'edit': // Editar un usuario existente
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -110,7 +110,7 @@ switch ($action) {
             }
         break;
 
-        case 'edit3': // Editar un producto existente
+    case 'edit3': // Editar un producto existente
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Si se envía el formulario de edición (método POST), llama al método 'update' del controlador
                 echo $controller4->update($_POST);
@@ -122,7 +122,7 @@ switch ($action) {
                 $productoSeleccionado = $controller4->readOne($sku);
                 include __DIR__ . '/views/editarProducto.php'; // Carga la vista para editar el producto
             }
-            break;
+        break;
 
     case 'delete': // Eliminar un usuario
         // Llama al método 'delete' del controlador y muestra el resultado
@@ -193,7 +193,22 @@ switch ($action) {
             // Incluir la vista de login con el posible mensaje de error
             include __DIR__ . '/views/loginUsuario.php';
             break;
-        
+
+    case 'activar':
+            if (isset($_GET['sku'])) {
+                    $controller4->restore($_GET['sku']); // Activa el producto
+                }
+                header('Location: ?action=list2');
+            exit;
+            
+    case 'desactivar':
+                if (isset($_GET['sku'])) {
+                    $controller4->softDelete($_GET['sku']); // Desactiva el producto
+                }
+            
+                header('Location: ?action=list2');
+            exit;
+                
         
         
 

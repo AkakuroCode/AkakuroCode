@@ -3,7 +3,7 @@ require_once __DIR__ . '/../controllers/ProductoController.php';
 require_once __DIR__ . '/../controllers/OfertaController.php';
 
 $productoController = new ProductoController();
-$productos = $productoController->readAll(); // Recupera todos los productos
+$productos = $productoController->readVisible(); // Solo productos visibles
 
 $ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
 

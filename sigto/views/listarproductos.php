@@ -3,6 +3,11 @@ require_once __DIR__ . '/../controllers/ProductoController.php';
 
 $productoController = new ProductoController();
 
+// Iniciar sesión si no está ya iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Verifica si la sesión de empresa está activa
 if (!isset($_SESSION['idemp'])) {
     echo "No tienes permiso para acceder a esta página.";
@@ -31,24 +36,23 @@ if (!$productos) {
 </head>
 <body>
 <header>
-        <nav class="mi-navbar">
-           <div class="mi-navbar-container">
-                   <h1>
-                    <img class="mi-navbar-logo2" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
-                   </h1>
-                    <div class="mi-navbar-items">
-                        <form action="ruta/destino" method="GET" class="search-form"> <!-- Ajusta 'action' y 'method' según el backend -->
-                            <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
-                        </form>
-                    <a href="/sigto/views/mainempresa.php">Inicio</a>
-                    <a href="/sigto/views/agregarproducto.php">Agregar Producto</a>
-                    <a href="/sigto/views/nosotrosempresa.php">Nosotros</a>
-                    <a href="/sigto/index.php?action=logout">Salir</a>
-                    </div>
-                    
+    <nav class="mi-navbar">
+        <div class="mi-navbar-container">
+            <h1>
+                <img class="mi-navbar-logo2" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
+            </h1>
+            <div class="mi-navbar-items">
+                <form action="ruta/destino" method="GET" class="search-form"> <!-- Ajusta 'action' y 'method' según el backend -->
+                    <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
+                </form>
+                <a href="/sigto/views/mainempresa.php">Inicio</a>
+                <a href="/sigto/views/agregarproducto.php">Agregar Producto</a>
+                <a href="/sigto/views/nosotrosempresa.php">Nosotros</a>
+                <a href="/sigto/index.php?action=logout">Salir</a>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 <div class="panel-gestion">
     <h1>Lista de Productos</h1>
     <table border="1">
@@ -65,7 +69,8 @@ if (!$productos) {
                 <th>Origen</th>
                 <th>Precio</th>
                 <th>Stock</th>
-                <th>Imagenes</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -100,7 +105,13 @@ if (!$productos) {
                     <td><img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" style="width: 100px; height: auto;"></td>
                     <td>
                         <a href="?action=edit3&sku=<?php echo $producto['sku']; ?>">Editar</a>
-                        <a href="?action=delete3&sku=<?php echo $producto['sku']; ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</a>
+                        <!-- Mostrar el botón de desactivar si el producto está visible -->
+                        <?php if ($producto['visible'] == 1): ?>
+                        <button class="btn btn-danger" onclick="window.location.href='?action=desactivar&sku=<?php echo $producto['sku']; ?>'">Desactivar</button>
+                        <?php else: ?>
+                        <!-- Mostrar el botón de activar si el producto está oculto -->
+                        <button class="btn btn-success" onclick="window.location.href='?action=activar&sku=<?php echo $producto['sku']; ?>'">Activar</button>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -108,26 +119,24 @@ if (!$productos) {
     </table>
 </div>
 <footer>
-        <div class="footer-container">
-            <div class="footer-item">
-                <p>Contacto</p>
-                <a href="tel:+598 92345888">092345888</a>
-                <br>
-                <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
-                <br>
-                <a href="reclamosempresa.php">Reclamos</a>
-            </div>
-            <div class="footer-item">
-                <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>
-
-            </div>
-
-            <div class="footer-redes">
-                <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png"  alt="Facebook"></a>
-                <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png"  alt="Twitter"></a>
-                <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png"  alt="Instagram"></a>
-            </div>
+    <div class="footer-container">
+        <div class="footer-item">
+            <p>Contacto</p>
+            <a href="tel:+598 92345888">092345888</a>
+            <br>
+            <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
+            <br>
+            <a href="reclamosempresa.php">Reclamos</a>
         </div>
-    </footer>
+        <div class="footer-item">
+            <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>
+        </div>
+        <div class="footer-redes">
+            <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png" alt="Facebook"></a>
+            <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png" alt="Twitter"></a>
+            <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png" alt="Instagram"></a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

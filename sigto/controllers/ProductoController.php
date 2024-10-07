@@ -69,6 +69,11 @@ class ProductoController {
         return $producto->readOne();
     }
 
+    public function readVisible() {
+        $producto = new Producto();
+        return $producto->readVisibleProducts(); // Llama a un método en el modelo
+    }
+
     // Función para actualizar el producto
     public function update($data) {
         $producto = new Producto();
@@ -148,13 +153,26 @@ class ProductoController {
         }
     }
 
-    public function delete($sku) {
+    // Método para el borrado lógico (ocultar producto)
+    public function softDelete($sku) {
         $producto = new Producto();
         $producto->setSku($sku);
-        if ($producto->delete()) {
-            return "Producto eliminado exitosamente.";
+        if ($producto->softDelete()) {
+            return "Producto ocultado exitosamente.";
         } else {
-            return "Error al eliminar producto.";
+            return "Error al ocultar el producto.";
+        }
+    }
+    
+    // Método para restaurar el producto
+    public function restore($sku) {
+        $producto = new Producto();
+        $producto->setSku($sku);
+        if ($producto->restore()) {
+            return "Producto restaurado exitosamente.";
+        } else {
+            return "Error al restaurar el producto.";
         }
     }
 }
+?>

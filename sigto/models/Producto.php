@@ -14,6 +14,7 @@ class Producto {
     private $precio;
     private $stock;
     private $imagen;
+    private $visible;
 
     public function __construct() {
         $database = new Database();
@@ -92,10 +93,19 @@ class Producto {
         $this->imagen = $imagen;
     }
 
+    // Métodos getters y setters para 'visible'
+    public function setVisible($visible) {
+        $this->visible = $visible;
+    }
+
+    public function getVisible() {
+        return $this->visible;
+    }
+
     // Método para crear un producto
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=?";
+                  SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=?, visible=1"; // Por defecto, visible=1
         $stmt = $this->conn->prepare($query);
 
         if (!$stmt) {
@@ -166,7 +176,21 @@ class Producto {
     
         return $result;
     }
-    // Método para obtener todos los productos
+
+    // Método para obtener productos visibles
+    public function readVisibleProducts() {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE visible = 1";
+        $result = $this->conn->query($query);
+        
+        if (!$result) {
+            echo "Error en la consulta SQL: " . $this->conn->error;
+            return false;
+        }
+        
+        return $result->fetch_all(MYSQLI_ASSOC); // Devuelve los productos visibles
+    }
+
+    // Método para obtener todos los productos de una empresa
     public function readByEmpresa($idemp) {
         $query = "SELECT p.*, o.porcentaje_oferta, o.preciooferta, o.fecha_inicio, o.fecha_fin 
                   FROM producto p
@@ -178,6 +202,7 @@ class Producto {
         $result = $stmt->get_result();
         return $result;
     }
+    
     public function getCategoriaBySku($sku) {
         $query = "SELECT idcat FROM pertenece WHERE sku = ?";
         $stmt = $this->conn->prepare($query);
@@ -209,9 +234,17 @@ class Producto {
         return $stmt->execute();
     }
 
-    // Método para eliminar un producto
-    public function delete() {
-        $query = "DELETE FROM " . $this->table_name . " WHERE sku = ?";
+    // Método para ocultar un producto (borrado lógico)
+    public function softDelete() {
+        $query = "UPDATE " . $this->table_name . " SET visible = 0 WHERE sku = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $this->sku);
+        return $stmt->execute();
+    }
+
+     // Método para mostrar un producto nuevamente
+     public function restore() {
+        $query = "UPDATE " . $this->table_name . " SET visible = 1 WHERE sku = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $this->sku);
         return $stmt->execute();
