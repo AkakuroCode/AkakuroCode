@@ -16,8 +16,8 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
 <head>
     <meta charset="UTF-8">
     <title>Lista de Usuarios y Empresas</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="/sigto/assets/css/style.css">
+    <link rel="stylesheet" href="/sigto/assets/css/admin.css">
 </head>
 <body>
 <div class="panel-gestion">
@@ -48,8 +48,8 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
                     <td><?php echo $usuario['telefono']; ?></td>
                     <td><?php echo $usuario['email']; ?></td>
                     <td>
-                        <a href="../index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
-                        <a href="../index.php?action=delete&idus=<?php echo $usuario['idus']; ?>">Eliminar</a>
+                        <a href="/sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
+                        <a href="/sigto/index.php?action=delete&idus=<?php echo $usuario['idus']; ?>">Eliminar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -89,8 +89,8 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
                     <td><?php echo $empresa['email']; ?></td>
                     <td><?php echo $empresa['cuentabanco']; ?></td>
                     <td>
-                        <a href="../index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
-                        <a href="../index.php?action=delete2&idemp=<?php echo $empresa['idemp']; ?>">Eliminar</a>
+                        <a href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
+                        <a href="/sigto/index.php?action=delete2&idemp=<?php echo $empresa['idemp']; ?>">Eliminar</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

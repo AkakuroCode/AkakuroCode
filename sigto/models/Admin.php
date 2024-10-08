@@ -14,6 +14,14 @@ class Admin {
         $this->conn = $database->getConnection();
     }
 
+    public function getIdad() {
+        return $this->idad;
+    }
+
+    public function setIdad($idad) {
+        $this->idad = $idad;
+    }
+    
     public function getEmail() {
         return $this->email;
     }
@@ -40,6 +48,7 @@ class Admin {
         if ($result->num_rows > 0) {
             return $result->fetch_assoc();
         } else {
+            echo "Error en la consulta: " . $this->conn->error;
             return false;
         }
     }

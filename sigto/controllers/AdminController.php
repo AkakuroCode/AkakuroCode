@@ -10,17 +10,22 @@ class AdminController {
     
         if ($result) {
             if (password_verify($data['passw'], $result['passw'])) {
-                // Asegurarse de que no haya otra sesión activa (como empresa o usuario)
-                session_start();
-                session_unset();  // Elimina todas las variables de sesión actuales
-                session_destroy(); // Destruye la sesión actual, si la hay
-    
-                // Iniciar una nueva sesión para el admin
-                session_start();
+                // Iniciar sesión si aún no está iniciada
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+
+                // Limpiar variables de sesión de otros roles si es necesario, sin destruir toda la sesión
+                session_unset();  // Elimina variables de sesión pero mantiene la sesión activa
+                
+                // Guardar datos en la sesión
                 $_SESSION['role'] = 'admin';  // Identifica el rol
-                $_SESSION['admin'] = $result['email'];  // Guardar el email del admin
+                $_SESSION['idad'] = $result['idad'];  // Guardar el ID del admin
+                $_SESSION['email'] = $result['email'];  // Guardar el email del admin
     
-                return true;
+                // Redirigir a la vista de admin
+                header('Location: /sigto/views/listarUsuarios.php');
+                exit;
             } else {
                 return false;
             }
@@ -29,4 +34,3 @@ class AdminController {
         }
     }
 }
-?>

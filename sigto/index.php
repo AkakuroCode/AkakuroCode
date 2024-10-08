@@ -41,6 +41,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !isset($_SESSIO
     exit;
 }
 
+
+
 // Controla las diferentes acciones posibles utilizando una estructura switch
 switch ($action) {
     case 'create': // Crear un nuevo usuario
@@ -98,6 +100,11 @@ switch ($action) {
         break;
 
     case 'edit2': // Editar un usuario existente
+       // Depuración para verificar si la sesión de admin está activa
+            if ($_SESSION['role'] !== 'admin' || !isset($_SESSION['idad'])) {
+                echo "Error: No tienes permisos o la sesión de administrador no es válida.";
+                exit;
+            }
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Si se envía el formulario de edición (método POST), llama al método 'update' del controlador
                 echo $controller2->update($_POST);
@@ -142,7 +149,7 @@ switch ($action) {
             header('Location: ?action=list2'); // Redirigir a la lista de productos
         exit;
     
-        case 'login': 
+    case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
@@ -179,6 +186,7 @@ switch ($action) {
                             $_SESSION['role'] = 'admin';
                             $_SESSION['idad'] = $loginAdmin['idad'];  // Almacenar ID del admin
                             $_SESSION['email'] = $email;  // Almacenar email del admin
+
                             // Redirigir a la vista de admin
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
