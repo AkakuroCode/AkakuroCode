@@ -36,7 +36,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'empresa' && !isset($_SESS
 }
 
 // Verificación para admins
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'edit' && $action !== 'edit2' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }

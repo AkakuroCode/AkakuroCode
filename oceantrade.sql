@@ -30,21 +30,11 @@ CREATE TABLE metodopago (
     estado  ENUM('activo', 'inactivo') NOT NULL
 );
 
-CREATE TABLE ofertas (
-  idof int(11) NOT NULL,
-  sku int(11) DEFAULT NULL,
-  porcentaje_oferta decimal(4,2) DEFAULT NULL,
-  preciooferta decimal(10,2) DEFAULT NULL,
-  fecha_inicio date DEFAULT NULL,
-  fecha_fin date DEFAULT NULL,
-  
-   FOREIGN KEY (sku) REFERENCES producto(sku)
-);
 
 -- Tabla empresa
 CREATE TABLE empresa (
     idemp INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(15) NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
     direccion VARCHAR(50) NOT NULL,
     telefono INT(15) UNIQUE NOT NULL,
     email VARCHAR(30) UNIQUE NOT NULL,
@@ -250,3 +240,32 @@ CREATE TABLE producto_favorito (
     FOREIGN KEY (sku) REFERENCES producto(sku),
     FOREIGN KEY (idus) REFERENCES cliente(idus)
     );
+
+CREATE TABLE ofertas (
+  idof int(11) NOT NULL,
+  sku int(11) DEFAULT NULL,
+  porcentaje_oferta decimal(4,2) DEFAULT NULL,
+  preciooferta decimal(10,2) DEFAULT NULL,
+  fecha_inicio date DEFAULT NULL,
+  fecha_fin date DEFAULT NULL,
+  
+   FOREIGN KEY (sku) REFERENCES producto(sku)
+);
+
+
+/* Valores para rellenar tablas */
+
+INSERT INTO categoria (nombre, descripcion) VALUES
+('vehículos', 'Productos relacionados con vehículos y transporte'),
+('electrodomésticos', 'Aparatos eléctricos para el hogar'),
+('hogar', 'Productos para el hogar y decoración'),
+('oficina', 'Equipos y suministros para la oficina'),
+('librería', 'Artículos de librería y papelería'),
+('belleza', 'Productos para el cuidado personal y belleza'),
+('bebés', 'Artículos para el cuidado de bebés'),
+('juguetes', 'Juguetes y entretenimiento para niños'),
+('deportes', 'Equipos y accesorios deportivos'),
+('música', 'Instrumentos musicales y accesorios'),
+('tecnología', 'Artículos tecnológicos y dispositivos electrónicos'),
+('celulares', 'Teléfonos móviles y accesorios'),
+('herramientas', 'Herramientas y equipos de construcción');
