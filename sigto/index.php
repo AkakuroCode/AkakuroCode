@@ -181,7 +181,7 @@ switch ($action) {
                         // Si no es usuario ni empresa, intentamos iniciar sesión como admin
                         $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
         
-                        if ($loginAdmin) {
+                if ($loginAdmin) {
                             // Si el login es exitoso para un admin, establecer rol de admin
                             $_SESSION['role'] = 'admin';
                             $_SESSION['idad'] = $loginAdmin['idad'];  // Almacenar ID del admin
@@ -190,7 +190,7 @@ switch ($action) {
                             // Redirigir a la vista de admin
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
-                        } else {
+                } else {
                             // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
                             $error = "Email o contraseña incorrectos.";
                         }

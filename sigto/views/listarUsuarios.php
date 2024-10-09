@@ -105,7 +105,7 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
     <br>
     <br>
 
-    <a href="../index.php?action=logout">
+    <a href="/sigto/index.php?action=logout">
     <button type="button">Cerrar Sesión</button>
     </a>
 

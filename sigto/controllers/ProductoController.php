@@ -92,7 +92,7 @@ class ProductoController {
             $tmp_name = $_FILES['imagen']['tmp_name'];
             $nombreImagen = basename($_FILES['imagen']['name']);
             $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
-
+    
             // Mover la nueva imagen a la carpeta de destino
             if (move_uploaded_file($tmp_name, $rutaDestino)) {
                 // Establecer la nueva imagen en el producto
@@ -104,19 +104,21 @@ class ProductoController {
             // Mantener la imagen actual si no se ha subido una nueva
             $producto->setImagen($data['imagenActual']);
         }
-
+    
         // Solo eliminar y asignar nueva categoría si se selecciona una nueva
         if (isset($data['categoria']) && $data['categoria'] !== "") {
             $producto->eliminarCategoria($data['sku']); // Elimina la categoría anterior del producto
             $producto->asignarCategoria($data['sku'], $data['categoria']); // Asigna la nueva categoría
         }
-
+    
         // Validar y actualizar la oferta
         $ofertaController = new OfertaController();
         if (isset($data['oferta']) && $data['oferta'] > 0) {
+            // Si no se proporcionan fechas nuevas, usar las fechas actuales
             $fechaInicio = !empty($data['fecha_inicio']) ? $data['fecha_inicio'] : $data['fecha_inicio_actual'];
             $fechaFin = !empty($data['fecha_fin']) ? $data['fecha_fin'] : $data['fecha_fin_actual'];
-
+    
+            // Validar que las fechas sean correctas, o mantener las actuales
             if ($fechaInicio && $fechaFin && $fechaInicio < $fechaFin) {
                 $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
                 $dataOferta = [
@@ -126,9 +128,23 @@ class ProductoController {
                     'fecha_inicio' => $fechaInicio,
                     'fecha_fin' => $fechaFin
                 ];
-                $ofertaController->update($dataOferta); // Actualizamos la oferta
+                $ofertaController->update($dataOferta); // Actualizar la oferta
             } else {
-                return "Error: La fecha de inicio debe ser anterior a la fecha de fin.";
+                // Mantener las fechas actuales si no se proporcionan nuevas
+                $ofertaActual = $ofertaController->readBySku($data['sku']);
+                if ($ofertaActual) {
+                    $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
+                    $dataOferta = [
+                        'sku' => $data['sku'],
+                        'porcentaje_oferta' => $data['oferta'],  // Solo actualizar el porcentaje
+                        'preciooferta' => $precioOferta,
+                        'fecha_inicio' => $ofertaActual['fecha_inicio'],
+                        'fecha_fin' => $ofertaActual['fecha_fin']
+                    ];
+                    $ofertaController->update($dataOferta); // Actualizar solo el porcentaje
+                } else {
+                    return "Error: No se puede actualizar la oferta sin fechas válidas.";
+                }
             }
         } else {
             // Si no se cambia el porcentaje de oferta, recalcular el precio de oferta en función del nuevo precio
@@ -145,13 +161,14 @@ class ProductoController {
                 $ofertaController->update($dataOferta); // Actualizamos la oferta con el nuevo precio
             }
         }
-
+    
         if ($producto->update()) {
             return "Producto actualizado exitosamente.";
         } else {
             return "Error al actualizar producto.";
         }
     }
+    
 
     // Método para el borrado lógico (ocultar producto)
     public function softDelete($sku) {
