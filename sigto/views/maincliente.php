@@ -36,9 +36,9 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                         <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                     </form>
                     <a href="maincliente.php">Inicio</a>
-                    <a href="carrito.html">Carrito</a>
+                    <a href="/sigto/index?action=view_cart">Carrito</a>
                     <a href="nosotroscliente.php">Nosotros</a>
-                    <a href="../index.php?action=logout">Salir</a>
+                    <a href="/sigto/index.php?action=logout">Salir</a>
                 </div>
             </div>
         </nav>
@@ -111,10 +111,12 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 ?>
 
                                 <!-- Botón de Comprar -->
-                                <form action="comprar.php" method="POST">
-                                    <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
-                                    <button type="submit" class="btn btn-primary">Comprar</button>
+                                <form action="?action=add_to_cart" method="POST">
+                                <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
+                                <input type="number" name="cantidad" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                                <button type="submit" class="btn btn-primary">Comprar</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>

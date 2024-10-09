@@ -19,7 +19,7 @@
                             <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                         </form>
                     <a href="mainvisitante.php">Inicio</a>
-                    <a href="../index.php?action=logout">Salir</a>
+                    <a href="../index.php?action=logout">Ingresar</a>
                     </div>
                     
             </div>

@@ -297,4 +297,77 @@ pre {
     
     }
 
+    .carrito-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .producto-item {
+        display: flex;
+        justify-content: space-between;
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .producto-info {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .producto-imagen {
+        width: 100px;
+        height: auto;
+        border-radius: 5px;
+    }
+    
+    .producto-detalle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .producto-precio {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+    }
+    
+    .carrito-resumen {
+        margin-top: 20px;
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: right;
+    }
+    
+    .btn-comprar {
+        background-color: #0267FF;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    .btn-comprar:hover {
+        background-color: #005bb5;
+    }
+    
+    .btn-eliminar {
+        background-color: #ff4b4b;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    
+    .btn-eliminar:hover {
+        background-color: #cc0000;
+    }
 }

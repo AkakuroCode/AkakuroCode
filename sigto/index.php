@@ -3,39 +3,33 @@
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 session_start();
 
-// Incluye el archivo del controlador 'UsuarioController.php'
+// Incluye los controladores necesarios
 require_once __DIR__ . '/controllers/UsuarioController.php';
 require_once __DIR__ . '/controllers/EmpresaController.php';
 require_once __DIR__ . '/controllers/AdminController.php';
 require_once __DIR__ . '/controllers/ProductoController.php';
+require_once __DIR__ . '/controllers/CarritoController.php'; // Nuevo controlador para el carrito
 
-// Crea una instancia del controlador de usuario
+// Crea una instancia de cada controlador
 $controller = new UsuarioController();
 $controller2 = new EmpresaController();
 $controller3 = new AdminController();
 $controller4 = new ProductoController();
+$carritoController = new CarritoController(); // Controlador de carrito
 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
 $action = isset($_GET['action']) ? $_GET['action'] : 'default';
 
-// Obtiene el ID del usuario desde la URL, si existe
-$idus = isset($_GET['idus']) ? $_GET['idus'] : null;
-$idemp = isset($_GET['idemp']) ? $_GET['idemp'] : null;
-$idad = isset($_GET['idad']) ? $_GET['idad'] : null;
-
-// Verificación para usuarios
+// Verificación de roles
+// Verificación para usuarios, empresas y admins
 if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }
-
-// Verificación para empresas
 if (isset($_SESSION['role']) && $_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
 }
-
-// Verificación para admins
 if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
     header('Location: ?action=login');
     exit;
@@ -160,8 +154,10 @@ switch ($action) {
                 if ($loginUsuario) {
                     // Si el login es exitoso para un usuario, establecer rol de usuario
                     $_SESSION['role'] = 'usuario';
-                    $_SESSION['idus'] = $loginUsuario['idusuario'];  // Almacenar ID del usuario
+                    $_SESSION['idus'] = $loginUsuario['idus'];  // Almacenar ID del usuario
                     $_SESSION['email'] = $email;  // Almacenar email del usuario
+
+
                     // Redirigir a la vista de cliente
                     header('Location: /sigto/views/maincliente.php');
                     exit;
@@ -216,9 +212,55 @@ switch ($action) {
             
                 header('Location: ?action=list2');
             exit;
+    // Acción para agregar un producto al carrito
+    case 'add_to_cart':
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && isset($_SESSION['idus'])) {
+            $idus = $_SESSION['idus']; // Obtener el ID del usuario
+            $sku = $_POST['sku']; // Obtener el SKU del producto desde el formulario
+            $cantidad = isset($_POST['cantidad']) ? (int)$_POST['cantidad'] : 1; // Obtener la cantidad, por defecto 1
+            
+            // Llamar a la función que agrega el producto al carrito
+            $carritoController->addItem($idus, $sku, $cantidad);
+            header('Location: maincliente.php'); // Redirigir a la página principal del cliente o a una vista de éxito
+            exit;
+        } else {
+            // Si el usuario no está logueado, redirigir al login
+            header('Location: ?action=login');
+            exit;
+        }
+        break;
+     // Acción para ver el carrito
+     case 'view_cart':
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && isset($_SESSION['idus'])) {
+            $idus = $_SESSION['idus'];
+            $carritoItems = $carritoController->getItemsByUser($idus);
+            include __DIR__ . '/views/verCarrito.php';
+        } else {
+            header('Location: ?action=login');
+        }
+        break;
+        
+     // Acción para actualizar la cantidad de un producto en el carrito
+    case 'update_quantity':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $sku = $_POST['sku'];
+            $cantidad = $_POST['cantidad'];
+            $carritoController->updateQuantity($_SESSION['idus'], $sku, $cantidad);
+            header('Location: ?action=view_cart');
+            exit;
+        }
+        break;
+
+    // Acción para eliminar un producto del carrito
+    case 'delete_from_cart':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $sku = $_POST['sku'];
+            $carritoController->removeItem($_SESSION['idus'], $sku);
+            header('Location: ?action=view_cart');
+            exit;
+        }
+        break;
                 
-        
-        
 
     case 'logout': // Cerrar sesión
         // Destruye la sesión y redirige al formulario de login

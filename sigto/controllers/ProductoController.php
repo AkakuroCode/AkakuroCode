@@ -168,7 +168,11 @@ class ProductoController {
             return "Error al actualizar producto.";
         }
     }
-    
+
+    public function addToCart($idus, $sku) {
+        $carrito = new Carrito();
+        return $carrito->addItem($idus, $sku);
+    }    
 
     // Método para el borrado lógico (ocultar producto)
     public function softDelete($sku) {

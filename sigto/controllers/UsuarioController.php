@@ -86,16 +86,16 @@ class UsuarioController {
     
         if ($result) {
             if (password_verify($data['passw'], $result['passw'])) {
-                // Asegurarse de que no haya otra sesión activa (como admin o empresa)
-                session_start();
-                session_unset();  // Elimina todas las variables de sesión actuales
-                session_destroy(); // Destruye la sesión actual, si la hay
-    
                 // Iniciar una nueva sesión para el usuario
-                session_start();
-                $_SESSION['role'] = 'usuario';  // Identifica el rol
-                $_SESSION['email'] = $result['email'];  // Guardar el email del usuario
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+    
+                // Establecer las variables de sesión
+                $_SESSION['role'] = 'usuario';
                 $_SESSION['idus'] = $result['idus'];  // Guardar el ID del usuario en la sesión
+                $_SESSION['email'] = $result['email'];  // Guardar el email del usuario
+    
     
                 return true;
             } else {
@@ -105,6 +105,8 @@ class UsuarioController {
             return false;
         }
     }
+    
+    
     
     
 }
