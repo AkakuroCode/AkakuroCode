@@ -1,6 +1,17 @@
 <?php
+session_start();
+var_dump($_SESSION);
+exit;
+
+// A partir de aquí, continúa con el código de verificación y carga del contenido
 require_once __DIR__ . '/../controllers/ProductoController.php';
 require_once __DIR__ . '/../controllers/OfertaController.php';
+
+// Verifica que el usuario esté logueado antes de cargar la página
+if (!isset($_SESSION['idus']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'usuario') {
+    header('Location: /sigto/index.php?action=login');
+    exit;
+}
 
 $productoController = new ProductoController();
 $productos = $productoController->readVisible(); // Solo productos visibles
@@ -14,6 +25,7 @@ if (!$productos) {
 
 $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

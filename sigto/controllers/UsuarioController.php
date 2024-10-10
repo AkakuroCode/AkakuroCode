@@ -86,16 +86,26 @@ class UsuarioController {
     
         if ($result) {
             if (password_verify($data['passw'], $result['passw'])) {
-                // Iniciar una nueva sesión para el usuario
+                // Iniciar sesión si aún no está iniciada
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
+
+
     
-                // Establecer las variables de sesión
-                $_SESSION['role'] = 'usuario';
-                $_SESSION['idus'] = $result['idus'];  // Guardar el ID del usuario en la sesión
-                $_SESSION['email'] = $result['email'];  // Guardar el email del usuario
-    
+                if (!empty($result['idus'])) {
+                    $_SESSION['role'] = 'usuario';
+                    $_SESSION['idus'] = $result['idus'];
+                    $_SESSION['email'] = $result['email'];
+                    
+                    // Depuración para verificar que se guarda la sesión correctamente
+                    var_dump($_SESSION);
+                    //exit;  // Esto detendrá la ejecución aquí, permitiéndote ver el contenido de la sesión
+                } else {
+                    echo "Error: el ID de usuario es nulo.";
+                    exit;
+                }
+                
     
                 return true;
             } else {

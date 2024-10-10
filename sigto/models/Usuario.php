@@ -164,15 +164,14 @@ class Usuario {
         $stmt->bind_param("s", $this->email);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+        $user = $result->fetch_assoc();
+    
         if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
+            return $user;
         } else {
             return false;
         }
     }
-    
-    
     
     
     

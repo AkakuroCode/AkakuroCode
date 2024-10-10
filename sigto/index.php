@@ -156,8 +156,6 @@ switch ($action) {
                     $_SESSION['role'] = 'usuario';
                     $_SESSION['idus'] = $loginUsuario['idus'];  // Almacenar ID del usuario
                     $_SESSION['email'] = $email;  // Almacenar email del usuario
-
-
                     // Redirigir a la vista de cliente
                     header('Location: /sigto/views/maincliente.php');
                     exit;
