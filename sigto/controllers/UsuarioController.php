@@ -90,9 +90,8 @@ class UsuarioController {
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
-
-
     
+                // Verificar que el ID de usuario esté disponible y no sea nulo
                 if (!empty($result['idus'])) {
                     $_SESSION['role'] = 'usuario';
                     $_SESSION['idus'] = $result['idus'];
@@ -100,12 +99,10 @@ class UsuarioController {
                     
                     // Depuración para verificar que se guarda la sesión correctamente
                     var_dump($_SESSION);
-                    //exit;  // Esto detendrá la ejecución aquí, permitiéndote ver el contenido de la sesión
                 } else {
                     echo "Error: el ID de usuario es nulo.";
                     exit;
                 }
-                
     
                 return true;
             } else {
@@ -116,9 +113,10 @@ class UsuarioController {
         }
     }
     
-    
-    
-    
+    // Método opcional para obtener el carrito de un usuario
+    public function getCarrito($idus) {
+        $carritoController = new CarritoController();
+        return $carritoController->getItemsByUser($idus);
+    }
 }
-
 ?>

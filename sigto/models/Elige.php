@@ -5,38 +5,34 @@ class Elige {
     private $conn;
     private $table_name = "elige";
 
+    private $sku;
+    private $idus;
+    private $favorito;
+
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
     }
 
-    // Verificar si un producto ya fue elegido por el usuario
-    public function isProductChosen($idus, $sku) {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE idus = ? AND sku = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ii", $idus, $sku);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->num_rows > 0;
+    public function setSku($sku) {
+        $this->sku = $sku;
     }
 
-    // Agregar un producto como elegido por un usuario
-    public function add($idus, $sku) {
-        $query = "INSERT INTO " . $this->table_name . " (idus, sku) VALUES (?, ?)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ii", $idus, $sku);
+    public function setIdus($idus) {
+        $this->idus = $idus;
+    }
 
+    public function setFavorito($favorito) {
+        $this->favorito = $favorito;
+    }
+
+    public function add() {
+        $query = "INSERT INTO " . $this->table_name . " (sku, idus, favorito) VALUES (?, ?, 'No')";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ii", $this->sku, $this->idus);
         return $stmt->execute();
     }
 
-    // Eliminar la relación entre un producto y un usuario en 'elige'
-    public function remove($idus, $sku) {
-        $query = "DELETE FROM " . $this->table_name . " WHERE idus = ? AND sku = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ii", $idus, $sku);
-
-        return $stmt->execute();
-    }
+    // Otros métodos CRUD para la tabla `elige`...
 }
 ?>

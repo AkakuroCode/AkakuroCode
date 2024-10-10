@@ -1,17 +1,11 @@
 <?php
-session_start();
-var_dump($_SESSION);
-exit;
+// Iniciar sesión si no está ya iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// A partir de aquí, continúa con el código de verificación y carga del contenido
 require_once __DIR__ . '/../controllers/ProductoController.php';
 require_once __DIR__ . '/../controllers/OfertaController.php';
-
-// Verifica que el usuario esté logueado antes de cargar la página
-if (!isset($_SESSION['idus']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'usuario') {
-    header('Location: /sigto/index.php?action=login');
-    exit;
-}
 
 $productoController = new ProductoController();
 $productos = $productoController->readVisible(); // Solo productos visibles
@@ -123,7 +117,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 ?>
 
                                 <!-- Botón de Comprar -->
-                                <form action="?action=add_to_cart" method="POST">
+                                <form action="/sigto/index?action=add_to_cart" method="POST">
                                 <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
                                 <input type="number" name="cantidad" value="1" min="1" class="form-control mb-2" style="width: 80px;">
                                 <button type="submit" class="btn btn-primary">Comprar</button>
@@ -165,7 +159,5 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- Tu script personalizado -->
-    <script src="/sigto/assets/js/script.js"></script>
 </body>
 </html>

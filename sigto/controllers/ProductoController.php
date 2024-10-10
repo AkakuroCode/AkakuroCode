@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Producto.php';
+require_once __DIR__ . '/../models/Carrito.php';
 require_once __DIR__ . '/../controllers/OfertaController.php';
 require_once __DIR__ . '/../controllers/CategoriaController.php'; 
 
@@ -169,10 +170,24 @@ class ProductoController {
         }
     }
 
-    public function addToCart($idus, $sku) {
+    public function addToCart($idus, $sku, $cantidad) {
         $carrito = new Carrito();
-        return $carrito->addItem($idus, $sku);
-    }    
+        $carrito->setIdus($idus);
+        $carrito->setSku($sku);
+        $carrito->setCantidad($cantidad);
+
+        // Verificar si el producto ya está en el carrito del usuario
+        $itemExistente = $carrito->getItemByUserAndSku();
+
+        if ($itemExistente) {
+            // Si el producto ya está en el carrito, actualizar la cantidad sumando la nueva
+            $nuevaCantidad = $itemExistente['cantidad'] + $cantidad;
+            return $carrito->updateQuantity($nuevaCantidad);
+        } else {
+            // Si el producto no está en el carrito, añadirlo como un nuevo ítem
+            return $carrito->addItem();
+        }
+    }  
 
     // Método para el borrado lógico (ocultar producto)
     public function softDelete($sku) {

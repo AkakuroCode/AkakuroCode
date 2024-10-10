@@ -1,58 +1,43 @@
 <?php
 require_once __DIR__ . '/../models/Carrito.php';
-require_once __DIR__ . '/../models/Elige.php';
-require_once __DIR__ . '/../models/Crea.php';
+require_once __DIR__ . '/../models/Producto.php';
+require_once __DIR__ . '/../models/Usuario.php';// Para manejar el modelo de productos si es necesario
 
 class CarritoController {
-
     // Método para agregar un producto al carrito
     public function addItem($idus, $sku, $cantidad) {
         $carrito = new Carrito();
-        $elige = new Elige(); // Instancia para manejar la tabla 'elige'
-        $crea = new Crea(); // Instancia para manejar la tabla 'crea'
-        
         $carrito->setIdus($idus);
         $carrito->setSku($sku);
         $carrito->setCantidad($cantidad);
-        
-        // Verificar si el producto ya fue elegido por el usuario
-        if (!$elige->isProductChosen($idus, $sku)) {
-            // Si no ha sido elegido, lo agregamos a 'elige'
-            if (!$elige->add($idus, $sku)) {
-                return "Error al agregar el producto a la tabla 'elige'.";
-            }
-        }
     
-        // Obtener o crear un idcarrito para el usuario
-        $idcarrito = $carrito->getIdCarritoByUser($idus);
-        if (!$idcarrito) {
-            // Si no tiene un carrito, crear uno nuevo
-            $idcarrito = $carrito->createCart($idus);
-            if (!$idcarrito) {
-                return "Error al crear un nuevo carrito.";
-            }
-        }
-    
-        // Verificar si el producto ya está en el carrito
-        if ($carrito->itemExists($idcarrito, $sku)) {
-            // Si ya está, actualizar la cantidad sumando la nueva
-            $cantidadExistente = $carrito->getCantidad($idcarrito, $sku);
-            $nuevaCantidad = $cantidadExistente + $cantidad;
-            if (!$carrito->updateQuantity($idcarrito, $sku, $nuevaCantidad)) {
-                return "Error al actualizar la cantidad del producto en el carrito.";
-            }
+        // Verificar si el producto ya está en el carrito para actualizar la cantidad
+        $itemExistente = $carrito->getItemByUserAndSku();
+        if ($itemExistente) {
+            // Si el producto ya está en el carrito, sumamos la nueva cantidad a la existente
+            $nuevaCantidad = $itemExistente['cantidad'] + $cantidad;
+            return $carrito->updateQuantity($idus, $sku, $nuevaCantidad);
         } else {
-            // Si no está, agregarlo a la tabla 'crea' y 'carrito'
-            if (!$crea->add($sku, $idcarrito)) {
-                return "Error al agregar el producto a la tabla 'crea'.";
-            }
-            if (!$carrito->addItemToCart($idcarrito, $sku, $cantidad)) {
-                return "Error al agregar el producto al carrito.";
-            }
-        }
+            // Obtener el precio del producto, considerando ofertas
+            $producto = new Producto();
+            $producto->setSku($sku);
+            $productoData = $producto->readOne();
     
-        return "Producto agregado correctamente al carrito.";
+            $precioProducto = $productoData['precio'];
+            if (isset($productoData['preciooferta']) && $productoData['preciooferta'] > 0) {
+                $precioProducto = $productoData['preciooferta'];
+            }
+    
+            // Establecer el total del producto (cantidad * precio unitario)
+            $carrito->setTotal($precioProducto * $cantidad);
+    
+            // Si no está en el carrito, agregarlo
+            return $carrito->addItem();
+        }
     }
+    
+    
+
     // Método para obtener todos los productos del carrito de un usuario
     public function getItemsByUser($idus) {
         $carrito = new Carrito();
@@ -64,29 +49,28 @@ class CarritoController {
         $carrito = new Carrito();
         $carrito->setIdus($idus);
         $carrito->setSku($sku);
-        
-        // Obtener el idcarrito del usuario
-        $idcarrito = $carrito->getIdCarritoByUser($idus);
-        
-        return $carrito->updateQuantity($idcarrito, $sku, $cantidad);
+        $carrito->setCantidad($cantidad);
+        return $carrito->updateQuantity($idus, $sku, $cantidad);
     }
 
     // Método para eliminar un producto del carrito
     public function removeItem($idus, $sku) {
         $carrito = new Carrito();
-        $crea = new Crea(); // Instancia para manejar la tabla 'crea'
-        
         $carrito->setIdus($idus);
         $carrito->setSku($sku);
+        return $carrito->removeItem($idus, $sku);
+    }
+
+    // Método para obtener el total del carrito de un usuario
+    public function getTotalByUser($idus) {
+        $items = $this->getItemsByUser($idus);
+        $total = 0;
         
-        // Obtener el idcarrito del usuario
-        $idcarrito = $carrito->getIdCarritoByUser($idus);
+        foreach ($items as $item) {
+            $total += $item['subtotal']; // Sumar los subtotales de cada producto (ya calculados con oferta si aplica)
+        }
         
-        // Eliminar la relación del producto con el carrito en 'crea'
-        $crea->remove($sku, $idcarrito);
-        
-        // Eliminar el producto del carrito
-        return $carrito->removeItem($idcarrito, $sku);
+        return $total;
     }
 }
 ?>

@@ -1,25 +1,26 @@
 <?php
-session_start(); // Asegúrate de que esto esté aquí
+// Iniciar sesión si no está ya iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/../controllers/CarritoController.php';
 require_once __DIR__ . '/../controllers/ProductoController.php';
 
 $carritoController = new CarritoController();
 $productoController = new ProductoController();
-var_dump($_SESSION);
-exit;
-
-// Verifica que el usuario esté logueado y tenga un ID de usuario
-if (!isset($_SESSION['idus'])) {
-    header('Location: /sigto/index.php?action=login');
-    exit;
-}
 
 $idus = $_SESSION['idus'];
 $carritoItems = $carritoController->getItemsByUser($idus);
 
-if (!$carritoItems || $carritoItems->num_rows == 0) {
+if (!$carritoItems || empty($carritoItems)) {
     echo "No hay productos en el carrito.";
     exit;
+}
+
+// Inicializar la variable $totalCarrito
+$totalCarrito = 0;
+foreach ($carritoItems as $item) {
+    $totalCarrito += $item['subtotal'];
 }
 ?>
 <!DOCTYPE html>
@@ -43,7 +44,7 @@ if (!$carritoItems || $carritoItems->num_rows == 0) {
                     <form action="ruta/destino" method="GET" class="search-form">
                         <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                     </form>
-                    <a href="maincliente.php">Inicio</a>
+                    <a href="/sigto/views/maincliente.php">Inicio</a>
                     <a href="/sigto/index?action=view_cart">Carrito</a>
                     <a href="nosotroscliente.php">Nosotros</a>
                     <a href="/sigto/index.php?action=logout">Salir</a>
@@ -57,44 +58,37 @@ if (!$carritoItems || $carritoItems->num_rows == 0) {
         <div class="row">
             <div class="col-md-8">
                 <div class="list-group">
-                    <?php 
-                    $totalCarrito = 0;
-                    while ($item = $carritoItems->fetch_assoc()): 
-                        $totalItem = $item['cantidad'] * $item['precio'];
-                        $totalCarrito += $totalItem;
-                    ?>
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="/sigto/assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="<?php echo htmlspecialchars($item['nombre']); ?>" style="width: 80px; height: auto; margin-right: 15px;">
+                    <?php foreach ($carritoItems as $item): ?>
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="/sigto/assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="<?php echo htmlspecialchars($item['nombre']); ?>" style="width: 80px; height: auto; margin-right: 15px;">
+                                    <div>
+                                        <h5><?php echo htmlspecialchars($item['nombre']); ?></h5>
+                                        <p>Cantidad: <span class="cantidad" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>"><?php echo $item['cantidad']; ?></span></p>
+                                        <p>Precio unitario: US$<?php echo number_format($item['precio_actual'], 2); ?></p>
+                                    </div>
+                                </div>
                                 <div>
-                                    <h5><?php echo htmlspecialchars($item['nombre']); ?></h5>
-                                    <p>Cantidad: <?php echo $item['cantidad']; ?></p>
-                                    <p>Precio unitario: US$<?php echo number_format($item['precio'], 2); ?></p>
+                                    <p>Total: US$<span class="item-total"><?php echo number_format($item['subtotal'], 2); ?></span></p>
+                                    <form class="update-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
+                                    <input type="number" name="cantidad" value="<?php echo $item['cantidad']; ?>" min="1" class="form-control mb-2 cantidad-input" style="width: 80px;">
+                                    <button type="button" class="btn btn-secondary" onclick="updateQuantity(this)">Actualizar</button>
+                                    </form>
+                                    <form class="delete-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
+                                    <button type="button" class="btn btn-danger" onclick="deleteItem(this)">Eliminar</button>
+                                    </form>
                                 </div>
                             </div>
-                            <div>
-                                <p>Total: US$<?php echo number_format($totalItem, 2); ?></p>
-                                <form action="?action=update_quantity" method="POST" class="d-inline">
-                                    <input type="hidden" name="sku" value="<?php echo $item['sku']; ?>">
-                                    <input type="number" name="cantidad" value="<?php echo $item['cantidad']; ?>" min="1" class="form-control mb-2" style="width: 80px;">
-                                    <button type="submit" class="btn btn-secondary">Actualizar</button>
-                                </form>
-                                <form action="?action=delete_from_cart" method="POST" class="d-inline">
-                                    <input type="hidden" name="sku" value="<?php echo $item['sku']; ?>">
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                </form>
-                            </div>
                         </div>
-                    </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Resumen de Compra</h4>
-                        <p class="card-text">Total: <strong>US$<?php echo number_format($totalCarrito, 2); ?></strong></p>
+                        <p class="card-text">Total: <strong>US$<span id="total"><?php echo number_format($totalCarrito, 2); ?></span></strong></p>
                         <a href="?action=checkout" class="btn btn-primary btn-block">Continuar compra</a>
                     </div>
                 </div>
@@ -130,6 +124,6 @@ if (!$carritoItems || $carritoItems->num_rows == 0) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Tu script personalizado -->
-    <script src="/sigto/assets/js/script.js"></script>
+    <script src="/sigto/assets/js/update.js"></script>
 </body>
 </html>

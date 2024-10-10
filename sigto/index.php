@@ -1,7 +1,9 @@
 <?php
 // Inicia una sesión o reanuda la sesión existente
 date_default_timezone_set('America/Argentina/Buenos_Aires');
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Incluye los controladores necesarios
 require_once __DIR__ . '/controllers/UsuarioController.php';
@@ -16,6 +18,11 @@ $controller2 = new EmpresaController();
 $controller3 = new AdminController();
 $controller4 = new ProductoController();
 $carritoController = new CarritoController(); // Controlador de carrito
+
+$idus = isset($_GET['idus']) ? (int)$_GET['idus'] : (isset($_SESSION['idus']) ? $_SESSION['idus'] : null);
+$idemp = isset($_GET['idemp']) ? (int)$_GET['idemp'] : (isset($_SESSION['idemp']) ? $_SESSION['idemp'] : null);
+$idad = isset($_GET['idad']) ? (int)$_GET['idad'] : (isset($_SESSION['idad']) ? $_SESSION['idad'] : null);
+
 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
 $action = isset($_GET['action']) ? $_GET['action'] : 'default';
@@ -147,52 +154,34 @@ switch ($action) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
-        
+                
                 // Primero intentamos iniciar sesión como usuario
                 $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
-        
+    
                 if ($loginUsuario) {
-                    // Si el login es exitoso para un usuario, establecer rol de usuario
-                    $_SESSION['role'] = 'usuario';
-                    $_SESSION['idus'] = $loginUsuario['idus'];  // Almacenar ID del usuario
-                    $_SESSION['email'] = $email;  // Almacenar email del usuario
-                    // Redirigir a la vista de cliente
                     header('Location: /sigto/views/maincliente.php');
                     exit;
                 } else {
                     // Si no es usuario, intentamos iniciar sesión como empresa
                     $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
-
-                if ($loginEmpresa) {
-                    // Ahora puedes guardar el 'idemp' correctamente
-                    $_SESSION['role'] = 'empresa';
-                    $_SESSION['idemp'] = $loginEmpresa['idemp'];  // Almacenar el ID de la empresa
-                    $_SESSION['email'] = $email;  // Almacenar el email de la empresa
-                    // Redirigir a la vista de empresa
-                    header('Location: /sigto/views/mainempresa.php');
-                    exit;
-                } else {
+    
+                    if ($loginEmpresa) {
+                        header('Location: /sigto/views/mainempresa.php');
+                        exit;
+                    } else {
                         // Si no es usuario ni empresa, intentamos iniciar sesión como admin
                         $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
-        
-                if ($loginAdmin) {
-                            // Si el login es exitoso para un admin, establecer rol de admin
-                            $_SESSION['role'] = 'admin';
-                            $_SESSION['idad'] = $loginAdmin['idad'];  // Almacenar ID del admin
-                            $_SESSION['email'] = $email;  // Almacenar email del admin
-
-                            // Redirigir a la vista de admin
+    
+                        if ($loginAdmin) {
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
-                } else {
+                        } else {
                             // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
                             $error = "Email o contraseña incorrectos.";
                         }
                     }
                 }
             }
-        
-            // Incluir la vista de login con el posible mensaje de error
             include __DIR__ . '/views/loginUsuario.php';
             break;
 
@@ -210,24 +199,8 @@ switch ($action) {
             
                 header('Location: ?action=list2');
             exit;
-    // Acción para agregar un producto al carrito
-    case 'add_to_cart':
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && isset($_SESSION['idus'])) {
-            $idus = $_SESSION['idus']; // Obtener el ID del usuario
-            $sku = $_POST['sku']; // Obtener el SKU del producto desde el formulario
-            $cantidad = isset($_POST['cantidad']) ? (int)$_POST['cantidad'] : 1; // Obtener la cantidad, por defecto 1
-            
-            // Llamar a la función que agrega el producto al carrito
-            $carritoController->addItem($idus, $sku, $cantidad);
-            header('Location: maincliente.php'); // Redirigir a la página principal del cliente o a una vista de éxito
-            exit;
-        } else {
-            // Si el usuario no está logueado, redirigir al login
-            header('Location: ?action=login');
-            exit;
-        }
-        break;
-     // Acción para ver el carrito
+
+     // Case para ver el carrito
      case 'view_cart':
         if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && isset($_SESSION['idus'])) {
             $idus = $_SESSION['idus'];
@@ -237,28 +210,76 @@ switch ($action) {
             header('Location: ?action=login');
         }
         break;
-        
-     // Acción para actualizar la cantidad de un producto en el carrito
-    case 'update_quantity':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $sku = $_POST['sku'];
-            $cantidad = $_POST['cantidad'];
-            $carritoController->updateQuantity($_SESSION['idus'], $sku, $cantidad);
-            header('Location: ?action=view_cart');
-            exit;
-        }
-        break;
 
-    // Acción para eliminar un producto del carrito
-    case 'delete_from_cart':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $sku = $_POST['sku'];
-            $carritoController->removeItem($_SESSION['idus'], $sku);
-            header('Location: ?action=view_cart');
-            exit;
+    // Case para agregar un producto al carrito
+    case 'add_to_cart':
+        // Verificar si el usuario es un cliente
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && isset($_SESSION['idus'])) {
+            $idus = $_SESSION['idus'];
+    
+            // Obtener los datos enviados por el formulario
+            $sku = isset($_POST['sku']) ? (int)$_POST['sku'] : null;
+            $cantidad = isset($_POST['cantidad']) ? (int)$_POST['cantidad'] : 1;
+    
+            // Validar que SKU y cantidad sean válidos
+            if ($sku && $cantidad > 0) {
+                $result = $carritoController->addItem($idus, $sku, $cantidad);
+                if ($result) {
+                    // Redirigir al carrito después de agregar el producto
+                    header('Location: ?action=view_cart');
+                } else {
+                    echo "Error al agregar el producto al carrito.";
+                }
+            } else {
+                echo "Datos inválidos para agregar al carrito.";
+            }
+        } else {
+            // Si no está autenticado, redirigir al login
+            header('Location: ?action=login');
         }
         break;
-                
+    // Case para actualizar la cantidad de un producto en el carrito
+    case 'update_quantity':
+        if (isset($_POST['sku'], $_POST['cantidad']) && isset($_SESSION['idus'])) {
+            $sku = (int)$_POST['sku'];
+            $cantidad = (int)$_POST['cantidad'];
+            $idus = (int)$_SESSION['idus'];
+            
+            // Actualizar la cantidad en el carrito
+            $resultado = $carritoController->updateQuantity($idus, $sku, $cantidad);
+    
+            if ($resultado) {
+                // Calcular el nuevo subtotal para el producto actualizado
+                $producto = $productoController->readOne($sku);
+                $precioActual = $producto['precio_actual']; // Asegúrate de obtener el precio correcto, ya sea oferta o normal
+                $newSubtotal = $precioActual * $cantidad;
+    
+                echo json_encode(['success' => true, 'newSubtotal' => $newSubtotal]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'No se pudo actualizar la cantidad.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Datos faltantes para actualizar la cantidad.']);
+        }
+        exit;
+    // Case para eliminar un producto del carrito
+    case 'delete_from_cart':
+        if (isset($_POST['sku']) && isset($_SESSION['idus'])) {
+            $sku = (int)$_POST['sku'];
+            $idus = (int)$_SESSION['idus'];
+            $resultado = $carritoController->removeItem($idus, $sku);
+    
+            if ($resultado) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'No se pudo eliminar el producto.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Datos faltantes para eliminar el producto.']);
+        }
+        exit;
+            
+
 
     case 'logout': // Cerrar sesión
         // Destruye la sesión y redirige al formulario de login
