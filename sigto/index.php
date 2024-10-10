@@ -144,35 +144,51 @@ switch ($action) {
             header('Location: ?action=list');
         exit;
     
-    case 'delete3': // Eliminar un producto
-            $sku = $_GET['sku']; // Obtener el SKU del producto a eliminar
-            echo $controller4->delete($sku);
-            header('Location: ?action=list2'); // Redirigir a la lista de productos
-        exit;
     
-    case 'login': 
+        case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
                 
                 // Primero intentamos iniciar sesión como usuario
                 $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
-    
+        
                 if ($loginUsuario) {
+                    // Configurar la sesión del usuario
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
+                    $_SESSION['role'] = 'usuario';
+                    $_SESSION['idus'] = $loginUsuario['idus'];
+                    $_SESSION['email'] = $loginUsuario['email'];
                     header('Location: /sigto/views/maincliente.php');
                     exit;
                 } else {
                     // Si no es usuario, intentamos iniciar sesión como empresa
                     $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
-    
+        
                     if ($loginEmpresa) {
+                        // Configurar la sesión de la empresa
+                        if (session_status() === PHP_SESSION_NONE) {
+                            session_start();
+                        }
+                        $_SESSION['role'] = 'empresa';
+                        $_SESSION['idemp'] = $loginEmpresa['idemp'];
+                        $_SESSION['email'] = $loginEmpresa['email'];
                         header('Location: /sigto/views/mainempresa.php');
                         exit;
                     } else {
                         // Si no es usuario ni empresa, intentamos iniciar sesión como admin
                         $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
-    
+        
                         if ($loginAdmin) {
+                            // Configurar la sesión del admin
+                            if (session_status() === PHP_SESSION_NONE) {
+                                session_start();
+                            }
+                            $_SESSION['role'] = 'admin';
+                            $_SESSION['id'] = $loginAdmin['id'];
+                            $_SESSION['email'] = $loginAdmin['email'];
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
                         } else {
@@ -183,61 +199,8 @@ switch ($action) {
                 }
             }
             include __DIR__ . '/views/loginUsuario.php';
-            break;
-
-    case 'activar':
-            if (isset($_GET['sku'])) {
-                    $controller4->restore($_GET['sku']); // Activa el producto
-                }
-                header('Location: ?action=list2');
-            exit;
-            
-    case 'desactivar':
-                if (isset($_GET['sku'])) {
-                    $controller4->softDelete($_GET['sku']); // Desactiva el producto
-                }
-            
-                header('Location: ?action=list2');
-            exit;
-
-     // Case para ver el carrito
-     case 'view_cart':
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && isset($_SESSION['idus'])) {
-            $idus = $_SESSION['idus'];
-            $carritoItems = $carritoController->getItemsByUser($idus);
-            include __DIR__ . '/views/verCarrito.php';
-        } else {
-            header('Location: ?action=login');
-        }
         break;
-
-    // Case para agregar un producto al carrito
-    case 'add_to_cart':
-        // Verificar si el usuario es un cliente
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && isset($_SESSION['idus'])) {
-            $idus = $_SESSION['idus'];
-    
-            // Obtener los datos enviados por el formulario
-            $sku = isset($_POST['sku']) ? (int)$_POST['sku'] : null;
-            $cantidad = isset($_POST['cantidad']) ? (int)$_POST['cantidad'] : 1;
-    
-            // Validar que SKU y cantidad sean válidos
-            if ($sku && $cantidad > 0) {
-                $result = $carritoController->addItem($idus, $sku, $cantidad);
-                if ($result) {
-                    // Redirigir al carrito después de agregar el producto
-                    header('Location: ?action=view_cart');
-                } else {
-                    echo "Error al agregar el producto al carrito.";
-                }
-            } else {
-                echo "Datos inválidos para agregar al carrito.";
-            }
-        } else {
-            // Si no está autenticado, redirigir al login
-            header('Location: ?action=login');
-        }
-        break;
+        
     // Case para actualizar la cantidad de un producto en el carrito
     case 'update_quantity':
         if (isset($_POST['sku'], $_POST['cantidad']) && isset($_SESSION['idus'])) {

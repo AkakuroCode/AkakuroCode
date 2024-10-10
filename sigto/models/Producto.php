@@ -104,25 +104,23 @@ class Producto {
 
     // Método para crear un producto
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=?, visible=1"; // Por defecto, visible=1
+        $query = "INSERT INTO producto (idemp, nombre, descripcion, estado, origen, stock, precio, imagen, visible) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
         $stmt = $this->conn->prepare($query);
-
+    
         if (!$stmt) {
-            echo "Error en la preparación de la consulta: " . $this->conn->error;
             return false;
         }
-
-        $stmt->bind_param("issssiis", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen);
-
+    
+        $stmt->bind_param("issssiis", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->stock, $this->precio, $this->imagen);
+    
         if ($stmt->execute()) {
-            // Devolver el último ID insertado
-            return $this->conn->insert_id;  // Esto devuelve el `sku` generado
+            return $this->conn->insert_id; // Devolver el último ID insertado (el SKU)
         } else {
-            echo "Error en la ejecución: " . $stmt->error;
             return false;
         }
     }
+    
 
     public function asignarCategoria($sku, $idcat) {
         // Usar la conexión actual en lugar de crear una nueva instancia de Producto

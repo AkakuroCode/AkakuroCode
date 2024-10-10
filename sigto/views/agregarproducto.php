@@ -6,85 +6,89 @@ require_once __DIR__ . '/../controllers/OfertaController.php';
 $categoriaController = new CategoriaController();
 $categorias = $categoriaController->getAllCategorias();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Inicializar variables
+$oferta = 0;
+$mensaje = '';
+
+// Verificar si el formulario ha sido enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
     // Validar y procesar el formulario
-    $nombre = $_POST['nombre'];
-    $descripcion = $_POST['descripcion'];
-    $estado = $_POST['estado'];
-    $origen = $_POST['origen'];
-    $precio = $_POST['precio'];
-    $stock = $_POST['stock'];
-    $idcat = $_POST['idcat']; // El ID de la categoría seleccionada
+    $nombre = $_POST['nombre'] ?? '';
+    $descripcion = $_POST['descripcion'] ?? '';
+    $estado = $_POST['estado'] ?? '';
+    $origen = $_POST['origen'] ?? '';
+    $precio = $_POST['precio'] ?? 0;
+    $stock = $_POST['stock'] ?? 0;
+    $idcat = $_POST['idcat'] ?? ''; // El ID de la categoría seleccionada
 
     // Oferta
-    $oferta = $_POST['oferta'];
-    $fechaInicio = $_POST['fecha_inicio'];
-    $fechaFin = $_POST['fecha_fin'];
+    $oferta = $_POST['oferta'] ?? 0;
+    $fechaInicio = $_POST['fecha_inicio'] ?? null;
+    $fechaFin = $_POST['fecha_fin'] ?? null;
 
     // Manejo de la imagen
-    $imagen = $_FILES['imagen'];
+    $imagen = $_FILES['imagen'] ?? null;
     $nombreImagen = '';
-    if ($imagen['error'] == UPLOAD_ERR_OK) {
+    if ($imagen && $imagen['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $imagen['tmp_name'];
         $nombreImagen = basename($imagen['name']);
         $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
 
         // Verificar el tamaño de la imagen
         if ($imagen['size'] > 2000000) {
-            die("La imagen es demasiado grande. El tamaño máximo permitido es 2MB.");
+            $mensaje = "La imagen es demasiado grande. El tamaño máximo permitido es 2MB.";
+        } elseif (!move_uploaded_file($tmp_name, $rutaDestino)) {
+            $mensaje = "Error al subir la imagen.";
         }
-
-        // Mover la imagen a la carpeta de destino
-        if (!move_uploaded_file($tmp_name, $rutaDestino)) {
-            die("Error al subir la imagen.");
-        }
-    } else {
-        die("Error en la subida de la imagen.");
     }
 
-    // Crear el producto
-    $productoController = new ProductoController();
-    $dataProducto = [
-        'nombre' => $nombre,
-        'descripcion' => $descripcion,
-        'estado' => $estado,
-        'origen' => $origen,
-        'precio' => $precio,
-        'stock' => $stock,
-        'imagen' => $nombreImagen
-    ];
-
-    // Crear el producto y obtener el SKU generado
-    $resultadoProducto = $productoController->create($dataProducto);
-
-    if (isset($resultadoProducto['status']) && $resultadoProducto['status'] === 'success') {
-        $skuGenerado = $resultadoProducto['sku'];
-
-        // Asignar el producto a la categoría seleccionada en la tabla 'pertenece'
-        $productoController->asignarCategoria($skuGenerado, $idcat);
-    } else {
-        die("Error al crear el producto: " . $resultadoProducto['message']);
-    }
-
-    // Crear la oferta si existe
-    if ($oferta > 0) {
-        $precioOferta = $precio - ($precio * ($oferta / 100));
-        $ofertaController = new OfertaController();
-        $dataOferta = [
-            'sku' => $skuGenerado,
-            'porcentaje_oferta' => $oferta,
-            'preciooferta' => $precioOferta,
-            'fecha_inicio' => $fechaInicio,
-            'fecha_fin' => $fechaFin
+    if (empty($mensaje)) {
+        // Crear el producto
+        $productoController = new ProductoController();
+        $dataProducto = [
+            'nombre' => $nombre,
+            'descripcion' => $descripcion,
+            'estado' => $estado,
+            'origen' => $origen,
+            'precio' => $precio,
+            'stock' => $stock,
+            'imagen' => $nombreImagen
         ];
 
-        $resultadoOferta = $ofertaController->create($dataOferta);
-        if (!$resultadoOferta) {
-            die("Error al crear la oferta.");
+        // Crear el producto y obtener el SKU generado
+        $resultadoProducto = $productoController->create($dataProducto);
+
+        if (isset($resultadoProducto['status']) && $resultadoProducto['status'] === 'success') {
+            $skuGenerado = $resultadoProducto['sku'];
+
+            // Asignar el producto a la categoría seleccionada en la tabla 'pertenece'
+            $productoController->asignarCategoria($skuGenerado, $idcat);
+
+            // Crear la oferta si existe
+            if ($oferta > 0) {
+                $precioOferta = $precio - ($precio * ($oferta / 100));
+                $ofertaController = new OfertaController();
+                $dataOferta = [
+                    'sku' => $skuGenerado,
+                    'porcentaje_oferta' => $oferta,
+                    'preciooferta' => $precioOferta,
+                    'fecha_inicio' => $fechaInicio,
+                    'fecha_fin' => $fechaFin
+                ];
+
+                $resultadoOferta = $ofertaController->create($dataOferta);
+                if (!$resultadoOferta) {
+                    $mensaje = "Error al crear la oferta.";
+                }
+            }
+
+            if (empty($mensaje)) {
+                $mensaje = "Producto y oferta creados con éxito.";
+            }
+        } else {
+            $mensaje = "Error al crear el producto: " . $resultadoProducto['message'];
         }
     }
-
-    echo "Producto y oferta creados con éxito.";
 }
 ?>
 
@@ -98,6 +102,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <form action="agregarproducto.php" method="post" enctype="multipart/form-data">
         <h1>Agregar Producto</h1>
+
+        <!-- Mostrar el mensaje de error o éxito -->
+        <?php if (!empty($mensaje)): ?>
+            <p><?php echo htmlspecialchars($mensaje); ?></p>
+        <?php endif; ?>
 
         <!-- Datos del Producto -->
         <label for="nombre">Nombre del Producto:</label>
