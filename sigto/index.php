@@ -144,51 +144,35 @@ switch ($action) {
             header('Location: ?action=list');
         exit;
     
+    case 'delete3': // Eliminar un producto
+            $sku = $_GET['sku']; // Obtener el SKU del producto a eliminar
+            echo $controller4->delete($sku);
+            header('Location: ?action=list2'); // Redirigir a la lista de productos
+        exit;
     
-        case 'login': 
+    case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
                 
                 // Primero intentamos iniciar sesión como usuario
                 $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
-        
+    
                 if ($loginUsuario) {
-                    // Configurar la sesión del usuario
-                    if (session_status() === PHP_SESSION_NONE) {
-                        session_start();
-                    }
-                    $_SESSION['role'] = 'usuario';
-                    $_SESSION['idus'] = $loginUsuario['idus'];
-                    $_SESSION['email'] = $loginUsuario['email'];
                     header('Location: /sigto/views/maincliente.php');
                     exit;
                 } else {
                     // Si no es usuario, intentamos iniciar sesión como empresa
                     $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
-        
+    
                     if ($loginEmpresa) {
-                        // Configurar la sesión de la empresa
-                        if (session_status() === PHP_SESSION_NONE) {
-                            session_start();
-                        }
-                        $_SESSION['role'] = 'empresa';
-                        $_SESSION['idemp'] = $loginEmpresa['idemp'];
-                        $_SESSION['email'] = $loginEmpresa['email'];
                         header('Location: /sigto/views/mainempresa.php');
                         exit;
                     } else {
                         // Si no es usuario ni empresa, intentamos iniciar sesión como admin
                         $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
-        
+    
                         if ($loginAdmin) {
-                            // Configurar la sesión del admin
-                            if (session_status() === PHP_SESSION_NONE) {
-                                session_start();
-                            }
-                            $_SESSION['role'] = 'admin';
-                            $_SESSION['id'] = $loginAdmin['id'];
-                            $_SESSION['email'] = $loginAdmin['email'];
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
                         } else {
@@ -199,8 +183,9 @@ switch ($action) {
                 }
             }
             include __DIR__ . '/views/loginUsuario.php';
-        break;
-        case 'activar':
+            break;
+
+    case 'activar':
             if (isset($_GET['sku'])) {
                     $controller4->restore($_GET['sku']); // Activa el producto
                 }
@@ -253,7 +238,6 @@ switch ($action) {
             header('Location: ?action=login');
         }
         break;
-        
     // Case para actualizar la cantidad de un producto en el carrito
     case 'update_quantity':
         if (isset($_POST['sku'], $_POST['cantidad']) && isset($_SESSION['idus'])) {
