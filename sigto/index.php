@@ -240,28 +240,43 @@ switch ($action) {
         break;
     // Case para actualizar la cantidad de un producto en el carrito
     case 'update_quantity':
-        if (isset($_POST['sku'], $_POST['cantidad']) && isset($_SESSION['idus'])) {
+        header('Content-Type: application/json'); // Asegúrate de que la respuesta sea JSON
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idus'], $_POST['sku'], $_POST['cantidad'])) {
+            $idus = (int)$_POST['idus'];
             $sku = (int)$_POST['sku'];
             $cantidad = (int)$_POST['cantidad'];
-            $idus = (int)$_SESSION['idus'];
-            
-            // Actualizar la cantidad en el carrito
-            $resultado = $carritoController->updateQuantity($idus, $sku, $cantidad);
     
-            if ($resultado) {
-                // Calcular el nuevo subtotal para el producto actualizado
-                $producto = $productoController->readOne($sku);
-                $precioActual = $producto['precio_actual']; // Asegúrate de obtener el precio correcto, ya sea oferta o normal
-                $newSubtotal = $precioActual * $cantidad;
+            if ($cantidad > 0) {
+                $result = $carritoController->updateQuantity($idus, $sku, $cantidad);
+                if ($result) {
+                    // Calcula el nuevo subtotal y total del carrito después de actualizar
+                    $items = $carritoController->getItemsByUser($idus);
+                    $subtotal = 0;
+                    $totalCarrito = 0;
+                    foreach ($items as $item) {
+                        if ($item['sku'] == $sku) {
+                            $subtotal = $item['precio_actual'] * $cantidad;
+                        }
+                        $totalCarrito += $item['subtotal'];
+                    }
     
-                echo json_encode(['success' => true, 'newSubtotal' => $newSubtotal]);
+                    echo json_encode([
+                        'status' => 'success',
+                        'subtotal' => number_format($subtotal, 2),
+                        'totalCarrito' => number_format($totalCarrito, 2)
+                    ]);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'No se pudo actualizar la cantidad.']);
+                }
             } else {
-                echo json_encode(['success' => false, 'message' => 'No se pudo actualizar la cantidad.']);
+                echo json_encode(['status' => 'error', 'message' => 'La cantidad debe ser mayor a cero.']);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Datos faltantes para actualizar la cantidad.']);
+            echo json_encode(['status' => 'error', 'message' => 'Datos incompletos.']);
         }
         exit;
+    
     // Case para eliminar un producto del carrito
     case 'delete_from_cart':
         if (isset($_POST['sku']) && isset($_SESSION['idus'])) {

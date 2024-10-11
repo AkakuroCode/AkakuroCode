@@ -65,12 +65,12 @@ foreach ($carritoItems as $item) {
                                     <img src="/sigto/assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="<?php echo htmlspecialchars($item['nombre']); ?>" style="width: 80px; height: auto; margin-right: 15px;">
                                     <div>
                                         <h5><?php echo htmlspecialchars($item['nombre']); ?></h5>
-                                        <p>Cantidad: <span class="cantidad" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>"><?php echo $item['cantidad']; ?></span></p>
+                                        <p id="cantidad-<?php echo $item['sku']; ?>">Cantidad: <?php echo $item['cantidad']; ?></p>
                                         <p>Precio unitario: US$<?php echo number_format($item['precio_actual'], 2); ?></p>
                                     </div>
                                 </div>
                                 <div>
-                                    <p>Total: US$<span class="item-total"><?php echo number_format($item['subtotal'], 2); ?></span></p>
+                                    <p>Total: US$<span class="item-total" id="item-total-<?php echo $item['sku']; ?>"><?php echo number_format($item['subtotal'], 2); ?></span></p>
                                     <form class="update-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
                                     <input type="number" name="cantidad" value="<?php echo $item['cantidad']; ?>" min="1" class="form-control mb-2 cantidad-input" style="width: 80px;">
                                     <button type="button" class="btn btn-secondary" onclick="updateQuantity(this)">Actualizar</button>

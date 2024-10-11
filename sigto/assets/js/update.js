@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Selecciona todos los botones de "Actualizar" en el carrito
     const updateButtons = document.querySelectorAll('.btn-secondary');
 
     updateButtons.forEach(button => {
@@ -9,37 +8,55 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Función para actualizar la cantidad de un producto en el carrito
-function updateQuantity(button) {
+async function updateQuantity(button) {
     const form = button.closest('.update-form');
+    const cantidadInput = form.querySelector('.cantidad-input');
+    const cantidad = cantidadInput.value;
     const sku = form.dataset.sku;
     const idus = form.dataset.idus;
-    const cantidad = form.querySelector('.cantidad-input').value;
 
-    fetch(`?action=update_quantity`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `sku=${sku}&idus=${idus}&cantidad=${cantidad}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Actualizar el total del artículo visualmente
+    try {
+        const response = await fetch('index.php?action=update_quantity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'idus': idus,
+                'sku': sku,
+                'cantidad': cantidad
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            // Verificar y actualizar el subtotal del producto
             const itemTotalElement = form.closest('.list-group-item').querySelector('.item-total');
-            itemTotalElement.textContent = data.newSubtotal.toFixed(2);
+            if (itemTotalElement) {
+                itemTotalElement.textContent = `${result.subtotal}`;
+            }
 
-            // Actualizar el total del carrito
-            updateTotal();
+            // Verificar y actualizar la cantidad mostrada
+            const cantidadElement = document.getElementById(`cantidad-${sku}`);
+            if (cantidadElement) {
+                cantidadElement.textContent = `Cantidad: ${cantidad}`;
+            }
+
+            // Verificar y actualizar el total del carrito
+            const totalElement = document.getElementById('total');
+            if (totalElement) {
+                totalElement.textContent = `${result.totalCarrito}`;
+            }
         } else {
-            alert('Error al actualizar la cantidad.');
+            alert(result.message || 'Error al actualizar la cantidad');
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error al actualizar la cantidad:', error);
-    });
+        alert('Hubo un problema al actualizar la cantidad.');
+    }
 }
+
 
 // Función para eliminar un producto del carrito
 function deleteItem(button) {
@@ -74,8 +91,8 @@ function deleteItem(button) {
 function updateTotal() {
     let total = 0;
     document.querySelectorAll('.item-total').forEach(item => {
-        total += parseFloat(item.textContent);
+        total += parseFloat(item.textContent.replace('', '')); // Eliminar "US$" antes de convertir a número.
     });
 
-    document.getElementById('total').textContent = total.toFixed(2);
+    document.getElementById('total').textContent = `${total.toFixed(2)}`; // Mostrar el total actualizado con "US$".
 }
