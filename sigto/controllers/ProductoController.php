@@ -182,7 +182,8 @@ class ProductoController {
         if ($itemExistente) {
             // Si el producto ya está en el carrito, actualizar la cantidad sumando la nueva
             $nuevaCantidad = $itemExistente['cantidad'] + $cantidad;
-            return $carrito->updateQuantity($nuevaCantidad);
+            return $carrito->updateQuantity($idus, $sku, $nuevaCantidad);
+
         } else {
             // Si el producto no está en el carrito, añadirlo como un nuevo ítem
             return $carrito->addItem();
