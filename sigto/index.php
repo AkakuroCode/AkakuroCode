@@ -128,6 +128,22 @@ switch ($action) {
             }
         break;
 
+    case 'edit_profile': // Editar información del usuario logueado
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Si se envía el formulario de edición, llama al método 'update' del controlador
+                echo $controller->update($_POST);
+                // Redirigir al perfil del usuario
+                header('Location: /sigto/views/usuarioperfil.php');
+                exit;
+            } else {
+                // Obtener el ID del usuario logueado desde la sesión
+                $idus = $_SESSION['idus'];
+                // Obtener los datos del usuario logueado para mostrarlos en el formulario de edición
+                $usuario = $controller->readOne($idus);
+                include __DIR__ . '/views/mieditar.php'; // Cargar el formulario de edición de perfil
+            }
+        break;
+
     case 'delete': // Eliminar un usuario
         // Llama al método 'delete' del controlador y muestra el resultado
         echo $controller->delete($idus);

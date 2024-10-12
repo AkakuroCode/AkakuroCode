@@ -19,6 +19,8 @@
                             <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
                         </form>
                     <a href="maincliente.php">Inicio</a>
+                    <a href="/sigto/views/usuarioperfil.php">Perfil</a> 
+                    <a href="/sigto/index?action=view_cart">Carrito</a>
                     <a href="../index.php?action=logout">Salir</a>
                     </div>
                     
