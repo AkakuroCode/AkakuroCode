@@ -7,6 +7,7 @@ body {
 }
 
 form {
+    text-align: center;
     background-color: #0267FF;
     max-width: 300px;
     margin: 0 auto;
@@ -83,3 +84,73 @@ text-align: center;
     height: 150px; 
 }
 
+select{
+    text-decoration: none;
+    text-align: center;
+    color:  #0267FF;
+    font-weight: bold;
+    background-color: white;
+    border: 3px solid #1900ff;
+    border-radius: 1em;
+    margin-top: 1em;
+    padding: 0.5em;
+    width: 100%;
+}
+
+
+#imagen {
+    display: none; /* Oculta el input real */
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 3px solid #1900ff;
+    border-radius: 1em;
+    background-color: white;
+    color: #0267FF;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+#file-name {
+    display: inline-block;
+    width: 200px; /* Ajusta el ancho a lo que necesites */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Esto agregará los puntos suspensivos */
+    font-style: italic;
+    color: #ffffff;
+    margin-top: 5px;
+}
+
+input[type="submit"] {
+    text-decoration: none;
+    text-align: center;
+    color:  #0267FF;
+    font-weight: bold;
+    background-color: white;
+    border: 3px solid #1900ff;
+    border-radius: 1em;
+    margin-top: 1em;
+    padding: 0.5em;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #ffffff;
+}
+
+#volver{
+    text-decoration: none;
+    text-align: center;
+    color:  #0267FF;
+    font-weight: bold;
+    background-color: white;
+    border: 3px solid #1900ff;
+    border-radius: 1em;
+    margin-top: 1em;
+    padding: 0.5em;
+    width: 100%;
+}

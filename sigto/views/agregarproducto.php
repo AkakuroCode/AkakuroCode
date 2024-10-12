@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
 <head>
     <meta charset="UTF-8">
     <title>Agregar Producto</title>
-    <link rel="stylesheet" href="/sigto/assets/css/login.css">
+    <link rel="stylesheet" href="/sigto/assets/css/formularios.css">
 </head>
 <body>
     <form action="agregarproducto.php" method="post" enctype="multipart/form-data">
@@ -142,9 +142,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
 
         <label for="stock">Stock:</label>
         <input type="number" id="stock" name="stock" required>
-
-        <label for="imagen">Imagen:</label>
-        <input type="file" id="imagen" name="imagen" accept="image/*">
+        <label for="imagen" class="custom-file-upload">
+        Seleccionar archivo
+        </label>
+        <input type="file" id="imagen" name="imagen" accept="image/*"/>
+        <br>
+        <span id="file-name">Ningún archivo seleccionado</span>
 
         <!-- Datos de la Oferta -->
         <h2>Datos de la Oferta</h2>
@@ -159,7 +162,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
         <input type="date" id="fecha_fin" name="fecha_fin">
 
         <input type="submit" value="Agregar Producto">
-        <a href="/sigto/views/mainempresa.php">Volver al Inicio</a>
+        <br><br><br>
+        <a id="volver"  href="/sigto/views/mainempresa.php">Volver al Inicio</a>
     </form>
+    <script src="\sigto\assets\js\formularios.js"></script>
 </body>
 </html>
