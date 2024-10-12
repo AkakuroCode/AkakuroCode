@@ -78,10 +78,6 @@ switch ($action) {
         break;
     
     case 'list2': // Redirigir a la lista de productos
-            if ($_SESSION['role'] !== 'empresa') {
-                header('Location: ?action=login');
-                exit;
-            }
             $empresa = $controller2->readAll();
             $producto = $controller4->readAll();
             include __DIR__ . '/views/listarproductos.php'; // Asegúrate de que esta vista exista
@@ -150,33 +146,36 @@ switch ($action) {
             header('Location: ?action=list2'); // Redirigir a la lista de productos
         exit;
     
-    case 'login': 
+        case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
-                
-                // Primero intentamos iniciar sesión como usuario
+        
+                // Intentar iniciar sesión como usuario
                 $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
-    
+        
                 if ($loginUsuario) {
+                    // Redireccionar al maincliente si el login es exitoso
                     header('Location: /sigto/views/maincliente.php');
                     exit;
                 } else {
-                    // Si no es usuario, intentamos iniciar sesión como empresa
+                    // Intentar iniciar sesión como empresa
                     $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
-    
+        
                     if ($loginEmpresa) {
+                        // Redireccionar al mainempresa si el login es exitoso
                         header('Location: /sigto/views/mainempresa.php');
                         exit;
                     } else {
-                        // Si no es usuario ni empresa, intentamos iniciar sesión como admin
+                        // Intentar iniciar sesión como admin
                         $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
-    
+        
                         if ($loginAdmin) {
+                            // Redireccionar a la vista de admin
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
                         } else {
-                            // Si falla tanto para usuario, empresa como para admin, mostrar un mensaje de error
+                            // Mostrar mensaje de error si el login falla
                             $error = "Email o contraseña incorrectos.";
                         }
                     }
@@ -184,6 +183,8 @@ switch ($action) {
             }
             include __DIR__ . '/views/loginUsuario.php';
             break;
+        
+        
 
     case 'activar':
             if (isset($_GET['sku'])) {

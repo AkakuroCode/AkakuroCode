@@ -96,9 +96,7 @@ class UsuarioController {
                     $_SESSION['role'] = 'usuario';
                     $_SESSION['idus'] = $result['idus'];
                     $_SESSION['email'] = $result['email'];
-                    
-                    // Depuración para verificar que se guarda la sesión correctamente
-                    var_dump($_SESSION);
+  
                 } else {
                     echo "Error: el ID de usuario es nulo.";
                     exit;

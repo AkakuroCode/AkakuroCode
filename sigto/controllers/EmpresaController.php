@@ -80,19 +80,27 @@ class EmpresaController {
     public function login($data) {
         $empresa = new Empresa();
         $empresa->setEmail($data['email']);
-        $result = $empresa->login();  // Traer todos los datos de la empresa
-    
+        $result = $empresa->login(); // Llama al modelo para validar las credenciales
+
         if ($result) {
             if (password_verify($data['passw'], $result['passw'])) {
-                // Aquí devolvemos los datos completos de la empresa en lugar de solo true
-                return $result; 
-            } else {
-                return false;
+                // Iniciar la sesión aquí, ya que estamos seguros de que las credenciales son correctas
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+
+                $_SESSION['role'] = 'empresa';
+                $_SESSION['idemp'] = $result['idemp'];
+                $_SESSION['email'] = $result['email'];
+
+                // Retornar true para indicar que el login fue exitoso
+                return true;
             }
-        } else {
-            return false;
         }
+
+        // Retornar false si la autenticación falla
+        return false;
     }
-    
 }
+    
 ?>
