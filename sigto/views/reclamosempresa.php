@@ -30,21 +30,21 @@
             <section class="reclamo-form">
                 <h2>Enviar Reclamo</h2>
                 <form action="" method="GET" onsubmit="enviarReclamo()">
-        <div>
-            <label for="asunto">Asunto</label>
-            <input type="text" id="asunto" name="asunto" placeholder="Ingrese su asunto..." required>
-        </div>
+                    <div>
+                        <label for="asunto">Asunto</label>
+                        <input type="text" id="asunto" name="asunto" placeholder="Ingrese su asunto..." required>
+                    </div>
 
-        <div>
-            <label for="reclamo">Escriba su reclamo:</label>
-            <textarea id="reclamo" name="reclamo" rows="5" placeholder="Escriba su reclamo aquí..." required></textarea>
-        </div>
+                    <div>
+                        <label for="reclamo">Escriba su reclamo:</label>
+                        <textarea id="reclamo" name="reclamo" rows="5" placeholder="Escriba su reclamo aquí..." required></textarea>
+                    </div>
 
-        <div>
-            <button type="submit">Enviar Reclamo</button>
-        </div>
-    </form>
-    <h6>Si no se envia correctamente el reclamo a través de su aplicación de correo, <br>puede mandar un mail manualmente con el asunto "reclamo"<br> al mail <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a></h6>
+                    <div>
+                        <button type="submit">Enviar Reclamo</button>
+                    </div>
+                 </form>
+                 <h6>Si no se envia correctamente el reclamo a través de su aplicación de correo, <br>puede mandar un mail manualmente con el asunto "reclamo"<br> al mail <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a></h6>
     <script>
         function enviarReclamo() {
             var asunto = document.getElementById("asunto").value;

@@ -1,126 +1,97 @@
 /* Estilo general del formulario */
 .reclamo-form {
-    max-width: 1200px; /* Aumentar el ancho del formulario */
-    margin: 50px auto; /* Añadir margen superior */
-    padding: 60px; /* Ajustar padding para más espacio */
-    background-color: #f1f1f1; /* Un color de fondo más suave */
-    border-radius: 20px; /* Bordes más redondeados */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra más suave y grande */
+    border: 2px solid #0267FF; 
+    text-align: center;
+    max-width: 600px; /* Ajustar el ancho del formulario */
+    margin: 50px auto; /* Centrar y añadir margen superior */
+    padding: 60px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
 }
 
 .reclamo-form h2 {
-    text-align: center;
     margin-bottom: 40px;
-    font-size: 3rem; /* Título más grande */
-    color: #333; /* Un color más neutro */
+    font-size: 3rem;
+    color: #333;
     font-weight: bold;
 }
 
 .form-group {
-    margin-bottom: 30px; /* Mayor espacio entre los campos */
+    font-family: Arial, sans-serif;
+    margin-bottom: 30px;
+    text-align: left; /* Para que las etiquetas estén alineadas a la izquierda */
+    width: 100%; /* Ancho completo de los grupos */
 }
 
 .form-group label {
     display: block;
     margin-bottom: 15px;
-    font-size: 1.6rem; /* Aumentar el tamaño de las etiquetas */
-    color: #555; /* Color más sutil para las etiquetas */
+    font-size: 1.6rem;
+    color: #555;
 }
 
-/* Estilo específico para el campo de email */
-#email {
-    width: 90%; /* Aumentar el ancho del campo de email */
-    padding: 10px; /* Padding generoso para mayor comodidad */
-    border: 2px solid #007BFF; /* Color del borde azul */
-    border-radius: 15px; /* Bordes más redondeados */
-    font-size: 1.5rem; /* Texto más grande */
-    background-color: #f0f8ff; /* Fondo suave */
-    transition: all 0.3s ease; /* Transición suave al hacer hover */
-}
-
-#email:hover, #email:focus {
-    border-color: #0056b3; /* Cambiar el color del borde al hacer hover o focus */
-}
-
-#asunto {
-    width: 90%; /* Aumentar el ancho del campo de email */
-    padding: 10px; /* Padding generoso para mayor comodidad */
-    border: 2px solid #007BFF; /* Color del borde azul */
-    border-radius: 15px; /* Bordes más redondeados */
-    font-size: 1.5rem; /* Texto más grande */
-    background-color: #f0f8ff; /* Fondo suave */
-    transition: all 0.3s ease; /* Transición suave al hacer hover */
-}
-
-#asunto:hover, #asunto:focus {
-    border-color: #0056b3; /* Cambiar el color del borde al hacer hover o focus */
-}
-
-
-/* Estilo específico para el campo de reclamo */
-#reclamo {
+/* Estilo específico para los campos de texto */
+input[type="text"], textarea {
     font-family: Arial, sans-serif;
-    width: 90%; /* Aumentar el ancho del campo de reclamo */
-    padding: 10px; /* Padding generoso */
-    border: 2px solid #0267FF; 
+    width: 100%; /* Hacer que los campos ocupen el 100% del contenedor */
+    padding: 10px;
+    border: 2px solid #007BFF;
     border-radius: 15px;
-    font-size: 1.5rem; /* Texto más grande */
-    min-height: 400px; /* Aumentar la altura del área de texto */
-    background-color: #fff8f0; /* Fondo suave */
+    font-size: 1.5rem;
+    background-color: #ffffff;
+}
+
+input[type="text"]:hover, input[type="text"]:focus, 
+textarea:hover, textarea:focus {
+    border-color: #0056b3;
+}
+
+/* Estilo específico para el área de texto del reclamo */
+textarea {
+    min-height: 150px; /* Reducir la altura del textarea */
+    max-width: 90%; /* Reducir el ancho para centrarlo mejor */
     resize: vertical;
-    transition: all 0.3s ease;
+    margin: 0 auto; /* Centrar horizontalmente */
+    display: block; /* Garantizar que el elemento se comporte como bloque */
 }
 
-#reclamo:hover, #reclamo:focus {
-    border-color: #0267FF; /* Cambiar el color del borde al hacer hover o focus */
-}
 
-/* Estilo del botón de envío */
-.form-group button {
-    width: 100%;
-    padding: 20px; /* Botón más grande */
+button {
+    text-align: center;
+    width: 50%; /* Ajustar el tamaño del botón */
+    padding: 15px;
     background-color: #0267FF;
     color: white;
-    border: none;
+    border: 2px solid #0267FF;
     border-radius: 15px;
-    font-size: 1.6rem; /* Texto más grande en el botón */
+    font-size: 1.6rem;
     cursor: pointer;
-    transition: all 0.3s ease; /* Transición suave para hover */
+    transition: all 0.3s ease;
+    margin: 0 auto; /* Para centrar el botón */
+    display: block;
 }
 
-.form-group button:hover {
-    background-color: #5CE1E6; /* Cambiar el color del fondo al hacer hover */
+button:hover {
+    background-color: #5CE1E6;
 }
 
 /* Mejora para pantallas grandes */
 @media (min-width: 768px) {
     .reclamo-form {
-        padding: 80px; /* Aumentar padding en pantallas grandes */
-    }
-
-    #email, #reclamo {
-        width: 95%; /* Ajustar el ancho en pantallas grandes */
+        max-width: 700px; /* Ajuste para pantallas más grandes */
     }
 }
 
+/* Estilo del pie de página */
 .footer-redes {
     display: flex;
-    align-items: center;
-    gap: 15px; /* Espaciado entre los íconos */
+    justify-content: center;
+    gap: 15px;
 }
 
-.reclamos-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #0267FF;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
-}
-
-.reclamos-btn:hover {
-    background-color:  #5CE1E6; /* Cambia el color al pasar el ratón */
+.redes {
+    width: 30px;
+    height: 30px;
 }

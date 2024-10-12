@@ -7,11 +7,6 @@ $productos = $productoController->readVisible(); // Solo productos visibles
 
 $ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
 
-if (!$productos) {
-    echo "No se encontraron productos.";
-    exit;
-}
-
 $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 ?>
 <!DOCTYPE html>
@@ -96,6 +91,9 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
                                 
                                 <?php
+                                if (!$productos) {
+                                    echo "No se encontraron productos.";
+                                }
                                 // Verificar si el producto tiene una oferta activa
                                 $oferta = $ofertaController->readBySku($producto['sku']);
                                 

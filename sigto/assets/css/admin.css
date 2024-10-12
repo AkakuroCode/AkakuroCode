@@ -54,3 +54,33 @@ th {
 .delete-btn:hover {
     background-color: #D4001E;
 }
+
+#editar{
+text-decoration: none;
+background-color: #0267FF;
+color: white;
+border-radius: 1em;
+padding: 0.5em;
+font-weight: bold;
+}
+
+#eliminar{
+text-decoration: none;
+background-color: #FF0026;
+border-radius: 1em;
+padding: 0.5em;
+font-weight: bold;
+}
+
+#logout{
+    text-decoration: none;
+    text-align: center;
+    color:  white;
+    font-weight: bold;
+    background-color: #0267FF;
+    border: 3px solid #1900ff;
+    border-radius: 1em;
+    margin-top: 1em;
+    padding: 0.5em;
+    width: 100%;
+}
