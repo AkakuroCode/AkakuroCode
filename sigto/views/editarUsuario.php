@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
-    <link rel="stylesheet" href="/sigto/assets/css/login.css">
+    <link rel="stylesheet" href="/sigto/assets/css/formularios.css">
 </head>
 <body>
     
@@ -43,7 +43,8 @@
 
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Actualizar">
-        <a class="button" href="/sigto/index.php?action=list">Volver a la lista</a>
+        <br><br><br>
+        <a id="volver" href="/sigto/index.php?action=list">Volver a la lista</a>
     </form>
     
 </body>

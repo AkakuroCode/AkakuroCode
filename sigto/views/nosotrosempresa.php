@@ -51,7 +51,7 @@
                 <br><br>
                 <b>Dinamicidad:</b> Nos adaptamos rápidamente a los cambios del mercado y a las necesidades de nuestros clientes para seguir siendo relevantes y competitivos.
             </p>
-            <h2>Objetivos</h2>
+            
         </div>
     </main>
 

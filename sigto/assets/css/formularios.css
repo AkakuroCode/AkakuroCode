@@ -23,7 +23,7 @@ label {
 }
 
 input {
-    width: 100%;
+    width: 94%;
     padding: 0.5em;
     margin-top: 0.5em;
 }
@@ -145,12 +145,17 @@ input[type="submit"]:hover {
 #volver{
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
+    color:  white;
     font-weight: bold;
-    background-color: white;
+    background-color: #0267FF;
     border: 3px solid #1900ff;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
     width: 100%;
+}
+
+#volver:hover{
+    background-color: white;
+    color:#0267FF
 }

@@ -194,7 +194,7 @@ pre {
 .ot{
     text-align: center;
     color: white;
-    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
     margin: 10vw;
     
 }

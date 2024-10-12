@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Crear Usuario</title>
-    <link rel="stylesheet" href="/sigto/assets/css/login.css">
+    <link rel="stylesheet" href="/sigto/assets/css/formularios.css">
 
 </head>
 <body>
@@ -40,7 +40,8 @@
 
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Crear">
-        <a href="/sigto/views/mainvisitante.php">Volver al Inicio</a>
+        <br><br><br>
+        <a id="volver" href="/sigto/views/mainvisitante.php">Volver al Inicio</a>
     </form>
 </body>
 </html>
