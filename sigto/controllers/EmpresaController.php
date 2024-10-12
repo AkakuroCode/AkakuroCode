@@ -80,7 +80,7 @@ class EmpresaController {
     public function login($data) {
         $empresa = new Empresa();
         $empresa->setEmail($data['email']);
-        $result = $empresa->login(); // Llama al modelo para validar las credenciales
+        $result = $empresa->login(); // El modelo maneja el login y el registro en el historial
 
         if ($result) {
             if (password_verify($data['passw'], $result['passw'])) {
@@ -93,14 +93,19 @@ class EmpresaController {
                 $_SESSION['idemp'] = $result['idemp'];
                 $_SESSION['email'] = $result['email'];
 
-                // Retornar true para indicar que el login fue exitoso
-                return true;
+                return true; // Login exitoso
             }
         }
 
         // Retornar false si la autenticación falla
         return false;
     }
+
+    public function getEmpresaLogins($idemp) {
+        $empresa = new Empresa();
+        return $empresa->getEmpresaLogins($idemp); // Llamamos al método del modelo Empresa
+    }
+    
 }
     
 ?>

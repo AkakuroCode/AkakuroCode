@@ -25,15 +25,7 @@ th {
     background-color: #f2f2f2;
 }
 
-.user-item {
-    background-color: #fff;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.edit-btn, .delete-btn {
+.edit-btn, .delete-btn, .view-logins-btn {
     background-color: #0267FF;
     color: white;
     border: none;
@@ -41,9 +33,12 @@ th {
     border-radius: 10px;
     cursor: pointer;
     text-decoration: none;
+    font-weight: bold;
+    margin-right: 10px; /* Añadir espacio entre los botones */
+    display: inline-block;
 }
 
-.edit-btn:hover {
+.edit-btn:hover, .view-logins-btn:hover {
     background-color: #024C9F;
 }
 
@@ -55,27 +50,27 @@ th {
     background-color: #D4001E;
 }
 
-#editar{
-text-decoration: none;
-background-color: #0267FF;
-color: white;
-border-radius: 1em;
-padding: 0.5em;
-font-weight: bold;
+#editar, #eliminar, .view-logins-btn {
+    text-decoration: none;
+    background-color: #0267FF;
+    color: white;
+    border-radius: 1em;
+    padding: 0.5em;
+    font-weight: bold;
+    display: inline-block;
+    width: auto; /* Ajusta automáticamente el ancho según el contenido */
+    margin-right: 10px;
+    text-align: center;
 }
 
-#eliminar{
-text-decoration: none;
-background-color: #FF0026;
-border-radius: 1em;
-padding: 0.5em;
-font-weight: bold;
+#eliminar {
+    background-color: #FF0026;
 }
 
-#logout{
+#logout {
     text-decoration: none;
     text-align: center;
-    color:  white;
+    color: white;
     font-weight: bold;
     background-color: #0267FF;
     border: 3px solid #1900ff;
@@ -83,4 +78,17 @@ font-weight: bold;
     margin-top: 1em;
     padding: 0.5em;
     width: 100%;
+}
+
+.view-logins-btn {
+    background-color: #0267FF;
+    border-radius: 1em;
+    padding: 0.5em;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    width: auto; /* Ajustar el tamaño automáticamente */
+    margin-right: 10px;
+    text-align: center;
 }

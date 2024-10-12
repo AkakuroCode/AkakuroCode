@@ -88,7 +88,7 @@ class UsuarioController {
     public function login($data) {
         $usuario = new Usuario();
         $usuario->setEmail($data['email']);
-        $result = $usuario->login();
+        $result = $usuario->login(); // El modelo maneja el login y el registro en el historial
     
         if ($result) {
             if (password_verify($data['passw'], $result['passw'])) {
@@ -96,24 +96,22 @@ class UsuarioController {
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
-    
+
                 // Verificar que el ID de usuario esté disponible y no sea nulo
                 if (!empty($result['idus'])) {
                     $_SESSION['role'] = 'usuario';
                     $_SESSION['idus'] = $result['idus'];
                     $_SESSION['email'] = $result['email'];
-  
+                    return true; // Login exitoso
                 } else {
                     echo "Error: el ID de usuario es nulo.";
                     exit;
                 }
-    
-                return true;
             } else {
-                return false;
+                return false; // Contraseña incorrecta
             }
         } else {
-            return false;
+            return false; // Usuario no encontrado
         }
     }
     
@@ -122,5 +120,11 @@ class UsuarioController {
         $carritoController = new CarritoController();
         return $carritoController->getItemsByUser($idus);
     }
+
+    public function getUserLogins($idus) {
+        $usuario = new Usuario();
+        return $usuario->getUserLogins($idus); // Llamamos al método del modelo Usuario
+    }
+    
 }
 ?>

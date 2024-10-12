@@ -18,6 +18,25 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
     <title>Lista de Usuarios y Empresas</title>
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/admin.css">
+    <script>
+        function toggleMenu(userId) {
+            var element = document.getElementById('logins-' + userId);
+            if (element.style.display === 'none') {
+                element.style.display = 'table-row';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+
+        function toggleEmpresaMenu(empId) {
+            var element = document.getElementById('logins-empresa-' + empId);
+            if (element.style.display === 'none') {
+                element.style.display = 'table-row';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="panel-gestion">
@@ -50,6 +69,35 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
                     <td>
                         <a id="editar" href="/sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
                         <a id="eliminar" href="/sigto/index.php?action=delete&idus=<?php echo $usuario['idus']; ?>">Eliminar</a>
+                        <!-- Botón para ver logins -->
+                        <button type="button" class="view-logins-btn" onclick="toggleMenu(<?php echo $usuario['idus']; ?>)">Ver Logins</button>
+                    </td>
+                </tr>
+                <!-- Fila que contiene el historial de logins del usuario, inicialmente oculta -->
+                <tr id="logins-<?php echo $usuario['idus']; ?>" style="display:none;">
+                    <td colspan="8">
+                        <?php
+                        // Obtener los logins desde el controlador
+                        $logins = $usuarioController->getUserLogins($usuario['idus']);
+                        ?>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>URL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($logins as $login): ?>
+                                <tr>
+                                    <td><?php echo $login['fecha']; ?></td>
+                                    <td><?php echo $login['hora']; ?></td>
+                                    <td><?php echo $login['url']; ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -60,10 +108,9 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
         <?php endif; ?>
         </tbody>
     </table>
+</div>
 
-    <br>
-    <br>
-
+<div class="panel-gestion">
     <h1>Lista de Empresas</h1>
 
     <table>
@@ -91,6 +138,35 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
                     <td>
                         <a id="editar" href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
                         <a id="eliminar" href="/sigto/index.php?action=delete2&idemp=<?php echo $empresa['idemp']; ?>">Eliminar</a>
+                        <!-- Botón para ver logins -->
+                        <button type="button" class="view-logins-btn" onclick="toggleEmpresaMenu(<?php echo $empresa['idemp']; ?>)">Ver Logins</button>
+                    </td>
+                </tr>
+                <!-- Fila que contiene el historial de logins de la empresa, inicialmente oculta -->
+                <tr id="logins-empresa-<?php echo $empresa['idemp']; ?>" style="display:none;">
+                    <td colspan="7">
+                        <?php
+                        // Obtener los logins desde el controlador
+                        $logins_empresa = $empresaController->getEmpresaLogins($empresa['idemp']);
+                        ?>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>URL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($logins_empresa as $login_empresa): ?>
+                                <tr>
+                                    <td><?php echo $login_empresa['fecha']; ?></td>
+                                    <td><?php echo $login_empresa['hora']; ?></td>
+                                    <td><?php echo $login_empresa['url']; ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -101,12 +177,9 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
         <?php endif; ?>
         </tbody>
     </table>
-
-    <br>
-    <br>
-
-    <a id="logout" href="/sigto/index.php?action=logout">Cerrar Sesión</a>
-
 </div>
+
+<a id="logout" href="/sigto/index.php?action=logout">Cerrar Sesión</a>
+
 </body>
 </html>

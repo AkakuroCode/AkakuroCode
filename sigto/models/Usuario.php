@@ -167,11 +167,66 @@ class Usuario {
         $user = $result->fetch_assoc();
     
         if ($result->num_rows > 0) {
+            // Si las credenciales son correctas, guardamos el login en el historial
+            $this->guardarLogin($user['idus']);
             return $user;
         } else {
             return false;
         }
     }
+    
+    private function guardarLogin($idus) {
+        $fecha = date("Y-m-d");
+        $hora = date("H:i:s");
+        $url = $_SERVER['REQUEST_URI']; // La URL actual del login
+    
+        // Verificar si la URL ya existe en la tabla `pagina`
+        $query_check = "SELECT COUNT(*) FROM pagina WHERE url = ?";
+        $stmt_check = $this->conn->prepare($query_check);
+        $stmt_check->bind_param("s", $url);
+        $stmt_check->execute();
+        $stmt_check->bind_result($count);
+        $stmt_check->fetch();
+        
+        // Cerrar el statement para liberar los resultados de la consulta anterior
+        $stmt_check->close();
+    
+        if ($count == 0) {
+            // Si la URL no existe, insertarla en la tabla `pagina`
+            $query_insert_url = "INSERT INTO pagina (url, estado) VALUES (?, 'activo')";
+            $stmt_insert_url = $this->conn->prepare($query_insert_url);
+            $stmt_insert_url->bind_param("s", $url);
+            $stmt_insert_url->execute();
+            
+            // Cerrar el statement después de la inserción
+            $stmt_insert_url->close();
+        }
+    
+        // Ahora puedes insertar el login en historial_logins
+        $query = "INSERT INTO historial_login (idus, fecha, hora, url) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("isss", $idus, $fecha, $hora, $url);
+    
+        if ($stmt->execute()) {
+            // Login registrado exitosamente
+        } else {
+            echo "Error al registrar el login: " . $stmt->error;
+        }
+    
+        // Cerrar el statement después de la inserción
+        $stmt->close();
+    }
+    public function getUserLogins($idus) {
+        $query = "SELECT fecha, hora, url FROM historial_login WHERE idus = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $idus);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result->fetch_all(MYSQLI_ASSOC); // Retornamos todos los resultados en forma de array asociativo
+    }
+    
+    
     
     
     

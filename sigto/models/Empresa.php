@@ -144,14 +144,70 @@ class Empresa {
         $stmt->bind_param("s", $this->email);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+        $empresa = $result->fetch_assoc();
+    
         if ($result->num_rows > 0) {
-            // Devolvemos toda la información de la empresa, incluido el idemp
-            return $result->fetch_assoc();
+            // Si las credenciales son correctas, guardamos el login en el historial
+            $this->guardarLogin($empresa['idemp']);
+            return $empresa;
         } else {
             return false;
         }
     }
+    
+    private function guardarLogin($idemp) {
+        $fecha = date("Y-m-d");
+        $hora = date("H:i:s");
+        $url = $_SERVER['REQUEST_URI']; // La URL actual del login
+    
+        // Verificar si la URL ya existe en la tabla `pagina`
+        $query_check = "SELECT COUNT(*) FROM pagina WHERE url = ?";
+        $stmt_check = $this->conn->prepare($query_check);
+        $stmt_check->bind_param("s", $url);
+        $stmt_check->execute();
+        $stmt_check->bind_result($count);
+        $stmt_check->fetch();
+        
+        // Cerrar el statement para liberar los resultados de la consulta anterior
+        $stmt_check->close();
+    
+        if ($count == 0) {
+            // Si la URL no existe, insertarla en la tabla `pagina`
+            $query_insert_url = "INSERT INTO pagina (url, estado) VALUES (?, 'activo')";
+            $stmt_insert_url = $this->conn->prepare($query_insert_url);
+            $stmt_insert_url->bind_param("s", $url);
+            $stmt_insert_url->execute();
+            
+            // Cerrar el statement después de la inserción
+            $stmt_insert_url->close();
+        }
+    
+        // Ahora puedes insertar el login en historial_logins
+        $query = "INSERT INTO historial_login (idemp, fecha, hora, url) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("isss", $idemp, $fecha, $hora, $url);
+    
+        if ($stmt->execute()) {
+            // Login registrado exitosamente
+        } else {
+            echo "Error al registrar el login: " . $stmt->error;
+        }
+    
+        // Cerrar el statement después de la inserción
+        $stmt->close();
+    }
+    
+    public function getEmpresaLogins($idemp) {
+        $query = "SELECT fecha, hora, url FROM historial_login WHERE idemp = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $idemp);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result->fetch_all(MYSQLI_ASSOC); // Retornamos todos los resultados en forma de array asociativo
+    }
+    
+    
     
 }
 ?>
