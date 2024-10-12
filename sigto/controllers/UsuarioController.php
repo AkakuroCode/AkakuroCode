@@ -25,6 +25,12 @@ class UsuarioController {
             return "Error al crear usuario.";
         }
     }
+
+    public function getUserById($idus) {
+        $usuario = new Usuario();
+        $usuario->setId($idus);
+        return $usuario->readOne();
+    }
     
     public function readAll() {
         $usuario = new Usuario();
