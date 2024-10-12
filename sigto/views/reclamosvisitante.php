@@ -40,7 +40,7 @@
             <textarea id="reclamo" name="reclamo" rows="5" placeholder="Escriba su reclamo aquí..." required></textarea>
         </div>
 
-        <div>
+        <div id="botoncito">
             <button type="submit">Enviar Reclamo</button>
         </div>
     </form>

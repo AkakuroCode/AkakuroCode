@@ -57,11 +57,15 @@ textarea {
     display: block; /* Garantizar que el elemento se comporte como bloque */
 }
 
-
-button {
+/* Estilo del botón de envío */
+#botoncito {
     text-align: center;
+    margin-top: 20px;
+}
+
+#botoncito button {
     width: 50%; /* Ajustar el tamaño del botón */
-    padding: 15px;
+    padding: 10px;
     background-color: #0267FF;
     color: white;
     border: 2px solid #0267FF;
@@ -73,7 +77,7 @@ button {
     display: block;
 }
 
-button:hover {
+#botoncito button:hover {
     background-color: #5CE1E6;
 }
 
