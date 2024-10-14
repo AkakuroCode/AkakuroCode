@@ -95,7 +95,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
             <h2>Productos Disponibles</h2>
             <div class="row">
                 <?php foreach ($productos as $producto): ?>
-                    <div class="col-md-3 mb-4">
+                    <div class="col-md-4 mb-4"> <!-- Cambié el col-md-3 a col-md-4 para que haya 3 productos por fila -->
                         <div class="card h-100">
                             <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                             <div class="card-body">
@@ -105,7 +105,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 <?php
                                 // Verificar si el producto tiene una oferta activa
                                 $oferta = $ofertaController->readBySku($producto['sku']);
-                                
+        
                                 if ($oferta && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
                                     $precioOferta = $oferta['preciooferta'];
                                     echo "<p class='card-text'><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
@@ -119,11 +119,13 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 
                                 <!-- Botón de Comprar -->
                                 <form action="/sigto/index?action=add_to_cart" method="POST">
-                                <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
-                                <input type="number" name="cantidad" value="1" min="1" class="form-control mb-2" style="width: 80px;">
-                                <button type="submit" class="btn btn-primary">Comprar</button>
+                                    <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
+                                    <input type="number" name="cantidad" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                                    <button type="submit" class="btn btn-primary">Comprar</button>
                                 </form>
 
+                                <!-- Botón de Ver detalles -->
+                                <a href="/sigto/views/detallesproducto.php?id=<?php echo $producto['sku']; ?>" class="btn btn-info mt-2">Ver detalles</a>
                             </div>
                         </div>
                     </div>
