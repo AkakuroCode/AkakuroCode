@@ -117,10 +117,15 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 }
                                 ?>
 
-                                <!-- Botón de Comprar -->
+                                <!-- Select de Cantidad basado en el Stock -->
                                 <form action="/sigto/index?action=add_to_cart" method="POST">
                                     <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
-                                    <input type="number" name="cantidad" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+                                    <label for="cantidad">Cantidad:</label>
+                                    <select name="cantidad" class="form-control mb-2" style="width: 80px;">
+                                        <?php for ($i = 1; $i <= $producto['stock']; $i++): ?>
+                                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                        <?php endfor; ?>
+                                    </select>
                                     <button type="submit" class="btn btn-primary">Comprar</button>
                                 </form>
 

@@ -156,11 +156,6 @@ switch ($action) {
             header('Location: ?action=list');
         exit;
     
-    case 'delete3': // Eliminar un producto
-            $sku = $_GET['sku']; // Obtener el SKU del producto a eliminar
-            echo $controller4->delete($sku);
-            header('Location: ?action=list2'); // Redirigir a la lista de productos
-        exit;
     
         case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
