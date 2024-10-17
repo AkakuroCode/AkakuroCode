@@ -87,41 +87,40 @@ class ProductoController {
         $producto->setStock($data['stock']);
         $producto->setPrecio($data['precio']);
     
-        // Verificar si se ha subido una nueva imagen
+        // Manejar la imagen
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-            // Procesar la nueva imagen
             $tmp_name = $_FILES['imagen']['tmp_name'];
             $nombreImagen = basename($_FILES['imagen']['name']);
             $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
-    
-            // Mover la nueva imagen a la carpeta de destino
             if (move_uploaded_file($tmp_name, $rutaDestino)) {
-                // Establecer la nueva imagen en el producto
                 $producto->setImagen($nombreImagen);
             } else {
                 return "Error al subir la nueva imagen.";
             }
         } else {
-            // Mantener la imagen actual si no se ha subido una nueva
             $producto->setImagen($data['imagenActual']);
         }
     
-        // Solo eliminar y asignar nueva categoría si se selecciona una nueva
+        // Manejar la categoría
         if (isset($data['categoria']) && $data['categoria'] !== "") {
-            $producto->eliminarCategoria($data['sku']); // Elimina la categoría anterior del producto
-            $producto->asignarCategoria($data['sku'], $data['categoria']); // Asigna la nueva categoría
+            $producto->eliminarCategoria($data['sku']);
+            $producto->asignarCategoria($data['sku'], $data['categoria']);
         }
     
-        // Validar y actualizar la oferta
+        // Manejar la oferta
         $ofertaController = new OfertaController();
+        $ofertaActual = $ofertaController->readBySku($data['sku']); // Verifica si ya existe una oferta
+    
+        // Si hay una oferta existente o se proporciona una nueva oferta
         if (isset($data['oferta']) && $data['oferta'] > 0) {
-            // Si no se proporcionan fechas nuevas, usar las fechas actuales
+            $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
+            
+            // Verificar si hay fechas nuevas o usar las fechas existentes
             $fechaInicio = !empty($data['fecha_inicio']) ? $data['fecha_inicio'] : $data['fecha_inicio_actual'];
             $fechaFin = !empty($data['fecha_fin']) ? $data['fecha_fin'] : $data['fecha_fin_actual'];
     
-            // Validar que las fechas sean correctas, o mantener las actuales
-            if ($fechaInicio && $fechaFin && $fechaInicio < $fechaFin) {
-                $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
+            // Si ya existe una oferta, actualizamos
+            if ($ofertaActual && isset($ofertaActual['porcentaje_oferta'])) {
                 $dataOferta = [
                     'sku' => $data['sku'],
                     'porcentaje_oferta' => $data['oferta'],
@@ -129,47 +128,28 @@ class ProductoController {
                     'fecha_inicio' => $fechaInicio,
                     'fecha_fin' => $fechaFin
                 ];
-                $ofertaController->update($dataOferta); // Actualizar la oferta
+                $ofertaController->update($dataOferta);
             } else {
-                // Mantener las fechas actuales si no se proporcionan nuevas
-                $ofertaActual = $ofertaController->readBySku($data['sku']);
-                if ($ofertaActual) {
-                    $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
-                    $dataOferta = [
-                        'sku' => $data['sku'],
-                        'porcentaje_oferta' => $data['oferta'],  // Solo actualizar el porcentaje
-                        'preciooferta' => $precioOferta,
-                        'fecha_inicio' => $ofertaActual['fecha_inicio'],
-                        'fecha_fin' => $ofertaActual['fecha_fin']
-                    ];
-                    $ofertaController->update($dataOferta); // Actualizar solo el porcentaje
-                } else {
-                    return "Error: No se puede actualizar la oferta sin fechas válidas.";
-                }
-            }
-        } else {
-            // Si no se cambia el porcentaje de oferta, recalcular el precio de oferta en función del nuevo precio
-            $ofertaActual = $ofertaController->readBySku($data['sku']);
-            if ($ofertaActual) {
-                $precioOferta = $data['precio'] - ($data['precio'] * ($ofertaActual['porcentaje_oferta'] / 100));
+                // Si no existe una oferta, creamos una nueva
                 $dataOferta = [
                     'sku' => $data['sku'],
-                    'porcentaje_oferta' => $ofertaActual['porcentaje_oferta'],
+                    'porcentaje_oferta' => $data['oferta'],
                     'preciooferta' => $precioOferta,
-                    'fecha_inicio' => $ofertaActual['fecha_inicio'],
-                    'fecha_fin' => $ofertaActual['fecha_fin']
+                    'fecha_inicio' => $fechaInicio,
+                    'fecha_fin' => $fechaFin
                 ];
-                $ofertaController->update($dataOferta); // Actualizamos la oferta con el nuevo precio
+                $ofertaController->create($dataOferta);
             }
         }
     
+        // Actualizar el producto
         if ($producto->update()) {
             return "Producto actualizado exitosamente.";
         } else {
             return "Error al actualizar producto.";
         }
     }
-
+    
     public function addToCart($idus, $sku, $cantidad) {
         $carrito = new Carrito();
         $carrito->setIdus($idus);
