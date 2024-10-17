@@ -90,7 +90,7 @@ foreach ($carritoItems as $item) {
                     <div class="card-body">
                         <h4 class="card-title">Resumen de Compra</h4>
                         <p class="card-text">Total: <strong>US$<span id="total"><?php echo number_format($totalCarrito, 2); ?></span></strong></p>
-                        <a href="?action=checkout" class="btn btn-primary btn-block">Continuar compra</a>
+                        <a href="/sigto/views/metodoEntrega.php" class="btn btn-primary btn-block">Continuar compra</a>
                     </div>
                 </div>
             </div>
