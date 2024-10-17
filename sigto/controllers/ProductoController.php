@@ -109,28 +109,23 @@ class ProductoController {
     
         // Manejar la oferta
         $ofertaController = new OfertaController();
-        $ofertaActual = $ofertaController->readBySku($data['sku']); // Verifica si ya existe una oferta
+        $ofertaActual = $ofertaController->readBySku($data['sku']); // Verificar si ya existe una oferta
     
-        // Si hay una oferta existente o se proporciona una nueva oferta
         if (isset($data['oferta']) && $data['oferta'] > 0) {
             $precioOferta = $data['precio'] - ($data['precio'] * ($data['oferta'] / 100));
-            
-            // Verificar si hay fechas nuevas o usar las fechas existentes
-            $fechaInicio = !empty($data['fecha_inicio']) ? $data['fecha_inicio'] : $data['fecha_inicio_actual'];
-            $fechaFin = !empty($data['fecha_fin']) ? $data['fecha_fin'] : $data['fecha_fin_actual'];
     
-            // Si ya existe una oferta, actualizamos
-            if ($ofertaActual && isset($ofertaActual['porcentaje_oferta'])) {
-                $dataOferta = [
-                    'sku' => $data['sku'],
-                    'porcentaje_oferta' => $data['oferta'],
-                    'preciooferta' => $precioOferta,
-                    'fecha_inicio' => $fechaInicio,
-                    'fecha_fin' => $fechaFin
-                ];
-                $ofertaController->update($dataOferta);
+            // Si no se proporcionan fechas nuevas, usar las fechas actuales
+            if (!empty($ofertaActual)) {
+                $fechaInicio = !empty($data['fecha_inicio']) ? $data['fecha_inicio'] : $ofertaActual['fecha_inicio'];
+                $fechaFin = !empty($data['fecha_fin']) ? $data['fecha_fin'] : $ofertaActual['fecha_fin'];
             } else {
-                // Si no existe una oferta, creamos una nueva
+                // Si no hay una oferta previa, es necesario proporcionar fechas nuevas
+                $fechaInicio = !empty($data['fecha_inicio']) ? $data['fecha_inicio'] : null;
+                $fechaFin = !empty($data['fecha_fin']) ? $data['fecha_fin'] : null;
+            }
+    
+            // Validar que las fechas sean correctas (si no hay fechas, se mostrará un error)
+            if ($fechaInicio && $fechaFin && $fechaInicio <= $fechaFin) {
                 $dataOferta = [
                     'sku' => $data['sku'],
                     'porcentaje_oferta' => $data['oferta'],
@@ -138,7 +133,28 @@ class ProductoController {
                     'fecha_inicio' => $fechaInicio,
                     'fecha_fin' => $fechaFin
                 ];
-                $ofertaController->create($dataOferta);
+    
+                // Actualizar o crear la oferta dependiendo de si ya existe
+                if ($ofertaActual) {
+                    $ofertaController->update($dataOferta); // Actualizar la oferta existente
+                } else {
+                    $ofertaController->create($dataOferta); // Crear una nueva oferta si no existe
+                }
+            } else {
+                return "Error: Fechas de oferta inválidas o incompletas.";
+            }
+        } else {
+            // Si solo se está actualizando el porcentaje de la oferta, recalcular el precio de oferta
+            if ($ofertaActual) {
+                $precioOferta = $data['precio'] - ($data['precio'] * ($ofertaActual['porcentaje_oferta'] / 100));
+                $dataOferta = [
+                    'sku' => $data['sku'],
+                    'porcentaje_oferta' => $ofertaActual['porcentaje_oferta'],
+                    'preciooferta' => $precioOferta,
+                    'fecha_inicio' => $ofertaActual['fecha_inicio'], // Mantener fechas anteriores
+                    'fecha_fin' => $ofertaActual['fecha_fin'] // Mantener fechas anteriores
+                ];
+                $ofertaController->update($dataOferta); // Actualizar solo el precio de la oferta
             }
         }
     
@@ -149,6 +165,7 @@ class ProductoController {
             return "Error al actualizar producto.";
         }
     }
+    
     
     public function addToCart($idus, $sku, $cantidad) {
         $carrito = new Carrito();
