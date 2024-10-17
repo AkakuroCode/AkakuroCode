@@ -80,23 +80,20 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
         <p class="relleno">Más Vendidos</p>
         <!-- Catálogo de productos -->
         <div class="container mt-5">
-            <h2>Productos Disponibles</h2>
+        <h2>Productos Disponibles</h2>
             <div class="row">
                 <?php foreach ($productos as $producto): ?>
-                    <div class="col-md-3 mb-4">
+                    <div class="col-md-4 mb-4"> <!-- Cambié el col-md-3 a col-md-4 para que haya 3 productos por fila -->
                         <div class="card h-100">
                             <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-                                
+
                                 <?php
-                                if (!$productos) {
-                                    echo "No se encontraron productos.";
-                                }
                                 // Verificar si el producto tiene una oferta activa
                                 $oferta = $ofertaController->readBySku($producto['sku']);
-                                
+        
                                 if ($oferta && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
                                     $precioOferta = $oferta['preciooferta'];
                                     echo "<p class='card-text'><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
@@ -107,6 +104,21 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                     echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
                                 }
                                 ?>
+
+                                <!-- Select de Cantidad basado en el Stock -->
+                                <form action="/sigto/index?action=add_to_cart" method="POST">
+                                    <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
+                                    <label for="cantidad">Cantidad:</label>
+                                    <select name="cantidad" class="form-control mb-2" style="width: 80px;">
+                                        <?php for ($i = 1; $i <= $producto['stock']; $i++): ?>
+                                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                        <?php endfor; ?>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Comprar</button>
+                                </form>
+
+                                <!-- Botón de Ver detalles -->
+                                <a href="/sigto/views/detallesproducto.php?id=<?php echo $producto['sku']; ?>" class="btn btn-info mt-2">Ver detalles</a>
                             </div>
                         </div>
                     </div>
@@ -114,6 +126,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
             </div>
         </div>
     </main>
+
 
     <br><br><br><br><br><br>
     <footer>
