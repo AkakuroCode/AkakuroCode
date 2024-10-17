@@ -151,29 +151,43 @@ class Usuario {
         return $stmt->execute();
     }
 
-    public function delete() {
-        $query = "DELETE FROM " . $this->table_name . " WHERE idus = ?";
+    public function updateActivo($estado) {
+        $query = "UPDATE cliente SET activo = ? WHERE idus = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $this->idus);
+    
+        // Verificar si la consulta fue preparada correctamente
+        if ($stmt === false) {
+            die('Error en la consulta: ' . $this->conn->error);
+        }
+    
+        $stmt->bind_param("si", $estado, $this->idus);
+    
         return $stmt->execute();
     }
+    
+    
+    
 
     public function login() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE email = ?";
+        $query = "SELECT idus, email, passw, activo FROM cliente WHERE email = ?";
         $stmt = $this->conn->prepare($query);
+        
+        if ($stmt === false) {
+            die('Error en la consulta: ' . $this->conn->error);
+        }
+        
         $stmt->bind_param("s", $this->email);
         $stmt->execute();
+        
         $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
-    
+        
         if ($result->num_rows > 0) {
-            // Si las credenciales son correctas, guardamos el login en el historial
-            $this->guardarLogin($user['idus']);
-            return $user;
+            return $result->fetch_assoc();
         } else {
-            return false;
+            return false; // Usuario no encontrado
         }
     }
+    
     
     private function guardarLogin($idus) {
         $fecha = date("Y-m-d");
