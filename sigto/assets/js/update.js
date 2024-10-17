@@ -1,9 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
     const updateButtons = document.querySelectorAll('.btn-secondary');
+    const deleteButtons = document.querySelectorAll('.btn-danger');
 
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
             updateQuantity(button);
+        });
+    });
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            deleteItem(button);
         });
     });
 });
@@ -31,19 +38,16 @@ async function updateQuantity(button) {
         const result = await response.json();
 
         if (result.status === 'success') {
-            // Verificar y actualizar el subtotal del producto
             const itemTotalElement = form.closest('.list-group-item').querySelector('.item-total');
             if (itemTotalElement) {
                 itemTotalElement.textContent = `${result.subtotal}`;
             }
 
-            // Verificar y actualizar la cantidad mostrada
             const cantidadElement = document.getElementById(`cantidad-${sku}`);
             if (cantidadElement) {
                 cantidadElement.textContent = `Cantidad: ${cantidad}`;
             }
 
-            // Verificar y actualizar el total del carrito
             const totalElement = document.getElementById('total');
             if (totalElement) {
                 totalElement.textContent = `${result.totalCarrito}`;
@@ -56,7 +60,6 @@ async function updateQuantity(button) {
         alert('Hubo un problema al actualizar la cantidad.');
     }
 }
-
 
 // Función para eliminar un producto del carrito
 function deleteItem(button) {
@@ -74,10 +77,20 @@ function deleteItem(button) {
     .then(data => {
         if (data.success) {
             // Eliminar el elemento de la lista visualmente
-            button.closest('.list-group-item').remove();
+            const itemElement = button.closest('.list-group-item');
+            itemElement.remove();
 
             // Actualizar el total en el resumen de compra
             updateTotal();
+
+            // Verificar si quedan productos en el carrito
+            if (document.querySelectorAll('.list-group-item').length === 0) {
+                // Ocultar el resumen de compra
+                document.querySelector('.col-md-4').style.display = 'none';
+
+                // Mostrar mensaje de carrito vacío
+                document.querySelector('main.container').innerHTML = '<p class="text-center mt-4">No hay productos en el carrito.</p>';
+            }
         } else {
             alert('Error al eliminar el producto del carrito.');
         }
@@ -87,12 +100,13 @@ function deleteItem(button) {
     });
 }
 
+
 // Función para actualizar el total después de la eliminación
 function updateTotal() {
     let total = 0;
     document.querySelectorAll('.item-total').forEach(item => {
-        total += parseFloat(item.textContent.replace('', '')); // Eliminar "US$" antes de convertir a número.
+        total += parseFloat(item.textContent.replace('US$', '')); // Eliminar "US$" antes de convertir a número.
     });
 
-    document.getElementById('total').textContent = `${total.toFixed(2)}`; // Mostrar el total actualizado con "US$".
+    document.getElementById('total').textContent = `US$${total.toFixed(2)}`; // Mostrar el total actualizado.
 }
