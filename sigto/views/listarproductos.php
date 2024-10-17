@@ -15,6 +15,7 @@ if (!isset($_SESSION['idemp'])) {
 }
 
 // Obtener productos solo de la empresa logueada
+$productoController->handleRequest();
 $productos = $productoController->readAllByEmpresa($_SESSION['idemp']);
 
 if (!$productos) {

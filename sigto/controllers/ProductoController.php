@@ -208,5 +208,19 @@ class ProductoController {
             return "Error al restaurar el producto.";
         }
     }
+
+    public function handleRequest() {
+        if (isset($_GET['action']) && isset($_GET['sku'])) {
+            $action = $_GET['action'];
+            $sku = $_GET['sku'];
+    
+            if ($action === 'desactivar') {
+                return $this->softDelete($sku);
+            } elseif ($action === 'activar') {
+                return $this->restore($sku);
+            }
+        }
+    }
+    
 }
 ?>
