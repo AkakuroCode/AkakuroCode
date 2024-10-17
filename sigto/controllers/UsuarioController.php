@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Utils.php'; // Incluye el archivo Utils.php
 
-
 class UsuarioController {
 
     public function create($data) {
@@ -73,30 +72,37 @@ class UsuarioController {
             return "Error al actualizar usuario.";
         }
     }
-    
 
+    // Modificación del método delete para baja lógica
     public function delete($idus) {
-        $usuario = new Usuario();
-        $usuario->setId($idus);
-        if ($usuario->delete()) {
-            return "Usuario eliminado exitosamente.";
+        $usuario = new Usuario(); // Instancia del modelo Usuario
+        $usuario->setId($idus); // Establece el id del usuario
+
+        // Cambiar el valor de 'activo' a 'no'
+        if ($usuario->updateActivo('no')) { // Método para realizar la baja lógica en el modelo
+            return true;
         } else {
-            return "Error al eliminar usuario.";
+            return false;
         }
     }
-
+    
     public function login($data) {
         $usuario = new Usuario();
         $usuario->setEmail($data['email']);
         $result = $usuario->login(); // El modelo maneja el login y el registro en el historial
-    
+        
         if ($result) {
+            if ($result['activo'] === 'no') {
+                // Si el cliente está inactivo, denegamos el login
+                return "El usuario ha sido dado de baja y no puede iniciar sesión.";
+            }
+    
             if (password_verify($data['passw'], $result['passw'])) {
                 // Iniciar sesión si aún no está iniciada
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
-
+    
                 // Verificar que el ID de usuario esté disponible y no sea nulo
                 if (!empty($result['idus'])) {
                     $_SESSION['role'] = 'usuario';
@@ -115,6 +121,7 @@ class UsuarioController {
         }
     }
     
+    
     // Método opcional para obtener el carrito de un usuario
     public function getCarrito($idus) {
         $carritoController = new CarritoController();
@@ -125,6 +132,4 @@ class UsuarioController {
         $usuario = new Usuario();
         return $usuario->getUserLogins($idus); // Llamamos al método del modelo Usuario
     }
-    
 }
-?>
