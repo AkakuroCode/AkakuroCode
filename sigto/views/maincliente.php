@@ -14,7 +14,6 @@ $ofertaController = new OfertaController(); // Para obtener las ofertas relacion
 
 if (!$productos) {
     echo "No se encontraron productos.";
-    exit;
 }
 
 $fechaActual = date('Y-m-d'); // Obtener la fecha actual
