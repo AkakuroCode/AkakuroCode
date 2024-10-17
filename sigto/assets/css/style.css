@@ -95,20 +95,22 @@ flex-direction: column;
     text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
 }
 
+.contenedor{
+    min-height: 100dvh;
+    display:grid;
+    grid-template-rows: auto 1fr auto;
+}
+
 footer{
     background-color: #0267FF;
-    width: 100%;
-    padding-bottom: 20px;
-    padding-top: 20px;
+    text-align: center;
+    padding: 1rem 2rem;
 }
 
 .footer-container{
-    padding: 1%;
-    color: rgb(0, 0, 0);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items:center;
+    color: white;
+    display: grid;
+    grid-template-columns: auto auto auto;
 }
 
 .footer-item p{
@@ -117,13 +119,20 @@ footer{
     }
 
 .footer-item a{
-    color: rgb(0, 0, 0);
+    color: white;
     font-size: large;
 }
 
+.footer-redes{
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente si es necesario */
+}
+
 .redes{
-    max-width: 2.5em;
+    max-width: 3.5em;
     height: auto;
+    margin: 5px;
 }
 
 .forms-container{
@@ -133,8 +142,8 @@ footer{
     justify-content: center;
     color: white; 
     text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
-
 }
+
 .forms-container h1{
     text-align: center;
 }
@@ -244,6 +253,7 @@ pre {
 .next-btn {
     right: 10px;
 }
+
 @media (width < 650px){
     .mi-navbar-items{
         flex-direction: column;
@@ -270,21 +280,25 @@ pre {
 
     footer{
         background-color: #0267FF;
-        width: 100%;
-        padding-bottom: 20px;
-        padding-top: 20px;
+        text-align: center;
+        padding: 1rem 2rem;
+    }
+
+    .contenedor{
+        min-height: 100dvh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
     }
     
     .footer-container{
-        padding: 1%;
         color: white;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
         align-items:center;
     }
     
     .footer-redes{
+        text-decoration:none;
         height: auto;
         flex-direction: row;
         flex-wrap: wrap;
