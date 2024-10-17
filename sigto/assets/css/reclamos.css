@@ -32,8 +32,8 @@
     color: #555;
 }
 
-/* Estilo específico para los campos de texto */
-input[type="text"], textarea {
+#asunto, #reclamo{
+    /* Estilo específico para los campos de texto */
     font-family: Arial, sans-serif;
     width: 100%; /* Hacer que los campos ocupen el 100% del contenedor */
     padding: 10px;
@@ -43,10 +43,10 @@ input[type="text"], textarea {
     background-color: #ffffff;
 }
 
-input[type="text"]:hover, input[type="text"]:focus, 
-textarea:hover, textarea:focus {
+#asunto:hover, #reclamo:hover{
     border-color: #0056b3;
 }
+
 
 /* Estilo específico para el área de texto del reclamo */
 textarea {
@@ -86,16 +86,4 @@ textarea {
     .reclamo-form {
         max-width: 700px; /* Ajuste para pantallas más grandes */
     }
-}
-
-/* Estilo del pie de página */
-.footer-redes {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.redes {
-    width: 30px;
-    height: 30px;
 }
