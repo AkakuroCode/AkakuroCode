@@ -26,6 +26,9 @@ if (session_status() === PHP_SESSION_NONE) {
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
                     </li>
+                    <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                    </li>
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
                     </li>
@@ -75,7 +78,6 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
         </div>
     </footer>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

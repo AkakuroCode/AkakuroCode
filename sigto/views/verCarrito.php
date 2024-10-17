@@ -43,6 +43,9 @@ if ($carritoItems && !empty($carritoItems)) {
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
                     </li>
+                    <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                    </li>
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
                     </li>
@@ -122,7 +125,7 @@ if ($carritoItems && !empty($carritoItems)) {
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
                 <br>
-                <a href="reclamoscliente.php">Reclamos</a>
+                <a href="\sigto\views\reclamoscliente.php">Reclamos</a>
             </div>
             <div class="footer-item">
                 <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>

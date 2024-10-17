@@ -42,6 +42,9 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                   <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
                 </li>
                 <li class="nav-item mx-3">
+                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                </li>
+                <li class="nav-item mx-3">
                   <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
                 </li>
                 <li class="nav-item mx-3">

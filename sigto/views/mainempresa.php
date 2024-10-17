@@ -44,6 +44,9 @@ if (!$productos) {
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php">Agregar Producto</a>
                     </li>
                     <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php">Ver Productos</a>
+                    </li>
+                    <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
                     </li>
                     </ul>
