@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/reclamos.css">
     <title>Reclamos</title>
 </head>
 <body>
     <header>
-        <nav class="mi-navbar">
-           <div class="mi-navbar-container">
-                   <h1>
-                    <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade">
-                   </h1>
-                    <div class="mi-navbar-items">
-                        <form action="ruta/destino" method="GET" class="search-form"> <!-- Ajusta 'action' y 'method' según el backend -->
-                            <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
-                        </form>
-                    <a href="mainvisitante.php">Inicio</a>
-                    <a href="../index.php?action=logout">Ingresar</a>
-                    </div>
-                    
-            </div>
-        </nav>
+    <nav class="navbar navbar-expand-sm bg-body-tertiary">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                      <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainvisitante.php">Inicio</a>
+                    </li>
+                      <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotrosvisitante.php">Nosotros</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/loginUsuario.php">Ingresar</a>
+                    </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="rounded-pill mt-2" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
+                    </form>
+                  </div>
+                </div>
+              </nav>
     </header>
 
         <main>
             <section class="reclamo-form">
                 <h2>Enviar Reclamo</h2>
-                <form action="" method="GET" onsubmit="enviarReclamo()">
+                <form class="formulario" action="" method="GET" onsubmit="enviarReclamo()">
         <div>
             <label for="asunto">Asunto</label>
             <input type="text" id="asunto" name="asunto" placeholder="Ingrese su asunto..." required>

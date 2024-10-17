@@ -1,3 +1,9 @@
+:root{
+    --azuloscuro: #0267FF;
+    --azulmedio: #3871C1;
+    --azulclaro: #51Aee5;
+    --turquesa: #5CE1E6;
+}
 
 body{
     font-family: Arial, Helvetica, sans-serif, sans-serif;
@@ -20,57 +26,9 @@ flex-direction: column;
     max-height: 500px;
 }
 
-.mi-navbar{
-    background-color: #0267FF;
-    color: white;
-    padding: 1px 15px;
-}
-
-.mi-navbar-container{
-    display: flex;
-    justify-content: space-between;    
-    align-items: center;
-    gap: 20px; /* Añade espacio entre los elementos */
-    flex-wrap:wrap
-}
-
-.mi-navbar-logo{
-    max-width:2em ; /* Ajusta el ancho del logo */
-    height: auto; /* Mantiene la proporción de aspecto */
-    text-decoration: none;
-}
-.mi-navbar-logo2{
-    max-width:1.7em ; /* Ajusta el ancho del logo */
-    height: auto; /* Mantiene la proporción de aspecto */
-    text-decoration: none;
-}
-
-.mi-navbar-items{
-    justify-items: center;
-    display: flex;
-    gap: 15px;
-
+.navbar{
+    background: linear-gradient(to top , var(--turquesa) ,var(--azulmedio),var(--azuloscuro)) !important;
     
-}
-
-.search-form {
-        align-items: center;
-        margin-left: 15px; /* Añade espacio desde el logo */
-        border: none; /* Elimina cualquier borde del form */
-        padding: 0; /* Remueve el padding del form si tiene */
-        background: none; /* Asegúrate de que no tenga fondo */
-        box-shadow: none; /* Remueve cualquier sombra si hay */
-}
-
-.searchbar {
-    flex: 1; /* Permite que crezca dentro del espacio disponible */
-    padding: 8px 15px; /* Aumenta el padding para hacerla más alta */
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    outline: none;
-    max-width: 100%; /* Aumenta el ancho máximo de la barra */
-    align-items: center;
-    font-size: 16px; /* Aumenta el tamaño del texto */
 }
 
 .mi-navbar-items a{
@@ -78,21 +36,12 @@ flex-direction: column;
    font-family: Arial, Helvetica;
    font-weight:bold;
    text-decoration: none;
-   color: rgb(0, 0, 0);
-   padding: 8px 12px;
+   color: rgb(0, 0, 0);   
 }
 
 .mi-navbar-items a:hover {
-    background-color: #5CE1E6;
+    background-color: var(--turquesa);
     border-radius: 4px;
-}
-
-/*borrar el relleno luego de borrar el Lorem*/
-.relleno{
-    text-align: center;
-    font-size: 48px;
-    color:rgb(0, 0, 0);
-    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Añade una sombra negra */
 }
 
 .contenedor{
@@ -102,7 +51,7 @@ flex-direction: column;
 }
 
 footer{
-    background-color: #0267FF;
+    background: linear-gradient(to bottom , var(--turquesa) ,var(--azulmedio),var(--azuloscuro));
     text-align: center;
     padding: 1rem 2rem;
 }
@@ -152,11 +101,11 @@ footer{
     color: white; 
     margin-bottom: 20px;
     padding: 10px;
-    border: 3px solid  #0267FF;
+    border: 3px solid  var(--azuloscuro);
     border-radius: 5px;
 }
 
-form {
+.formulario {
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -168,7 +117,7 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="text"], input[type="number"],input[type="list"] , button {
+input[type="text"], input[type="number"],input[type="list"] {
     display: block;
     margin-bottom: 10px;
     padding: 5px;
@@ -177,16 +126,8 @@ input[type="text"], input[type="number"],input[type="list"] , button {
 }
 
 button {
-    background-color: #0267FF;
+    background-color: var(--azuloscuro);
     color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-}
-
-
-button:hover {
-    background-color: #0267FF;
 }
 
 h2 {
@@ -215,71 +156,18 @@ pre {
 
 }
 
-  /* Estilos para el carrusel */
-  .carousel-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
+/*carrousel*/
+
+.img-carrousel{
+    min-height: 20vw;
+    max-height: 20vw;
 }
 
-.carousel-slide {
-    display: flex;
-    width: 300%; /* Cambia este valor según la cantidad de imágenes */
-    transition: transform 0.5s ease-in-out;
-}
-
-.carousel-slide img {
-    width: 100%;
-    height: 30%; /* Mantiene la proporción de la imagen */
-}
-
-/* Botones de navegación */
-.prev-btn, .next-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 1;
-}
-
-.prev-btn {
-    left: 10px;
-}
-
-.next-btn {
-    right: 10px;
-}
 
 @media (width < 650px){
-    .mi-navbar-items{
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
-    .mi-navbar-logo{
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    
-    }
-
-    .mi-navbar-container{
-        justify-content: center;
-    }
-
-    .mi-navbar-items a{
-        width: 100%;
-        text-align: center;
-        padding: 1px;
-    }
 
     footer{
-        background-color: #0267FF;
+        background-color: var(--azuloscuro);
         text-align: center;
         padding: 1rem 2rem;
     }
@@ -359,7 +247,7 @@ pre {
     }
     
     .btn-comprar {
-        background-color: #0267FF;
+        background-color: var(--azuloscuro);
         color: white;
         padding: 10px 20px;
         border: none;
@@ -369,7 +257,7 @@ pre {
     }
     
     .btn-comprar:hover {
-        background-color: #005bb5;
+        background-color: var(--azuloscuro);
     }
     
     .btn-eliminar {
