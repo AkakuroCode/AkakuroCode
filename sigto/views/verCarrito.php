@@ -12,17 +12,14 @@ $productoController = new ProductoController();
 $idus = $_SESSION['idus'];
 $carritoItems = $carritoController->getItemsByUser($idus);
 
-if (!$carritoItems || empty($carritoItems)) {
-    echo "No hay productos en el carrito.";
-    exit;
-}
-
-// Inicializar la variable $totalCarrito
 $totalCarrito = 0;
-foreach ($carritoItems as $item) {
-    $totalCarrito += $item['subtotal'];
-}
+if ($carritoItems && !empty($carritoItems)) {
+    foreach ($carritoItems as $item) {
+        $totalCarrito += $item['subtotal']; // Sumar el subtotal de cada producto al total del carrito
+    }
+ }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -37,15 +34,10 @@ foreach ($carritoItems as $item) {
     <header>
         <nav class="mi-navbar">
             <div class="mi-navbar-container">
-                <h1>
-                    <img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo.png" alt="OceanTrade">
-                </h1>
+                <h1><img class="mi-navbar-logo" src="/sigto/assets/images/navbar logo.png" alt="OceanTrade"></h1>
                 <div class="mi-navbar-items">
-                    <form action="ruta/destino" method="GET" class="search-form">
-                        <input class="searchbar" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
-                    </form>
                     <a href="/sigto/views/maincliente.php">Inicio</a>
-                    <a href="/sigto/views/usuarioperfil.php">Perfil</a> 
+                    <a href="/sigto/views/usuarioperfil.php">Perfil</a>
                     <a href="/sigto/index?action=view_cart">Carrito</a>
                     <a href="nosotroscliente.php">Nosotros</a>
                     <a href="/sigto/index.php?action=logout">Salir</a>
@@ -54,8 +46,14 @@ foreach ($carritoItems as $item) {
         </nav>
     </header>
     
+    <h2 class="text-center">Carrito de Compras</h2>
+    
+    
     <main class="container mt-5">
-        <h2>Carrito de Compras</h2>
+    <!-- Si no hay productos en el carrito -->
+    <?php if (!$carritoItems || empty($carritoItems)): ?>
+        <p class="text-center mt-4">No hay productos en el carrito.</p>
+    <?php else: ?>
         <div class="row">
             <div class="col-md-8">
                 <div class="list-group">
@@ -73,11 +71,11 @@ foreach ($carritoItems as $item) {
                                 <div>
                                     <p>Total: US$<span class="item-total" id="item-total-<?php echo $item['sku']; ?>"><?php echo number_format($item['subtotal'], 2); ?></span></p>
                                     <form class="update-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
-                                    <input type="number" name="cantidad" value="<?php echo $item['cantidad']; ?>" min="1" class="form-control mb-2 cantidad-input" style="width: 80px;">
-                                    <button type="button" class="btn btn-secondary" onclick="updateQuantity(this)">Actualizar</button>
+                                        <input type="number" name="cantidad" value="<?php echo $item['cantidad']; ?>" min="1" class="form-control mb-2 cantidad-input" style="width: 80px;">
+                                        <button type="button" class="btn btn-secondary" onclick="updateQuantity(this)">Actualizar</button>
                                     </form>
                                     <form class="delete-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
-                                    <button type="button" class="btn btn-danger" onclick="deleteItem(this)">Eliminar</button>
+                                        <button type="button" class="btn btn-danger" onclick="deleteItem(this)">Eliminar</button>
                                     </form>
                                 </div>
                             </div>
@@ -85,6 +83,8 @@ foreach ($carritoItems as $item) {
                     <?php endforeach; ?>
                 </div>
             </div>
+
+            <!-- Mostrar Resumen de compra solo si hay productos -->
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
@@ -95,7 +95,9 @@ foreach ($carritoItems as $item) {
                 </div>
             </div>
         </div>
-    </main>
+    <?php endif; ?>
+</main>
+
 
     <footer>
         <div class="footer-container">
