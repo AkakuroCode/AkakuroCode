@@ -62,7 +62,6 @@ class ProductoController {
         return $skuGenerado ? ['status' => 'success', 'sku' => $skuGenerado] : ['status' => 'error', 'message' => 'Error al crear el producto.'];
     }
 
-
     public function readAll() {
         $producto = new Producto();
         $result = $producto->readAllProducts(); // Llamamos al método del modelo que recupera todos los productos
@@ -110,7 +109,6 @@ class ProductoController {
         $producto->setDescripcion($data['descripcion']);
         $producto->setEstado($data['estado']);
         $producto->setOrigen($data['origen']);
-        $producto->setStock($data['stock']);
         $producto->setPrecio($data['precio']);
     
         // Manejar la imagen
@@ -192,6 +190,11 @@ class ProductoController {
         }
     }
     
+    // Método para obtener la cantidad de productos disponibles por SKU
+    public function getCantidadDisponiblePorSku($sku) {
+        $producto = new Producto();
+        return $producto->getCantidadDisponiblePorSku($sku); // Usar el método del modelo para obtener cantidad disponible
+    }
     
     public function addToCart($idus, $sku, $cantidad) {
         $carrito = new Carrito();
@@ -247,12 +250,5 @@ class ProductoController {
             }
         }
     }
-
-     // Método para obtener la cantidad de productos disponibles por SKU
-     public function getCantidadDisponiblePorSku($sku) {
-        $producto = new Producto();
-        return $producto->getCantidadDisponiblePorSku($sku);
-    }
-    
 }
 ?>

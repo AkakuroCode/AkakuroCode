@@ -103,6 +103,7 @@ class Producto {
     public function getVisible() {
         return $this->visible;
     }
+
     // Método para establecer el tipo de stock (unidad o cantidad)
     public function setTipoStock($tipo_stock) {
         $this->tipo_stock = $tipo_stock;
@@ -279,19 +280,17 @@ class Producto {
         return $stmt->execute();
     }
 
-   
+    // Método en Producto.php para obtener la cantidad de productos disponibles en la tabla producto_unitario
+    public function getCantidadDisponiblePorSku($sku) {
+    $query = "SELECT COUNT(*) AS cantidad_disponible FROM producto_unitario WHERE sku = ? AND estado = 'Disponible'";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("i", $sku);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
     
-        // Método para obtener la cantidad de productos disponibles por SKU
-        public function getCantidadDisponiblePorSku($sku) {
-            $query = "SELECT COUNT(*) AS cantidad_disponible FROM producto_unitario WHERE sku = ? AND estado = 'Disponible'";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("i", $sku);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-            return $row['cantidad_disponible']; // Retorna la cantidad de productos disponibles
-        }
+    return $row['cantidad_disponible']; // Retorna la cantidad de productos disponibles
     }
-    
 
+}
 ?>

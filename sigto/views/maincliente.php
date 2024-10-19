@@ -63,28 +63,28 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     </header>
     
     <main>
-               <!-- Carrusel de Bootstrap -->
-               <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                          <div class="carousel-item active">
-                            <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
-                          </div>
-                          <div class="carousel-item">
-                            <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
-                          </div>
-                          <div class="carousel-item">
-                            <img src="/sigto/assets/images/logo akakuro.png" class="img-carrousel d-block w-100" alt="...">
-                          </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                          <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                          <span class="visually-hidden">Next</span>
-                        </button>
-                      </div>
+        <!-- Carrusel de Bootstrap -->
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/sigto/assets/images/logo akakuro.png" class="img-carrousel d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
 
         <p class="relleno">Más Vendidos</p>
         
@@ -93,7 +93,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
             <h2>Productos Disponibles</h2>
             <div class="row">
             <?php foreach ($productos as $producto): ?>
-                    <div class="col-md-4 mb-4"> <!-- Cambié el col-md-3 a col-md-4 para que haya 3 productos por fila -->
+                    <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                             <div class="card-body">
@@ -103,29 +103,41 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 <?php
                                 // Verificar si el producto tiene una oferta activa
                                 $oferta = $ofertaController->readBySku($producto['sku']);
-
+        
                                 // Solo mostrar oferta si está activa y válida
                                 if ($oferta && isset($oferta['preciooferta'], $oferta['porcentaje_oferta']) && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
-                                    $precioOferta = $oferta['preciooferta'];
-                                    echo "<p class='card-text'><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
-                                    echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
-                                    echo "<p class='card-text'><strong>Precio con oferta: </strong>US$" . htmlspecialchars($precioOferta) . "</p>";
+                                $precioOferta = $oferta['preciooferta'];
+                                echo "<p class='card-text'><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
+                                echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
+                                echo "<p class='card-text'><strong>Precio con oferta: </strong>US$" . htmlspecialchars($precioOferta) . "</p>";
                                 } else {
-                                    echo "<p class='card-text'><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
-                                    echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
+                                echo "<p class='card-text'><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
+                                echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
+                                }
+                                ?>
+                                <?php
+                                // Obtener la cantidad disponible dependiendo del tipo de stock
+                                if ($producto['tipo_stock'] === 'unidad') {
+                                    $cantidadDisponible = $productoController->getCantidadDisponiblePorSku($producto['sku']);
+                                } else {
+                                    $cantidadDisponible = $producto['stock'];
                                 }
                                 ?>
 
-                                <!-- Select de Cantidad basado en el Stock -->
+                                <!-- Select de Cantidad basado en la cantidad disponible -->
                                 <form action="/sigto/index?action=add_to_cart" method="POST">
                                     <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
                                     <label for="cantidad">Cantidad:</label>
                                     <select name="cantidad" class="form-control mb-2" style="width: 80px;">
-                                        <?php for ($i = 1; $i <= $producto['stock']; $i++): ?>
-                                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                        <?php endfor; ?>
+                                        <?php if ($cantidadDisponible > 0): ?>
+                                            <?php for ($i = 1; $i <= $cantidadDisponible; $i++): ?>
+                                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                            <?php endfor; ?>
+                                        <?php else: ?>
+                                            <option value="0">Sin stock disponible</option>
+                                        <?php endif; ?>
                                     </select>
-                                    <button type="submit" class="btn btn-primary">Comprar</button>
+                                    <button type="submit" class="btn btn-primary" <?php echo ($cantidadDisponible <= 0) ? 'disabled' : ''; ?>>Comprar</button>
                                 </form>
 
                                 <!-- Botón de Ver detalles -->

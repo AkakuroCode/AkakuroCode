@@ -102,18 +102,50 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 }
                                 ?>
 
-                                <!-- Select de Cantidad basado en el Stock -->
+                               <!-- Select de Cantidad basado en el tipo de Stock --> 
                                 <form action="/sigto/index?action=add_to_cart" method="POST">
-                                    <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
-                                    <label for="cantidad">Cantidad:</label>
-                                    <select name="cantidad" class="form-control mb-2" style="width: 80px;">
-                                        <?php for ($i = 1; $i <= $producto['stock']; $i++): ?>
-                                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                        <?php endfor; ?>
-                                    </select>
-                                    <button type="submit" class="btn btn-primary">Comprar</button>
-                                </form>
+                                <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
+                                <label for="cantidad">Cantidad:</label>
+                                <select name="cantidad" class="form-control mb-2" style="width: 80px;">
+                                <?php
+                                // Verificar el tipo de stock
+                                if ($producto['tipo_stock'] === 'unidad') {
+                                    // Obtener la cantidad disponible de unidades con estado "Disponible"
+                                    $cantidadDisponible = $productoController->getCantidadDisponiblePorSku($producto['sku']);
 
+                                    // Verificar si hay disponibilidad
+                                    if ($cantidadDisponible > 0) {
+                                    // Generar el select con la cantidad disponible
+                                    for ($i = 1; $i <= $cantidadDisponible; $i++): ?>
+                                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                    <?php endfor;
+                                    } else {
+                                    echo '<option value="0">Sin stock disponible</option>';
+                                    }
+                                } elseif ($producto['tipo_stock'] === 'cantidad') {
+                                    // Si es por cantidad, usar directamente el campo stock
+                                    if ($producto['stock'] > 0) {
+                                    for ($i = 1; $i <= $producto['stock']; $i++): ?>
+                                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                    <?php endfor;
+                                    } else {
+                                     echo '<option value="0">Sin stock disponible</option>';
+                                    }
+                                } else {
+                                // Si no está definido el tipo de stock, mostrar "Sin stock"
+                                echo '<option value="0">Sin stock disponible</option>';
+                                }
+                                ?>
+                                </select>
+                                <button type="submit" class="btn btn-primary"
+                                <?php
+                                if ($producto['tipo_stock'] === 'unidad') {
+                                echo ($cantidadDisponible <= 0) ? 'disabled' : '';
+                                } elseif ($producto['tipo_stock'] === 'cantidad') {
+                                echo ($producto['stock'] <= 0) ? 'disabled' : '';
+                                }
+                                ?>>Comprar</button></form>
+                                
                                 <!-- Botón de Ver detalles -->
                                 <a href="/sigto/views/detallesproducto.php?id=<?php echo $producto['sku']; ?>" class="btn btn-info mt-2">Ver detalles</a>
                             </div>
