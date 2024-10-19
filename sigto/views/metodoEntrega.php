@@ -218,7 +218,8 @@ if (!isset($_SESSION['idus'])) {
             </div>
         </div>
         
+        <script src="/sigto/assets/js/searchbar.js"></script>
     </footer>
-    </div>
+</div>
 </body>
 </html>

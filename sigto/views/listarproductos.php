@@ -174,6 +174,7 @@ if (!$productos) {
         </div>
     </div>
 </footer>
+<script src="/sigto/assets/js/searchbar.js"></script>
 
 </body>
 </html>

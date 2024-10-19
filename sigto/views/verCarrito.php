@@ -148,6 +148,7 @@ if ($carritoItems && !empty($carritoItems)) {
 
     <!-- Tu script personalizado -->
     <script src="/sigto/assets/js/update.js"></script>
+    <script src="/sigto/assets/js/searchbar.js"></script>
 </div>   
 </body>
 </html>

@@ -94,5 +94,7 @@
         </div>
     </footer>
     <script src="/assets/js/script.js"></script>
+    <script src="/sigto/assets/js/searchbar.js"></script>
+
 </body>
 </html>
