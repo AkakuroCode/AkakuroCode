@@ -81,7 +81,6 @@ if (!$productos) {
                         </button>
                       </div>
 
-        <p class="relleno">Productos de la Empresa</p>
 
         <!-- Catálogo de productos -->
         <div class="container mt-5">

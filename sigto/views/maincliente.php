@@ -86,10 +86,11 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
             </button>
         </div>
 
-        <p class="relleno">Más Vendidos</p>
+        
         
         <!-- Catálogo de productos -->
         <div class="container mt-5">
+            <p class="relleno">Más Vendidos</p>
             <h2>Productos Disponibles</h2>
             <div class="row">
             <?php foreach ($productos as $producto): ?>

@@ -31,6 +31,7 @@ if ($carritoItems && !empty($carritoItems)) {
     <title>Carrito de Compras</title>
 </head>
 <body>
+<div class="contenedor">
     <header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
                 <div class="container-fluid">
@@ -146,5 +147,6 @@ if ($carritoItems && !empty($carritoItems)) {
 
     <!-- Tu script personalizado -->
     <script src="/sigto/assets/js/update.js"></script>
+</div>   
 </body>
 </html>

@@ -116,7 +116,6 @@ switch ($action) {
 
     case 'edit3': // Editar un producto existente
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Si se envía el formulario de edición (método POST), llama al método 'update' del controlador
                 echo $controller4->update($_POST);
                 header('Location: ?action=list2'); // Redirigir a la lista de productos
                 exit;
@@ -157,7 +156,7 @@ switch ($action) {
         exit;
     
     
-        case 'login': 
+    case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];

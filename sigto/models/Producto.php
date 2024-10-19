@@ -254,15 +254,38 @@ class Producto {
 
     // Método para actualizar un producto
     public function update() {
-        $query = "UPDATE " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=? 
-                  WHERE sku=?";
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bind_param("issssiisi", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen, $this->sku);
-
-        return $stmt->execute();
+        // Verificar si el tipo de stock es "unidad", en cuyo caso no se actualiza el stock
+        if ($this->tipo_stock === 'unidad') {
+            $query = "UPDATE " . $this->table_name . " 
+                      SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, imagen=? 
+                      WHERE sku=?";
+            $stmt = $this->conn->prepare($query);
+    
+            // Bind parameters excluding 'stock'
+            $stmt->bind_param("issssisi", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->imagen, $this->sku);
+        } else {
+            // Si es por cantidad, incluimos el campo de stock en la actualización
+            $query = "UPDATE " . $this->table_name . " 
+                      SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=? 
+                      WHERE sku=?";
+            $stmt = $this->conn->prepare($query);
+    
+            // Bind parameters including 'stock'
+            $stmt->bind_param("issssiisi", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen, $this->sku);
+        }
+    
+        // Ejecutar la consulta y verificar el resultado
+        if ($stmt->execute()) {
+            return true; // Actualización exitosa
+        } else {
+            // Mostrar errores si la consulta falla
+            echo "Error en la actualización: " . $this->conn->error;
+            echo "Query ejecutada: " . $query;
+            return false;
+        }
     }
+    
+
 
     // Método para ocultar un producto (borrado lógico)
     public function softDelete() {
@@ -290,7 +313,7 @@ class Producto {
     $row = $result->fetch_assoc();
     
     return $row['cantidad_disponible']; // Retorna la cantidad de productos disponibles
-    }
+}
 
 }
 ?>
