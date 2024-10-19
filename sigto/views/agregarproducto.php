@@ -12,29 +12,24 @@ $mensaje = '';
 
 // Verificar si el formulario ha sido enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
-    // Validar y procesar el formulario
     $nombre = $_POST['nombre'] ?? '';
     $descripcion = $_POST['descripcion'] ?? '';
     $estado = $_POST['estado'] ?? '';
     $origen = $_POST['origen'] ?? '';
     $precio = $_POST['precio'] ?? 0;
     $stock = $_POST['stock'] ?? 0;
-    $idcat = $_POST['idcat'] ?? ''; // El ID de la categoría seleccionada
+    $idcat = $_POST['idcat'] ?? '';
 
-    // Oferta
     $oferta = $_POST['oferta'] ?? 0;
     $fechaInicio = $_POST['fecha_inicio'] ?? null;
     $fechaFin = $_POST['fecha_fin'] ?? null;
 
-    // Manejo de la imagen
     $imagen = $_FILES['imagen'] ?? null;
     $nombreImagen = '';
     if ($imagen && $imagen['error'] == UPLOAD_ERR_OK) {
         $tmp_name = $imagen['tmp_name'];
         $nombreImagen = basename($imagen['name']);
         $rutaDestino = __DIR__ . '/../assets/images/' . $nombreImagen;
-
-        // Verificar el tamaño de la imagen
         if ($imagen['size'] > 2000000) {
             $mensaje = "La imagen es demasiado grande. El tamaño máximo permitido es 2MB.";
         } elseif (!move_uploaded_file($tmp_name, $rutaDestino)) {
@@ -43,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
     }
 
     if (empty($mensaje)) {
-        // Crear el producto
         $productoController = new ProductoController();
         $dataProducto = [
             'nombre' => $nombre,
@@ -52,19 +46,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
             'origen' => $origen,
             'precio' => $precio,
             'stock' => $stock,
-            'imagen' => $nombreImagen
+            'imagen' => $nombreImagen,
+            'tipo_stock' => $_POST['tipo_stock'],
+            'codigos_unitarios' => $_POST['codigos_unitarios'] ?? ''
         ];
 
-        // Crear el producto y obtener el SKU generado
         $resultadoProducto = $productoController->create($dataProducto);
 
         if (isset($resultadoProducto['status']) && $resultadoProducto['status'] === 'success') {
             $skuGenerado = $resultadoProducto['sku'];
-
-            // Asignar el producto a la categoría seleccionada en la tabla 'pertenece'
             $productoController->asignarCategoria($skuGenerado, $idcat);
-
-            // Crear la oferta si existe
             if ($oferta > 0) {
                 $precioOferta = $precio - ($precio * ($oferta / 100));
                 $ofertaController = new OfertaController();
@@ -75,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
                     'fecha_inicio' => $fechaInicio,
                     'fecha_fin' => $fechaFin
                 ];
-
                 $resultadoOferta = $ofertaController->create($dataOferta);
                 if (!$resultadoOferta) {
                     $mensaje = "Error al crear la oferta.";
@@ -102,13 +92,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
 <body>
     <form action="agregarproducto.php" method="post" enctype="multipart/form-data">
         <h1>Agregar Producto</h1>
-
-        <!-- Mostrar el mensaje de error o éxito -->
         <?php if (!empty($mensaje)): ?>
             <p><?php echo htmlspecialchars($mensaje); ?></p>
         <?php endif; ?>
 
-        <!-- Datos del Producto -->
         <label for="nombre">Nombre del Producto:</label>
         <input type="text" id="nombre" name="nombre" required>
 
@@ -140,24 +127,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
         <label for="precio">Precio:</label>
         <input type="number" id="precio" name="precio" step="0.01" required>
 
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" required>
+        <label for="tipo_stock">Tipo de Stock:</label>
+        <select name="tipo_stock" id="tipo_stock" required>
+            <option value="">Seleccionar tipo de stock</option>
+            <option value="unidad">Unidad (código único por unidad)</option>
+            <option value="cantidad">Cantidad (manejo por stock total)</option>
+        </select>
+
+        <!-- Campo de Stock -->
+        <div id="stock-container">
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock">
+        </div>
+
+        <!-- Campo para ingresar códigos unitarios -->
+        <div id="codigos-container">
+            <label for="codigos_unitarios">Códigos de las unidades (separados por comas):</label>
+            <textarea id="codigos_unitarios" name="codigos_unitarios" rows="4" placeholder="Ingrese los códigos de cada unidad, separados por comas..."></textarea>
+        </div>
+
         <label for="imagen" class="custom-file-upload">
         Seleccionar archivo
         </label>
         <input type="file" id="imagen" name="imagen" accept="image/*"/>
-        <br>
-        <span id="file-name">Ningún archivo seleccionado</span>
 
-        <!-- Datos de la Oferta -->
+        <!-- Oferta -->
         <h2>Datos de la Oferta</h2>
-
         <label for="oferta">Oferta (Descuento en %):</label>
         <input type="number" id="oferta" name="oferta" min="0" max="100" step="1" value="0">
-
         <label for="fecha_inicio">Fecha de inicio de la oferta:</label>
         <input type="date" id="fecha_inicio" name="fecha_inicio">
-
         <label for="fecha_fin">Fecha de fin de la oferta:</label>
         <input type="date" id="fecha_fin" name="fecha_fin">
 
@@ -165,6 +164,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
         <br><br><br>
         <a id="volver"  href="/sigto/views/mainempresa.php">Volver al Inicio</a>
     </form>
-    <script src="\sigto\assets\js\formularios.js"></script>
+
+    <script>
+        document.getElementById('tipo_stock').addEventListener('change', function() {
+            var tipoStock = this.value;
+            var stockContainer = document.getElementById('stock-container');
+            var codigosContainer = document.getElementById('codigos-container');
+
+            if (tipoStock === 'cantidad') {
+                stockContainer.style.display = 'block';
+                codigosContainer.style.display = 'none';
+            } else if (tipoStock === 'unidad') {
+                codigosContainer.style.display = 'block';
+                stockContainer.style.display = 'none';
+            } else {
+                stockContainer.style.display = 'none';
+                codigosContainer.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('stock-container').style.display = 'none';
+            document.getElementById('codigos-container').style.display = 'none';
+        });
+    </script>
 </body>
 </html>

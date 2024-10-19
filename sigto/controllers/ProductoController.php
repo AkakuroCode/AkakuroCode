@@ -7,12 +7,10 @@ require_once __DIR__ . '/../controllers/CategoriaController.php';
 class ProductoController {
 
     public function create($data) {
-        // Verificar si la sesión está activa
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Verificar que el usuario sea una empresa
         if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'empresa' || !isset($_SESSION['idemp'])) {
             return "Acceso denegado. Solo las empresas pueden agregar productos.";
         }
@@ -23,18 +21,40 @@ class ProductoController {
         $producto->setDescripcion($data['descripcion']);
         $producto->setEstado($data['estado']);
         $producto->setOrigen($data['origen']);
-        $producto->setStock($data['stock']);
         $producto->setPrecio($data['precio']);
         $producto->setImagen($data['imagen']);
 
-        // Intentar crear el producto
+        if ($data['tipo_stock'] === 'cantidad') {
+            $producto->setStock($data['stock']);  // Establecer el stock si es por cantidad
+        } else {
+            $producto->setStock(null);  // No necesita stock en la tabla principal si es por unidad
+        }
+
         $skuGenerado = $producto->create();
 
-        if ($skuGenerado) {
-            return ['status' => 'success', 'sku' => $skuGenerado];
-        } else {
-            return ['status' => 'error', 'message' => 'Error al crear el producto.'];
+        // Si es por unidad, insertar los códigos únicos en la tabla 'producto_unitario'
+        if ($skuGenerado && $data['tipo_stock'] === 'unidad' && !empty($data['codigos_unitarios'])) {
+            $codigos = explode(',', $data['codigos_unitarios']);
+            $codigosRepetidos = [];
+
+            foreach ($codigos as $codigoUnidad) {
+                $codigoUnidad = trim($codigoUnidad);  // Eliminar espacios en blanco
+
+                // Verificar si el código ya existe
+                if ($producto->existeCodigoUnidad($codigoUnidad)) {
+                    $codigosRepetidos[] = $codigoUnidad;
+                } else {
+                    $producto->agregarUnidad($skuGenerado, $codigoUnidad);  // Agregar si no existe
+                }
+            }
+
+            // Si hay códigos repetidos, retornamos un mensaje de error
+            if (!empty($codigosRepetidos)) {
+                return ['status' => 'error', 'message' => 'Los siguientes códigos ya existen: ' . implode(', ', $codigosRepetidos)];
+            }
         }
+
+        return $skuGenerado ? ['status' => 'success', 'sku' => $skuGenerado] : ['status' => 'error', 'message' => 'Error al crear el producto.'];
     }
 
     public function readAll() {

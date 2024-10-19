@@ -111,16 +111,36 @@ class Producto {
         if (!$stmt) {
             return false;
         }
-    
+
         $stmt->bind_param("issssiis", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->stock, $this->precio, $this->imagen);
-    
+
         if ($stmt->execute()) {
             return $this->conn->insert_id; // Devolver el último ID insertado (el SKU)
         } else {
             return false;
         }
     }
-    
+
+    // Método para agregar un código único en la tabla 'producto_unitario'
+    public function agregarUnidad($sku, $codigoUnidad) {
+        $query = "INSERT INTO producto_unitario (sku, codigo_unidad, estado) VALUES (?, ?, 'Disponible')";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("is", $sku, $codigoUnidad);
+        return $stmt->execute();
+    }
+
+    // Método para verificar si un código ya existe
+    public function existeCodigoUnidad($codigoUnidad) {
+        $query = "SELECT COUNT(*) as total FROM producto_unitario WHERE codigo_unidad = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $codigoUnidad);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        return $row['total'] > 0; // Retorna true si ya existe, false si no
+    }
+
 
     public function asignarCategoria($sku, $idcat) {
         // Usar la conexión actual en lugar de crear una nueva instancia de Producto

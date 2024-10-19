@@ -206,8 +206,8 @@ CREATE TABLE admin (
 -- Tabla historial_login
 CREATE TABLE historial_login (
     idLogin INT AUTO_INCREMENT PRIMARY KEY,
-    idus INT UNIQUE,
-    idemp INT UNIQUE,
+    idus INT,
+    idemp INT,
     fecha DATE NOT NULL ,
     hora TIME NOT NULL,
     url VARCHAR(255),
