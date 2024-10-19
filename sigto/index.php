@@ -27,20 +27,30 @@ $idad = isset($_GET['idad']) ? (int)$_GET['idad'] : (isset($_SESSION['idad']) ? 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
 $action = isset($_GET['action']) ? $_GET['action'] : 'default';
 
-// Verificación de roles
-// Verificación para usuarios, empresas y admins
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
-    header('Location: ?action=login');
-    exit;
+// Validación de sesión y redirección en caso de roles incorrectos
+if (isset($_SESSION['role'])) {
+    switch ($_SESSION['role']) {
+        case 'usuario':
+            if (!isset($_SESSION['idus']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
+                header('Location: ?action=login');
+                exit;
+            }
+            break;
+        case 'empresa':
+            if (!isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
+                header('Location: ?action=login');
+                exit;
+            }
+            break;
+        case 'admin':
+            if (!isset($_SESSION['idad']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
+                header('Location: ?action=login');
+                exit;
+            }
+            break;
+    }
 }
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
-    header('Location: ?action=login');
-    exit;
-}
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
-    header('Location: ?action=login');
-    exit;
-}
+
 
 
 
