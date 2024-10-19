@@ -92,7 +92,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
         <div class="container mt-5">
             <h2>Productos Disponibles</h2>
             <div class="row">
-                <?php foreach ($productos as $producto): ?>
+            <?php foreach ($productos as $producto): ?>
                     <div class="col-md-4 mb-4"> <!-- Cambié el col-md-3 a col-md-4 para que haya 3 productos por fila -->
                         <div class="card h-100">
                             <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
@@ -103,8 +103,9 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 <?php
                                 // Verificar si el producto tiene una oferta activa
                                 $oferta = $ofertaController->readBySku($producto['sku']);
-        
-                                if ($oferta && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
+
+                                // Solo mostrar oferta si está activa y válida
+                                if ($oferta && isset($oferta['preciooferta'], $oferta['porcentaje_oferta']) && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
                                     $precioOferta = $oferta['preciooferta'];
                                     echo "<p class='card-text'><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
                                     echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";

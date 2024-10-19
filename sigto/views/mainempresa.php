@@ -11,7 +11,6 @@ $ofertaController = new OfertaController(); // Para obtener las ofertas relacion
 
 if (!$productos) {
     echo "No se encontraron productos.";
-    exit;
 }
 ?>
 
@@ -88,32 +87,32 @@ if (!$productos) {
         <div class="container mt-5">
             <h2>Mis Productos</h2>
             <div class="row">
-                <?php foreach ($productos as $producto): ?>
-                    <div class="col-md-3 mb-4">
-                        <div class="card h-100">
-                            <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
-                                <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+            <?php foreach ($productos as $producto): ?>
+              <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                <div class="card-body">
+                <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
+                <p class="card-text"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
 
-                                <?php
-                                // Verificar si el producto tiene una oferta activa
-                                $oferta = $ofertaController->readBySku($producto['sku']);
-                                if ($oferta) {
-                                    $precioOferta = $oferta['preciooferta'];
-                                    echo "<p class='card-text'><strong>Precio: </strong><span style='text-decoration: line-through;'>US$" . htmlspecialchars($producto['precio']) . "</span></p>";
-                                    echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
-                                    echo "<p class='card-text'><strong>Precio con oferta: </strong>US${precioOferta}</p>";
-                                } else {
-                                    echo "<p class='card-text'><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
-                                    echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
-                                }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+                <?php
+                // Verificar si el producto tiene una oferta activa
+                $oferta = $ofertaController->readBySku($producto['sku']);
+                if ($oferta && isset($oferta['preciooferta'], $oferta['porcentaje_oferta'])) {
+                    $precioOferta = $oferta['preciooferta'];
+                    echo "<p class='card-text'><strong>Precio: </strong><span style='text-decoration: line-through;'>US$" . htmlspecialchars($producto['precio']) . "</span></p>";
+                    echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
+                    echo "<p class='card-text'><strong>Precio con oferta: </strong>US$" . htmlspecialchars($precioOferta) . "</p>";
+                } else {
+                    echo "<p class='card-text'><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
+                    echo "<p class='card-text'><strong>No hay oferta disponible</strong></p>";
+                }
+                ?>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
         </div>
     </main>
 

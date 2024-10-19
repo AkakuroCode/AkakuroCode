@@ -16,6 +16,8 @@ class Producto {
     private $imagen;
     private $visible;
 
+    private $tipo_stock; // Aquí agregamos la propiedad tipo_stock
+
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
@@ -101,18 +103,27 @@ class Producto {
     public function getVisible() {
         return $this->visible;
     }
+    // Método para establecer el tipo de stock (unidad o cantidad)
+    public function setTipoStock($tipo_stock) {
+        $this->tipo_stock = $tipo_stock;
+    }
 
-    // Método para crear un producto
+    // Método para obtener el tipo de stock
+    public function getTipoStock() {
+        return $this->tipo_stock;
+    }
+
+    // Método para crear un producto (incluyendo el tipo de stock)
     public function create() {
-        $query = "INSERT INTO producto (idemp, nombre, descripcion, estado, origen, stock, precio, imagen, visible) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
+        $query = "INSERT INTO producto (idemp, nombre, descripcion, estado, origen, stock, precio, imagen, visible, tipo_stock) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)";
         $stmt = $this->conn->prepare($query);
     
         if (!$stmt) {
             return false;
         }
 
-        $stmt->bind_param("issssiis", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->stock, $this->precio, $this->imagen);
+        $stmt->bind_param("issssiiss", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->stock, $this->precio, $this->imagen, $this->tipo_stock);
 
         if ($stmt->execute()) {
             return $this->conn->insert_id; // Devolver el último ID insertado (el SKU)
@@ -267,5 +278,20 @@ class Producto {
         $stmt->bind_param("i", $this->sku);
         return $stmt->execute();
     }
-}
+
+   
+    
+        // Método para obtener la cantidad de productos disponibles por SKU
+        public function getCantidadDisponiblePorSku($sku) {
+            $query = "SELECT COUNT(*) AS cantidad_disponible FROM producto_unitario WHERE sku = ? AND estado = 'Disponible'";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param("i", $sku);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            return $row['cantidad_disponible']; // Retorna la cantidad de productos disponibles
+        }
+    }
+    
+
 ?>

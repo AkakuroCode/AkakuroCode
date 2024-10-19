@@ -24,10 +24,15 @@ class ProductoController {
         $producto->setPrecio($data['precio']);
         $producto->setImagen($data['imagen']);
 
+        // Verificar el tipo de stock y asignar el tipo correcto
         if ($data['tipo_stock'] === 'cantidad') {
+            $producto->setTipoStock('cantidad');
             $producto->setStock($data['stock']);  // Establecer el stock si es por cantidad
-        } else {
+        } elseif ($data['tipo_stock'] === 'unidad') {
+            $producto->setTipoStock('unidad');
             $producto->setStock(null);  // No necesita stock en la tabla principal si es por unidad
+        } else {
+            return ['status' => 'error', 'message' => 'Tipo de stock inválido.'];
         }
 
         $skuGenerado = $producto->create();
@@ -56,6 +61,7 @@ class ProductoController {
 
         return $skuGenerado ? ['status' => 'success', 'sku' => $skuGenerado] : ['status' => 'error', 'message' => 'Error al crear el producto.'];
     }
+
 
     public function readAll() {
         $producto = new Producto();
@@ -240,6 +246,12 @@ class ProductoController {
                 return $this->restore($sku);
             }
         }
+    }
+
+     // Método para obtener la cantidad de productos disponibles por SKU
+     public function getCantidadDisponiblePorSku($sku) {
+        $producto = new Producto();
+        return $producto->getCantidadDisponiblePorSku($sku);
     }
     
 }

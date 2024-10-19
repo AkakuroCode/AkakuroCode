@@ -49,33 +49,34 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     </header>
     
     <main>
-              <!-- Carrusel de Bootstrap -->
-              <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                          <div class="carousel-item active">
-                            <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
-                          </div>
-                          <div class="carousel-item">
-                            <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
-                          </div>
-                          <div class="carousel-item">
-                            <img src="/sigto/assets/images/logo akakuro.png" class="img-carrousel d-block w-100" alt="...">
-                          </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                          <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                          <span class="visually-hidden">Next</span>
-                        </button>
-                      </div>
+        <!-- Carrusel de Bootstrap -->
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="/sigto/assets/images/logo akakuro.png" class="img-carrousel d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
 
         <p class="relleno">Más Vendidos</p>
+
         <!-- Catálogo de productos -->
         <div class="container mt-5">
-        <h2>Productos Disponibles</h2>
+            <h2>Productos Disponibles</h2>
             <div class="row">
                 <?php foreach ($productos as $producto): ?>
                     <div class="col-md-4 mb-4"> <!-- Cambié el col-md-3 a col-md-4 para que haya 3 productos por fila -->
@@ -88,8 +89,9 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                 <?php
                                 // Verificar si el producto tiene una oferta activa
                                 $oferta = $ofertaController->readBySku($producto['sku']);
-        
-                                if ($oferta && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
+
+                                // Solo mostrar oferta si está activa y válida
+                                if ($oferta && isset($oferta['preciooferta'], $oferta['porcentaje_oferta']) && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
                                     $precioOferta = $oferta['preciooferta'];
                                     echo "<p class='card-text'><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
                                     echo "<p class='card-text'><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
@@ -122,7 +124,6 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
         </div>
     </main>
 
-
     <br><br><br><br><br><br>
     <footer>
         <div class="footer-container">
@@ -146,9 +147,9 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
         </div>
     </footer>
 
-        <!-- Incluye Bootstrap JS y jQuery -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    </body>
+    <!-- Incluye Bootstrap JS y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
 </html>
