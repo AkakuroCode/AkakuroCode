@@ -53,6 +53,7 @@ if ($producto['tipo_stock'] === 'unidad') {
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
 </head>
 <body>
+<div class="contenedor"> 
 <header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-fluid">
@@ -92,9 +93,10 @@ if ($producto['tipo_stock'] === 'unidad') {
                         </li>
                     </ul>
                 <?php endif; ?>
-                <form class="d-flex" role="search">
-                    <input class="rounded-pill mt-2" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
-                </form>
+                <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                    <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                    <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
+                    </form>
             </div>
         </div>
     </nav>
@@ -177,5 +179,6 @@ if ($producto['tipo_stock'] === 'unidad') {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</div class="contenedor"> 
 </body>
 </html>

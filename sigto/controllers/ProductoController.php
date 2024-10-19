@@ -282,5 +282,11 @@ public function update($data) {
             }
         }
     }
+    
+    public function searchByName($term) {
+        $producto = new Producto();
+        return $producto->searchByName($term);
+    }
+    
 }
 ?>

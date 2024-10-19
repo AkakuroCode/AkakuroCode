@@ -315,5 +315,23 @@ class Producto {
     return $row['cantidad_disponible']; // Retorna la cantidad de productos disponibles
 }
 
+public function searchByName($term) {
+    $query = "SELECT * FROM " . $this->table_name . " WHERE nombre LIKE ? AND visible = 1";
+    $stmt = $this->conn->prepare($query);
+    $term = '%' . $term . '%';
+    $stmt->bind_param('s', $term);
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    $productos = [];
+    
+    while ($row = $result->fetch_assoc()) {
+        $productos[] = $row;
+    }
+    
+    return $productos;
+}
+
+
 }
 ?>
