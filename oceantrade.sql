@@ -54,6 +54,7 @@ CREATE TABLE producto (
     stock TINYINT(3) NOT NULL,
     imagen VARCHAR(255),
     visible TINYINT(1) DEFAULT 1,
+    tipo_stock ENUM('unidad','cantidad'),
     FOREIGN KEY (idemp) REFERENCES empresa(idemp)
 );
 
@@ -253,13 +254,7 @@ CREATE TABLE ofertas (
    FOREIGN KEY (sku) REFERENCES producto(sku)
 );
 
-CREATE TABLE producto_unitario (
-    idunid INT AUTO_INCREMENT PRIMARY KEY,
-    sku INT,
-    codigo_unidad VARCHAR(50) UNIQUE,
-    estado ENUM('Disponible', 'Vendido') DEFAULT 'Disponible',
-    FOREIGN KEY (sku) REFERENCES producto(sku) ON DELETE CASCADE
-);
+ 
 
 /* Valores para rellenar tablas */
 
