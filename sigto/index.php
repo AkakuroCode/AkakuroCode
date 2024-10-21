@@ -166,7 +166,7 @@ switch ($action) {
         exit;
     
     
-    case 'login': 
+        case 'login': 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['email'];
                 $passw = $_POST['passw'];
@@ -195,16 +195,15 @@ switch ($action) {
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
                         } else {
-                            // Mostrar mensaje de error si el login falla
-                            $error = "Email o contraseña incorrectos.";
+                            // Mostrar mensaje de error si el login falla o el usuario está dado de baja
+                            $error = "Email o contraseña incorrectos, o el usuario está dado de baja.";
                         }
                     }
                 }
             }
             include __DIR__ . '/views/loginUsuario.php';
             break;
-        
-        
+              
 
     case 'activar':
             if (isset($_GET['sku'])) {
@@ -326,5 +325,20 @@ switch ($action) {
     default:
         include __DIR__ . '/views/mainvisitante.php';
     break;
+
+    case 'updateStatus': // Cambiar estado activo/inactivo de un usuario
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->updateStatus(); // Llama al método updateStatus en UsuarioController
+            exit; // Termina la ejecución para que no se procese más código
+        }
+        break;
+    
+    case 'updateEmpresaStatus':
+        $data = json_decode(file_get_contents("php://input"), true);
+        $result = $controller2->updateActivo($data['idemp'], $data['estado']);
+        echo json_encode($result);
+        exit;
+        
+    
 }
 ?>
