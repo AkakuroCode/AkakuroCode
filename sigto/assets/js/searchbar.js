@@ -1,15 +1,14 @@
 function showSuggestions(query) {
-    if (query.length === 0) {
+    if (query.length == 0) {
         document.getElementById("suggestions").innerHTML = "";
-        document.getElementById("suggestions").style.display = "none"; // Ocultar si no hay sugerencias
         return;
     }
 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
+        if (this.readyState == 4 && this.status == 200) {
             document.getElementById("suggestions").innerHTML = this.responseText;
-            document.getElementById("suggestions").style.display = "block"; // Mostrar sugerencias
+            document.getElementById("suggestions").style.display = "block";
         }
     };
 
@@ -17,7 +16,14 @@ function showSuggestions(query) {
     xhr.send();
 }
 
-// Función para redirigir al catálogo cuando se hace clic en una sugerencia
-function redirectToCatalog(productName) {
-    window.location.href = "/sigto/views/catalogo.php?query=" + encodeURIComponent(productName);
+// Nueva función para manejar el clic en las sugerencias
+function submitSearch(producto) {
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-words');
+    
+    // Actualiza el valor del campo de búsqueda con el producto seleccionado
+    searchInput.value = producto;
+
+    // Envía el formulario para redirigir al catálogo con el producto seleccionado
+    searchForm.submit();
 }

@@ -166,6 +166,7 @@ pre {
     overflow-y: auto;
     width: 250px;
     display: none;
+    z-index: 9999; /* Asegúrate de que tenga un valor de z-index alto */
 }
 
 #search-results div {
@@ -176,6 +177,7 @@ pre {
 #search-results div:hover {
     background-color: #f0f0f0;
 }
+
 
 #suggestions {
     position: absolute;
