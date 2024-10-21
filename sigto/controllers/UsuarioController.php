@@ -89,21 +89,21 @@ class UsuarioController {
     public function login($data) {
         $usuario = new Usuario();
         $usuario->setEmail($data['email']);
-        $result = $usuario->login(); // El modelo maneja el login y el registro en el historial
-        
+        $result = $usuario->login(); // El modelo maneja el login y la obtención de datos del usuario
+    
         if ($result) {
+            // Verificar si el usuario está inactivo (activo = 'no')
             if ($result['activo'] === 'no') {
-                // Si el cliente está inactivo, denegamos el login
-                return "El usuario ha sido dado de baja y no puede iniciar sesión.";
+                return false; // No permitir el acceso
             }
     
+            // Verificar la contraseña
             if (password_verify($data['passw'], $result['passw'])) {
                 // Iniciar sesión si aún no está iniciada
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
     
-                // Verificar que el ID de usuario esté disponible y no sea nulo
                 if (!empty($result['idus'])) {
                     $_SESSION['role'] = 'usuario';
                     $_SESSION['idus'] = $result['idus'];
@@ -122,6 +122,8 @@ class UsuarioController {
     }
     
     
+    
+    
     // Método opcional para obtener el carrito de un usuario
     public function getCarrito($idus) {
         $carritoController = new CarritoController();
@@ -132,4 +134,25 @@ class UsuarioController {
         $usuario = new Usuario();
         return $usuario->getUserLogins($idus); // Llamamos al método del modelo Usuario
     }
+
+
+    public function updateStatus() {
+        $data = json_decode(file_get_contents("php://input"), true);
+        $idus = $data['idus'];
+        $estado = $data['estado'];
+    
+        $usuario = new Usuario();
+        $usuario->setId($idus);
+    
+        if ($usuario->updateActivo($estado)) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
+    }
+
+    
+    
 }
+
+
