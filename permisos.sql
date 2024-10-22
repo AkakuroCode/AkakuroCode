@@ -15,7 +15,7 @@ GRANT ALL PRIVILEGES ON oceantrade.* TO 'dba_user'@'localhost';
 GRANT CREATE, ALTER, SELECT, INSERT, UPDATE, DELETE ON oceantrade.* TO 'dev_user'@'localhost';
 
 -- Asignar permisos al Usuario de Aplicación
-GRANT SELECT, INSERT, UPDATE ON oceantrade.* TO 'app_user'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON oceantrade.* TO 'app_user'@'localhost';
 
 -- Asignar permisos al Auditor
 GRANT SELECT ON oceantrade.* TO 'auditor_user'@'localhost';

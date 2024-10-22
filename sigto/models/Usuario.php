@@ -15,7 +15,8 @@ class Usuario {
     private $passw;
 
     public function __construct() {
-        $database = new Database();
+        // Aquí especificamos que queremos usar la conexión con rol de 'user' (app_user).
+        $database = new Database('user');
         $this->conn = $database->getConnection();
     }
 

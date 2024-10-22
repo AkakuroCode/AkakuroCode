@@ -250,7 +250,7 @@ public function update($data) {
 
     // Método para el borrado lógico (ocultar producto)
     public function softDelete($sku) {
-        $producto = new Producto();
+        $producto = new Producto('write');
         $producto->setSku($sku);
         if ($producto->softDelete()) {
             return "Producto ocultado exitosamente.";
@@ -261,7 +261,7 @@ public function update($data) {
     
     // Método para restaurar el producto
     public function restore($sku) {
-        $producto = new Producto();
+        $producto = new Producto('write');
         $producto->setSku($sku);
         if ($producto->restore()) {
             return "Producto restaurado exitosamente.";
