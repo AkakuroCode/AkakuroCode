@@ -43,6 +43,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+                <?php if (isset($_SESSION['idus'])): // Si el cliente está logueado ?>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
@@ -60,11 +61,24 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
                         </li>
                     </ul>
-                    <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
-                        <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
-                        <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
+                <?php else: // Si el cliente no está logueado, mostrar el nav para visitantes ?>
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainvisitante.php">Inicio</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotrosvisitante.php">Nosotros</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/loginUsuario.php">Ingresar</a>
+                        </li>
+                    </ul>
+                <?php endif; ?>
+                <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                    <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                    <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
                     </form>
-                </div>
+            </div>
             </div>
         </nav>
     </header>
