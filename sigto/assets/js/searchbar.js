@@ -12,7 +12,7 @@ function showSuggestions(query) {
         }
     };
 
-    xhr.open("GET", "/sigto/buscarProductos.php?query=" + encodeURIComponent(query), true);
+    xhr.open("GET", "/sigto/models/buscarProductos.php?query=" + encodeURIComponent(query), true);
     xhr.send();
 }
 

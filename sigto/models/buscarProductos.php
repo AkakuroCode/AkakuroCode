@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__ . '/controllers/ProductoController.php';
+require_once __DIR__ . '/../controllers/ProductoController.php';
 
 if (isset($_GET['query'])) {
     $query = $_GET['query'];
