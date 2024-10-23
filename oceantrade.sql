@@ -243,6 +243,14 @@ CREATE TABLE producto_favorito (
     FOREIGN KEY (idus) REFERENCES cliente(idus)
     );
 
+CREATE TABLE producto_unitario (
+    idunid INT AUTO_INCREMENT PRIMARY KEY,
+    sku INT,
+    codigo_unidad VARCHAR(50),
+    estado ENUM('Disponible, Vendido'),
+    FOREIGN KEY (sku) REFERENCES producto(sku)
+);
+
 CREATE TABLE ofertas (
   idof int(11) NOT NULL,
   sku int(11) DEFAULT NULL,
