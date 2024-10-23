@@ -80,8 +80,8 @@ th {
     width: 100%;
 }
 
-.view-logins-btn {
-    background-color: #0267FF;
+.btn-baja {
+    background-color: #ff0a02;
     border-radius: 1em;
     padding: 0.5em;
     font-weight: bold;
@@ -92,3 +92,17 @@ th {
     margin-right: 10px;
     text-align: center;
 }
+
+.btn-alta {
+    background-color: #119600;
+    border-radius: 1em;
+    padding: 0.5em;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    width: auto; /* Ajustar el tamaño automáticamente */
+    margin-right: 10px;
+    text-align: center;
+}
+

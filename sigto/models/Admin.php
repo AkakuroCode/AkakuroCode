@@ -10,7 +10,8 @@ class Admin {
     private $passw;
 
     public function __construct() {
-        $database = new Database();
+        // Aquí especificamos que queremos usar la conexión con rol de 'admin'.
+        $database = new Database('admin'); 
         $this->conn = $database->getConnection();
     }
 

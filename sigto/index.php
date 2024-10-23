@@ -27,20 +27,30 @@ $idad = isset($_GET['idad']) ? (int)$_GET['idad'] : (isset($_SESSION['idad']) ? 
 // Obtiene la acción solicitada desde la URL, o establece 'login' como acción predeterminada
 $action = isset($_GET['action']) ? $_GET['action'] : 'default';
 
-// Verificación de roles
-// Verificación para usuarios, empresas y admins
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'usuario' && !isset($_SESSION['idus']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
-    header('Location: ?action=login');
-    exit;
+// Validación de sesión y redirección en caso de roles incorrectos
+if (isset($_SESSION['role'])) {
+    switch ($_SESSION['role']) {
+        case 'usuario':
+            if (!isset($_SESSION['idus']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
+                header('Location: ?action=login');
+                exit;
+            }
+            break;
+        case 'empresa':
+            if (!isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
+                header('Location: ?action=login');
+                exit;
+            }
+            break;
+        case 'admin':
+            if (!isset($_SESSION['idad']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
+                header('Location: ?action=login');
+                exit;
+            }
+            break;
+    }
 }
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'empresa' && !isset($_SESSION['idemp']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
-    header('Location: ?action=login');
-    exit;
-}
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' && !isset($_SESSION['idad']) && $action !== 'login' && $action !== 'create' && $action !== 'create2' && $action !== 'default') {
-    header('Location: ?action=login');
-    exit;
-}
+
 
 
 
@@ -116,7 +126,6 @@ switch ($action) {
 
     case 'edit3': // Editar un producto existente
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                // Si se envía el formulario de edición (método POST), llama al método 'update' del controlador
                 echo $controller4->update($_POST);
                 header('Location: ?action=list2'); // Redirigir a la lista de productos
                 exit;
@@ -186,16 +195,15 @@ switch ($action) {
                             header('Location: /sigto/views/listarUsuarios.php');
                             exit;
                         } else {
-                            // Mostrar mensaje de error si el login falla
-                            $error = "Email o contraseña incorrectos.";
+                            // Mostrar mensaje de error si el login falla o el usuario está dado de baja
+                            $error = "Email o contraseña incorrectos, o el usuario está dado de baja.";
                         }
                     }
                 }
             }
             include __DIR__ . '/views/loginUsuario.php';
             break;
-        
-        
+              
 
     case 'activar':
             if (isset($_GET['sku'])) {
@@ -317,5 +325,20 @@ switch ($action) {
     default:
         include __DIR__ . '/views/mainvisitante.php';
     break;
+
+    case 'updateStatus': // Cambiar estado activo/inactivo de un usuario
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->updateStatus(); // Llama al método updateStatus en UsuarioController
+            exit; // Termina la ejecución para que no se procese más código
+        }
+        break;
+    
+    case 'updateEmpresaStatus':
+        $data = json_decode(file_get_contents("php://input"), true);
+        $result = $controller2->updateActivo($data['idemp'], $data['estado']);
+        echo json_encode($result);
+        exit;
+        
+    
 }
 ?>

@@ -10,10 +10,10 @@ $categorias = $categoriaController->getAllCategorias(); // Obtiene todas las cat
 <head>
     <meta charset="UTF-8">
     <title>Editar Producto</title>
-    <link rel="stylesheet" href="/sigto/assets/css/login.css">
+    <link rel="stylesheet" href="/sigto/assets/css/formularios.css">
 </head>
 <body>
-    <form action="?action=edit3" method="POST" enctype="multipart/form-data">
+    <form action="../sigto/index/?action=edit3&sku" method="POST" enctype="multipart/form-data">
     <h1>Editar Producto</h1>
         <input type="hidden" name="sku" value="<?php echo htmlspecialchars($productoSeleccionado['sku']); ?>">
 
@@ -40,25 +40,43 @@ $categorias = $categoriaController->getAllCategorias(); // Obtiene todas las cat
         <!-- Select para elegir la categoría -->
         <label for="categoria">Categoría:</label>
         <select id="categoria" name="categoria">
-        <option value="">Seleccionar categoría</option>
-        <?php foreach ($categorias as $categoria): ?>
-        <option value="<?php echo htmlspecialchars($categoria['idcat']); ?>" 
-            <?php echo (isset($categoriaSeleccionada['idcat']) && $categoriaSeleccionada['idcat'] == $categoria['idcat']) ? 'selected' : ''; ?>>
-            <?php echo htmlspecialchars($categoria['nombre']); ?>
-        </option>
-        <?php endforeach; ?>
-    </select>
+            <option value="">Seleccionar categoría</option>
+            <?php foreach ($categorias as $categoria): ?>
+                <option value="<?php echo htmlspecialchars($categoria['idcat']); ?>" 
+                    <?php echo (isset($categoriaSeleccionada['idcat']) && $categoriaSeleccionada['idcat'] == $categoria['idcat']) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($categoria['nombre']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
         <label for="precio">Precio:</label>
         <input type="number" id="precio" name="precio" step="0.01" value="<?php echo htmlspecialchars($productoSeleccionado['precio']); ?>" required>
 
-        <label for="stock">Stock:</label>
+        <?php if ($productoSeleccionado['tipo_stock'] === 'cantidad'): ?>
+        <!-- Si el tipo de stock es "cantidad", muestra el campo de stock -->
+        <label for="stock">Stock (Cantidad):</label>
         <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($productoSeleccionado['stock']); ?>" required>
+        <?php elseif ($productoSeleccionado['tipo_stock'] === 'unidad'): ?>
+        <!-- Si el tipo de stock es "unidad", muestra el textarea para agregar los códigos de unidades -->
+        <label for="codigos_unitarios">Códigos de las unidades (separados por comas):</label>
+        <textarea id="codigos_unitarios" name="codigos_unitarios" rows="4" placeholder="Ingrese los códigos de cada unidad, separados por comas..."><?php 
+            // Verificar si ya hay códigos unitarios para este producto
+            if (isset($productoSeleccionado['codigo_unidad'])) {
+                // Convertir a array si es necesario, y mostrar los códigos separados por comas
+                echo htmlspecialchars(implode(',', (array)$productoSeleccionado['codigo_unidad']));
+            }
+        ?></textarea>
+        <?php endif; ?>
 
-        <label for="imagen">Imagen:</label>
-        <input type="file" id="imagen" name="imagen">
+
+        <label for="imagen" class="custom-file-upload">
+        Seleccionar archivo
+        </label>
+        <input type="file" id="imagen" name="imagen" accept="image/*"/><br>
         <input type="hidden" name="imagenActual" value="<?php echo htmlspecialchars($productoSeleccionado['imagen']); ?>">
         <img src="/sigto/assets/images/<?php echo htmlspecialchars($productoSeleccionado['imagen']); ?>" alt="<?php echo htmlspecialchars($productoSeleccionado['nombre']); ?>" style="width: 100px; height: auto;">
+        
+        <input type="hidden" name="tipo_stock" value="<?php echo htmlspecialchars($productoSeleccionado['tipo_stock']); ?>">
 
         <!-- Sección de Oferta -->
         <h2>Editar Oferta</h2>

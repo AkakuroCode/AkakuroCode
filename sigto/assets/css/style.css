@@ -156,6 +156,49 @@ pre {
 
 }
 
+/*searchbar*/
+
+#search-results {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 250px;
+    display: none;
+    z-index: 9999; /* Asegúrate de que tenga un valor de z-index alto */
+}
+
+#search-results div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#search-results div:hover {
+    background-color: #f0f0f0;
+}
+
+
+#suggestions {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 250px;
+    display: none; /* Se muestra con "block" cuando hay resultados */
+    z-index: 9999; /* Asegúrate de que este valor sea alto */
+}
+
+#suggestions div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#suggestions div:hover {
+    background-color: #f0f0f0;
+}
+
 /*carrousel*/
 
 .img-carrousel{

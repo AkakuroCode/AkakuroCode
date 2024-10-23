@@ -67,10 +67,16 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
                     <td><?php echo $usuario['telefono']; ?></td>
                     <td><?php echo $usuario['email']; ?></td>
                     <td>
-                        <a id="editar" href="/sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
-                        <a id="eliminar" href="/sigto/index.php?action=delete&idus=<?php echo $usuario['idus']; ?>">Eliminar</a>
-                        <!-- Botón para ver logins -->
-                        <button type="button" class="view-logins-btn" onclick="toggleMenu(<?php echo $usuario['idus']; ?>)">Ver Logins</button>
+                        <a id="editar" class="btn" href="/sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
+
+                        <!-- Verificar si el usuario está activo o inactivo -->
+                        <?php if ($usuario['activo'] == 'si'): ?>
+                            <button class="btn-baja" onclick="cambiarEstado(<?php echo $usuario['idus']; ?>, 'no')">Dar de baja</button>
+                        <?php else: ?>
+                            <button class="btn-alta" onclick="cambiarEstado(<?php echo $usuario['idus']; ?>, 'si')">Dar de alta</button>
+                        <?php endif; ?>
+
+                        <button type="button" class="btn view-logins-btn" onclick="toggleMenu(<?php echo $usuario['idus']; ?>)">Ver Logins</button>
                     </td>
                 </tr>
                 <!-- Fila que contiene el historial de logins del usuario, inicialmente oculta -->
@@ -136,10 +142,10 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
                     <td><?php echo $empresa['email']; ?></td>
                     <td><?php echo $empresa['cuentabanco']; ?></td>
                     <td>
-                        <a id="editar" href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
-                        <a id="eliminar" href="/sigto/index.php?action=delete2&idemp=<?php echo $empresa['idemp']; ?>">Eliminar</a>
+                        <a id="editar" class="btn" href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
+                        <a id="eliminar" class="btn" href="/sigto/index.php?action=delete2&idemp=<?php echo $empresa['idemp']; ?>">Eliminar</a>
                         <!-- Botón para ver logins -->
-                        <button type="button" class="view-logins-btn" onclick="toggleEmpresaMenu(<?php echo $empresa['idemp']; ?>)">Ver Logins</button>
+                        <button type="button" class="btn view-logins-btn" onclick="toggleEmpresaMenu(<?php echo $empresa['idemp']; ?>)">Ver Logins</button>
                     </td>
                 </tr>
                 <!-- Fila que contiene el historial de logins de la empresa, inicialmente oculta -->
@@ -179,7 +185,35 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
     </table>
 </div>
 
-<a id="logout" href="/sigto/index.php?action=logout">Cerrar Sesión</a>
+<a id="logout" class="btn" href="/sigto/index.php?action=logout">Cerrar Sesión</a>
+
+<script>
+    function cambiarEstado(idus, estado) {
+        fetch('/sigto/index.php?action=updateStatus', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idus: idus,
+                estado: estado
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Recargar la página para actualizar los botones
+            } else {
+                alert('Error al cambiar el estado del usuario.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    
+</script>
 
 </body>
 </html>

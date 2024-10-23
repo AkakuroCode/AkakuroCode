@@ -12,10 +12,15 @@ class Oferta {
     private $fechaInicio;
     private $fechaFin;
 
-    public function __construct() {
-        $database = new Database();
+    public function __construct($operation = 'read') {
+        if ($operation === 'write') {
+            $database = new Database('user'); // app_user para operaciones privadas
+        } else {
+            $database = new Database('guest'); // guest_user para lecturas públicas
+        }
         $this->conn = $database->getConnection();
     }
+    
 
     // Métodos para obtener y establecer los atributos
     public function getIdof() {

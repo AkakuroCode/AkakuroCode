@@ -17,29 +17,94 @@ if (!isset($_SESSION['idus'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Seleccionar Método de Entrega</title>
+    <link rel="stylesheet" href="/sigto/assets/css/style.css">
+    <title>Seleccionar Método de Entrega y Pago</title>
     <script>
         function mostrarOpcionesEntrega() {
             var opcionesPickUp = document.getElementById('opciones-pickup');
             var formularioDomicilio = document.getElementById('formulario-domicilio');
+            var botonContinuar = document.getElementById('boton-continuar');
             
             if (document.getElementById('pickUp').checked) {
                 opcionesPickUp.style.display = 'block';
                 formularioDomicilio.style.display = 'none';
+                botonContinuar.style.display = 'block';
             } else if (document.getElementById('domicilio').checked) {
                 opcionesPickUp.style.display = 'none';
                 formularioDomicilio.style.display = 'block';
+                botonContinuar.style.display = 'block';
             } else {
                 opcionesPickUp.style.display = 'none';
                 formularioDomicilio.style.display = 'none';
+                botonContinuar.style.display = 'none';
             }
+        }
+
+        function validarCampos() {
+            // Verificar si un radio button de Pick Up está seleccionado
+            var pickupSeleccionado = document.querySelector('input[name="ubicacion_pickup"]:checked');
+            // Obtener los valores de los campos de entrega a domicilio
+            var calle = document.getElementById('calle').value;
+            var numero = document.getElementById('numero').value;
+
+            // Mostrar las opciones de pago solo si:
+            // 1. Se seleccionó una opción de Pick Up
+            // O
+            // 2. Los campos "Calle" y "Número de Puerta" están completos
+            if (pickupSeleccionado || (calle.trim() !== '' && numero.trim() !== '')) {
+                mostrarOpcionesPago();
+            } else {
+                alert("Por favor, complete todos los campos requeridos para continuar.");
+            }
+        }
+
+        function mostrarOpcionesPago() {
+            var opcionesPago = document.getElementById('opciones-pago');
+            opcionesPago.style.display = 'block'; // Mostrar opciones de pago después de continuar
         }
     </script>
 </head>
 <body>
+    <div class="contenedor">
+
+    
+    <header>
+    <nav class="navbar navbar-expand-sm bg-body-tertiary">
+      <div class="container-fluid">
+         <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+              <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item mx-3">
+                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
+                </li>
+                <li class="nav-item mx-3">
+                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                </li>
+                <li class="nav-item mx-3">
+                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
+                </li>
+                <li class="nav-item mx-3">
+                  <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
+                </li>
+                <li class="nav-item mx-3">
+                  <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
+                </li>
+              </ul>
+              <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
+                </form>
+            </div>
+        </div>
+      </nav>
+    </header>
+    <main>
     <div class="container mt-5">
         <h2>Seleccionar Método de Entrega</h2>
-        <form action="procesarEntrega.php" method="POST">
+        <form id="form-entrega" action="procesarEntregaYPago.php" method="POST">
             <!-- Selección de Retiro en Pick up -->
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="metodo_entrega" id="pickUp" value="pick_up" required onclick="mostrarOpcionesEntrega()">
@@ -93,13 +158,68 @@ if (!isset($_SESSION['idus'])) {
                     <input type="text" class="form-control" id="numero" name="numero" required>
                 </div>
                 <div class="form-group">
-                    <label for="esquina">Esquina:</label>
+                    <label for="esquina">Esquina (opcional):</label>
                     <input type="text" class="form-control" id="esquina" name="esquina">
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Continuar</button>
+            <!-- Botón Continuar -->
+            <button type="button" id="boton-continuar" class="btn btn-primary mt-3" style="display: none;" onclick="validarCampos()">Continuar</button>
+
+            <!-- Opciones de Pago -->
+            <div id="opciones-pago" style="display: none; margin-top: 20px;">
+                <h5>Seleccionar Método de Pago:</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="metodo_pago" id="credito" value="tarjeta_credito" required>
+                    <label class="form-check-label" for="credito">Tarjeta de Crédito</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="metodo_pago" id="debito" value="tarjeta_debito" required>
+                    <label class="form-check-label" for="debito">Tarjeta de Débito</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="metodo_pago" id="paypal" value="paypal" required>
+                    <label class="form-check-label" for="paypal">PayPal</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="metodo_pago" id="mercadopago" value="mercadopago" required>
+                    <label class="form-check-label" for="mercadopago">Mercado Pago</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="metodo_pago" id="centros_pago" value="centros_pago" required>
+                    <label class="form-check-label" for="centros_pago">Centros de Pago Local</label>
+                </div>
+
+                <!-- Botón Finalizar -->
+                <button type="submit" class="btn btn-success mt-3">Finalizar y Pagar</button>
+            </div>
         </form>
     </div>
+    </main>
+    <br><br><br><br><br><br>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-item">
+                <p>Contacto</p>
+                <a href="tel:+598 92345888">092345888</a>
+                <br>
+                <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
+                <br>
+                <a href="reclamoscliente.php">Reclamos</a>
+            </div>
+            <div class="footer-item">
+                <p>Horario de Atención <br><br>Lunes a Viernes de 10hs a 18hs</p>
+            </div>
+            
+            <div class="footer-redes">
+                <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png" alt="Facebook"></a>
+                <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png" alt="Twitter"></a>
+                <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png" alt="Instagram"></a>
+            </div>
+        </div>
+        
+        <script src="/sigto/assets/js/searchbar.js"></script>
+    </footer>
+</div>
 </body>
 </html>

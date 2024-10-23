@@ -16,10 +16,17 @@ class Producto {
     private $imagen;
     private $visible;
 
-    public function __construct() {
-        $database = new Database();
+    private $tipo_stock; // Aquí agregamos la propiedad tipo_stock
+
+    public function __construct($operation = 'read') {
+        if ($operation === 'write') {
+            $database = new Database('user'); // app_user para operaciones privadas
+        } else {
+            $database = new Database('guest'); // guest_user para lecturas públicas
+        }
         $this->conn = $database->getConnection();
     }
+    
 
     public function getSku() {
         return $this->sku;
@@ -102,25 +109,55 @@ class Producto {
         return $this->visible;
     }
 
-    // Método para crear un producto
+    // Método para establecer el tipo de stock (unidad o cantidad)
+    public function setTipoStock($tipo_stock) {
+        $this->tipo_stock = $tipo_stock;
+    }
+
+    // Método para obtener el tipo de stock
+    public function getTipoStock() {
+        return $this->tipo_stock;
+    }
+
+    // Método para crear un producto (incluyendo el tipo de stock)
     public function create() {
-        $query = "INSERT INTO producto (idemp, nombre, descripcion, estado, origen, stock, precio, imagen, visible) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
+        $query = "INSERT INTO producto (idemp, nombre, descripcion, estado, origen, stock, precio, imagen, visible, tipo_stock) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)";
         $stmt = $this->conn->prepare($query);
     
         if (!$stmt) {
             return false;
         }
-    
-        $stmt->bind_param("issssiis", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->stock, $this->precio, $this->imagen);
-    
+
+        $stmt->bind_param("issssiiss", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->stock, $this->precio, $this->imagen, $this->tipo_stock);
+
         if ($stmt->execute()) {
             return $this->conn->insert_id; // Devolver el último ID insertado (el SKU)
         } else {
             return false;
         }
     }
-    
+
+    // Método para agregar un código único en la tabla 'producto_unitario'
+    public function agregarUnidad($sku, $codigoUnidad) {
+        $query = "INSERT INTO producto_unitario (sku, codigo_unidad, estado) VALUES (?, ?, 'Disponible')";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("is", $sku, $codigoUnidad);
+        return $stmt->execute();
+    }
+
+    // Método para verificar si un código ya existe
+    public function existeCodigoUnidad($codigoUnidad) {
+        $query = "SELECT COUNT(*) as total FROM producto_unitario WHERE codigo_unidad = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $codigoUnidad);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        return $row['total'] > 0; // Retorna true si ya existe, false si no
+    }
+
 
     public function asignarCategoria($sku, $idcat) {
         // Usar la conexión actual en lugar de crear una nueva instancia de Producto
@@ -222,15 +259,38 @@ class Producto {
 
     // Método para actualizar un producto
     public function update() {
-        $query = "UPDATE " . $this->table_name . " 
-                  SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=? 
-                  WHERE sku=?";
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bind_param("issssiisi", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen, $this->sku);
-
-        return $stmt->execute();
+        // Verificar si el tipo de stock es "unidad", en cuyo caso no se actualiza el stock
+        if ($this->tipo_stock === 'unidad') {
+            $query = "UPDATE " . $this->table_name . " 
+                      SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, imagen=? 
+                      WHERE sku=?";
+            $stmt = $this->conn->prepare($query);
+    
+            // Bind parameters excluding 'stock'
+            $stmt->bind_param("issssisi", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->imagen, $this->sku);
+        } else {
+            // Si es por cantidad, incluimos el campo de stock en la actualización
+            $query = "UPDATE " . $this->table_name . " 
+                      SET idemp=?, nombre=?, descripcion=?, estado=?, origen=?, precio=?, stock=?, imagen=? 
+                      WHERE sku=?";
+            $stmt = $this->conn->prepare($query);
+    
+            // Bind parameters including 'stock'
+            $stmt->bind_param("issssiisi", $this->idemp, $this->nombre, $this->descripcion, $this->estado, $this->origen, $this->precio, $this->stock, $this->imagen, $this->sku);
+        }
+    
+        // Ejecutar la consulta y verificar el resultado
+        if ($stmt->execute()) {
+            return true; // Actualización exitosa
+        } else {
+            // Mostrar errores si la consulta falla
+            echo "Error en la actualización: " . $this->conn->error;
+            echo "Query ejecutada: " . $query;
+            return false;
+        }
     }
+    
+
 
     // Método para ocultar un producto (borrado lógico)
     public function softDelete() {
@@ -247,5 +307,36 @@ class Producto {
         $stmt->bind_param("i", $this->sku);
         return $stmt->execute();
     }
+
+    // Método en Producto.php para obtener la cantidad de productos disponibles en la tabla producto_unitario
+    public function getCantidadDisponiblePorSku($sku) {
+    $query = "SELECT COUNT(*) AS cantidad_disponible FROM producto_unitario WHERE sku = ? AND estado = 'Disponible'";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("i", $sku);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    
+    return $row['cantidad_disponible']; // Retorna la cantidad de productos disponibles
+}
+
+public function searchByName($term) {
+    $query = "SELECT * FROM " . $this->table_name . " WHERE nombre LIKE ? AND visible = 1";
+    $stmt = $this->conn->prepare($query);
+    $term = '%' . $term . '%';
+    $stmt->bind_param('s', $term);
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    $productos = [];
+    
+    while ($row = $result->fetch_assoc()) {
+        $productos[] = $row;
+    }
+    
+    return $productos;
+}
+
+
 }
 ?>

@@ -14,6 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="/sigto/assets/css/style.css"> <!-- Estilos personalizados -->
 </head>
 <body>
+<div class="contenedor">
     <header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
                 <div class="container-fluid">
@@ -39,8 +40,9 @@ if (session_status() === PHP_SESSION_NONE) {
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
                     </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="rounded-pill mt-2" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
+                    <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                    <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                    <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
                     </form>
                   </div>
                 </div>
@@ -81,5 +83,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/sigto/assets/js/searchbar.js"></script>
+
+</div>
 </body>
 </html>

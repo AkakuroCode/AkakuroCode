@@ -21,6 +21,9 @@
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
                     </li>
+                    <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                    </li>
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
                     </li>
@@ -31,8 +34,9 @@
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
                     </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="rounded-pill mt-2" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
+                    <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                    <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                    <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
                     </form>
                   </div>
                 </div>
@@ -93,5 +97,7 @@
         </div>
     </footer>
     <script src="/assets/js/script.js"></script>
+    <script src="/sigto/assets/js/searchbar.js"></script>
+
 </body>
 </html>

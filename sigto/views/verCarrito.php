@@ -31,6 +31,7 @@ if ($carritoItems && !empty($carritoItems)) {
     <title>Carrito de Compras</title>
 </head>
 <body>
+<div class="contenedor">
     <header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
                 <div class="container-fluid">
@@ -56,8 +57,9 @@ if ($carritoItems && !empty($carritoItems)) {
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
                     </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="rounded-pill mt-2" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
+                    <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                    <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                    <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
                     </form>
                   </div>
                 </div>
@@ -146,5 +148,7 @@ if ($carritoItems && !empty($carritoItems)) {
 
     <!-- Tu script personalizado -->
     <script src="/sigto/assets/js/update.js"></script>
+    <script src="/sigto/assets/js/searchbar.js"></script>
+</div>   
 </body>
 </html>

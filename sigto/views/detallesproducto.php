@@ -31,6 +31,16 @@ $ofertaController = new OfertaController();
 $oferta = $ofertaController->readBySku($sku); // Obtener la oferta asociada al producto, si la hay
 
 $fechaActual = date('Y-m-d'); // Obtener la fecha actual
+
+// Verificar el tipo de stock (unidad o cantidad)
+$cantidadDisponible = 0;
+if ($producto['tipo_stock'] === 'unidad') {
+    // Si es por unidad, contar cuántas unidades están disponibles
+    $cantidadDisponible = $productoController->getCantidadDisponiblePorSku($producto['sku']);
+} else {
+    // Si es por cantidad, usar el valor del campo stock
+    $cantidadDisponible = $producto['stock'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -43,35 +53,55 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
 </head>
 <body>
-    <header>
+<div class="contenedor"> 
+<header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
-                <div class="container-fluid">
-                  <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
-                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                  </button>
-                  <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+                <?php if (isset($_SESSION['idus'])): // Si el cliente está logueado ?>
                     <ul class="navbar-nav mb-2 mb-lg-0">
-                      <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
-                    </li>
-                      <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
-                    </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
+                        </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="rounded-pill mt-2" type="text" placeholder="Buscar..." autocomplete="off" maxlength="50" id="search-words" name="query">
+                <?php else: // Si el cliente no está logueado, mostrar el nav para visitantes ?>
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainvisitante.php">Inicio</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotrosvisitante.php">Nosotros</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/loginUsuario.php">Ingresar</a>
+                        </li>
+                    </ul>
+                <?php endif; ?>
+                <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                    <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                    <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
                     </form>
-                  </div>
-                </div>
-              </nav>
-    </header>
+            </div>
+        </div>
+    </nav>
+</header>
+
     
     <main class="container mt-5">
         <div class="row">
@@ -86,27 +116,28 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 
                 <?php
                 // Verificar si el producto tiene una oferta activa
-                if ($oferta && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
-                    $precioOferta = $oferta['preciooferta'];
-                    echo "<p><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
-                    echo "<p><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
-                    echo "<p><strong>Precio con oferta: </strong>US$" . htmlspecialchars($precioOferta) . "</p>";
+                if ($oferta && isset($oferta['fecha_inicio'], $oferta['fecha_fin']) && $oferta['fecha_inicio'] <= $fechaActual && $oferta['fecha_fin'] >= $fechaActual) {
+                $precioOferta = $oferta['preciooferta'];
+                echo "<p><strong>Precio: </strong><del>US$" . htmlspecialchars($producto['precio']) . "</del></p>";
+                echo "<p><strong>Oferta: </strong>{$oferta['porcentaje_oferta']}%</p>";
+                echo "<p><strong>Precio con oferta: </strong>US$" . htmlspecialchars($precioOferta) . "</p>";
                 } else {
-                    echo "<p><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
-                    echo "<p><strong>No hay oferta disponible</strong></p>";
+                echo "<p><strong>Precio: </strong>US$" . htmlspecialchars($producto['precio']) . "</p>";
+                echo "<p><strong>No hay oferta disponible</strong></p>";
                 }
                 ?>
 
-                <!-- Select de Cantidad basado en el Stock -->
+
+                <!-- Select de Cantidad basado en la cantidad disponible -->
                 <form action="/sigto/index?action=add_to_cart" method="POST">
                     <input type="hidden" name="sku" value="<?php echo $producto['sku']; ?>">
                     <label for="cantidad">Cantidad:</label>
                     <select name="cantidad" class="form-control mb-2" style="width: 80px;">
-                        <?php for ($i = 1; $i <= $producto['stock']; $i++): ?>
+                        <?php for ($i = 1; $i <= $cantidadDisponible; $i++): ?>
                             <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                         <?php endfor; ?>
                     </select>
-                    <button type="submit" class="btn btn-primary">Comprar</button>
+                    <button type="submit" class="btn btn-primary" <?php echo $cantidadDisponible <= 0 ? 'disabled' : ''; ?>>Comprar</button>
                 </form>
 
                 <!-- Botón de Contactar al Vendedor (WhatsApp) -->
@@ -148,5 +179,8 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/sigto/assets/js/searchbar.js"></script>
+
+</div> 
 </body>
 </html>

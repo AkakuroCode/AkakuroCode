@@ -7,15 +7,21 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../controllers/ProductoController.php';
 require_once __DIR__ . '/../controllers/OfertaController.php';
 
+// Obtener la consulta de búsqueda
+$query = isset($_GET['query']) ? $_GET['query'] : '';
+
 $productoController = new ProductoController();
-$productos = $productoController->readVisible(); // Solo productos visibles
+$productos = [];
 
-$ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
-
-if (!$productos) {
-    echo "No se encontraron productos.";
+if ($query) {
+    // Si hay una búsqueda, obtener productos filtrados
+    $productos = $productoController->searchByName($query);
+} else {
+    // Si no hay búsqueda, mostrar todos los productos
+    $productos = $productoController->readVisible();
 }
 
+$ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
 $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 ?>
 
@@ -26,73 +32,46 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
-    <title>Inicio</title>
+    <title>Catálogo</title>
 </head>
 <body>
     <header>
-    <nav class="navbar navbar-expand-sm bg-body-tertiary">
-      <div class="container-fluid">
-         <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
-              <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
-                </li>
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
-                </li>
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
-                </li>
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
-                </li>
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
-                </li>
-              </ul>
-              <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
-                <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
-                <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
-                </form>
+        <nav class="navbar navbar-expand-sm bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
+                        </li>
+                        <li class="nav-item mx-3">
+                            <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
+                        </li>
+                    </ul>
+                    <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                        <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                        <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
+                    </form>
+                </div>
             </div>
-        </div>
-      </nav>
+        </nav>
     </header>
     
     <main>
-        <!-- Carrusel de Bootstrap -->
-        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="/sigto/assets/images/logo akakuro.png" class="img-carrousel d-block w-100" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-
-        
-        
-        <!-- Catálogo de productos -->
         <div class="container mt-5">
-            <p class="relleno">Más Vendidos</p>
-            <h2>Productos Disponibles</h2>
+            <h2>Catálogo de Productos</h2>
             <div class="row">
             <?php foreach ($productos as $producto): ?>
                     <div class="col-md-4 mb-4">

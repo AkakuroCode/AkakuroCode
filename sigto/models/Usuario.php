@@ -15,7 +15,8 @@ class Usuario {
     private $passw;
 
     public function __construct() {
-        $database = new Database();
+        // Aquí especificamos que queremos usar la conexión con rol de 'user' (app_user).
+        $database = new Database('user');
         $this->conn = $database->getConnection();
     }
 
@@ -155,15 +156,14 @@ class Usuario {
         $query = "UPDATE cliente SET activo = ? WHERE idus = ?";
         $stmt = $this->conn->prepare($query);
     
-        // Verificar si la consulta fue preparada correctamente
         if ($stmt === false) {
             die('Error en la consulta: ' . $this->conn->error);
         }
     
         $stmt->bind_param("si", $estado, $this->idus);
-    
         return $stmt->execute();
     }
+    
     
     
     

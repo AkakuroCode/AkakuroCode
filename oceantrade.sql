@@ -54,6 +54,7 @@ CREATE TABLE producto (
     stock TINYINT(3) NOT NULL,
     imagen VARCHAR(255),
     visible TINYINT(1) DEFAULT 1,
+    tipo_stock ENUM('unidad','cantidad'),
     FOREIGN KEY (idemp) REFERENCES empresa(idemp)
 );
 
@@ -206,8 +207,8 @@ CREATE TABLE admin (
 -- Tabla historial_login
 CREATE TABLE historial_login (
     idLogin INT AUTO_INCREMENT PRIMARY KEY,
-    idus INT UNIQUE,
-    idemp INT UNIQUE,
+    idus INT,
+    idemp INT,
     fecha DATE NOT NULL ,
     hora TIME NOT NULL,
     url VARCHAR(255),
@@ -253,6 +254,7 @@ CREATE TABLE ofertas (
    FOREIGN KEY (sku) REFERENCES producto(sku)
 );
 
+ 
 
 /* Valores para rellenar tablas */
 
