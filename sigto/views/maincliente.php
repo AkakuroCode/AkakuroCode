@@ -6,13 +6,13 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . '/../controllers/ProductoController.php';
 require_once __DIR__ . '/../controllers/OfertaController.php';
-require_once __DIR__ . '/../controllers/UsuarioController.php';  // Asegúrate de incluir el controlador de Usuario
+require_once __DIR__ . '/../controllers/FavoritoController.php';  // Asegúrate de incluir el controlador de Favorito
 
 $productoController = new ProductoController();
 $productos = $productoController->readVisible(); // Solo productos visibles
 
 $ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
-$usuarioController = new UsuarioController();  // Instanciar el controlador de Usuario
+$favoritoController = new FavoritoController();  // Instanciar el controlador de Favorito
 
 if (!$productos) {
     echo "No se encontraron productos.";
@@ -90,20 +90,24 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
             </button>
         </div>
 
-        
-        
         <!-- Catálogo de productos -->
         <div class="container mt-5">
             <p class="relleno">Más Vendidos</p>
             <h2>Productos Disponibles</h2>
             <div class="row">
-            <?php foreach ($productos as $producto): ?>
-                <?php
-                // Verifica si el producto ya está en favoritos llamando al controlador
-                $esFavorito = $usuarioController->esFavorito($_SESSION['idus'], $producto['sku']); // Comprueba si es favorito
-                // Determina el color del corazón según si es favorito o no
-                $iconoFavorito = $esFavorito ? 'favoritos2.png' : 'favoritos.png';  // Rutas de las imágenes de corazón
-                ?>
+            <?php foreach ($productos as $producto): ?><?php
+                    // Verifica si el producto ya está en favoritos llamando al controlador
+                    $esFavorito = false;
+                    $favoritos = $favoritoController->getFavoritosByUser($_SESSION['idus']);
+                    foreach ($favoritos as $favorito) {
+                    if ($favorito['sku'] == $producto['sku']) {
+                    $esFavorito = true;
+                    break;
+                    }
+                    }
+                    // Determina el color del corazón según si es favorito o no
+                    $iconoFavorito = $esFavorito ? 'favoritos2.png' : 'favoritos.png';  // Rutas de las imágenes de corazón
+                    ?>
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
