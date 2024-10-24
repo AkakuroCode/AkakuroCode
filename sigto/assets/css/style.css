@@ -129,6 +129,18 @@ button {
     background-color: var(--azuloscuro);
     color: white;
 }
+.heart-icon {
+    width: 30px;  /* Ajusta el tamaño del ícono de corazón */
+    height: 30px;  /* Asegúrate de que tenga proporciones cuadradas */
+    cursor: pointer;
+}
+
+.btn-favorito {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin-top: 10px;  /* Ajusta el espacio superior si lo necesitas */
+}
 
 h2 {
     margin-top: 0;
@@ -287,6 +299,18 @@ pre {
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         text-align: right;
+    }
+    
+    .heart-icon {
+        width: 30px; /* Ajusta el tamaño según sea necesario */
+        cursor: pointer;
+    }
+    
+    .btn-favorito {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        margin-top: 10px;
     }
     
     .btn-comprar {

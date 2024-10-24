@@ -151,8 +151,38 @@ class UsuarioController {
         }
     }
 
+    public function actualizarFavorito() {
+        error_log("Solicitud recibida en el controlador");  // Registro para asegurarte de que entra a la función
+        var_dump($_POST);  // Para verificar qué datos llegan
+        die();  // Detener la ejecución temporalmente para que puedas ver el var_dump en la consola
     
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idus']) && isset($_POST['sku']) && isset($_POST['accion'])) {
+            $idus = $_POST['idus'];
+            $sku = $_POST['sku'];
+            $accion = $_POST['accion'];
+    
+            $usuarioModel = new Usuario();
+            $usuarioModel->actualizarFavorito($idus, $sku, $accion);
+    
+            // Devuelve una respuesta JSON
+            echo json_encode(['status' => 'success', 'message' => "Producto $accion a favoritos"]);
+            exit;
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Datos incompletos o método no permitido']);
+            exit;
+        }
+    }
+    
+    
+    
+
+    public function esFavorito($idus, $sku) {
+            $usuarioModel = new Usuario();
+            return $usuarioModel->esFavorito($idus, $sku);  // Llama al método del modelo para comprobar si es favorito
+        }
     
 }
+
+
 
 

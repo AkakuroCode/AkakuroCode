@@ -240,7 +240,57 @@ class Usuario {
         return $result->fetch_all(MYSQLI_ASSOC); // Retornamos todos los resultados en forma de array asociativo
     }
     
+
+    public function actualizarFavorito($idus, $sku, $accion) {
+        // Verifica si el producto ya está en la tabla 'elige'
+        $consulta = "SELECT * FROM elige WHERE idus = ? AND sku = ?";
+        $stmt = $this->conn->prepare($consulta);
+        $stmt->bind_param("ii", $idus, $sku); // "ii" indica dos enteros
+        $stmt->execute();
     
+        if ($stmt->num_rows == 0) {
+            // Si no existe, lo insertamos como favorito si la acción es agregar
+            if ($accion == 'agregar') {
+                $insert = "INSERT INTO elige (idus, sku, favorito) VALUES (?, ?, 'si')";
+                $stmt = $this->conn->prepare($insert);
+                $stmt->bind_param("ii", $idus, $sku);
+                $stmt->execute();
+            }
+        } else {
+            // Si ya existe, actualizamos el estado de favorito (si o no)
+            $update = "UPDATE elige SET favorito = ? WHERE idus = ? AND sku = ?";
+            $stmt = $this->conn->prepare($update);
+            $favorito = ($accion == 'agregar') ? 'si' : 'no';
+            $stmt->bind_param("sii", $favorito, $idus, $sku); // "sii" indica string, entero, entero
+            $stmt->execute();
+        }
+    }
+    
+    
+    public function obtenerFavoritos($idus) {
+        $consulta = "SELECT p.* FROM producto p 
+                     INNER JOIN elige e ON p.sku = e.sku 
+                     WHERE e.idus = ? AND e.favorito = 'si'";
+        $stmt = $this->conn->prepare($consulta);
+        $stmt->bind_param("i", $idus);  // Un solo entero
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);  // Retorna todos los productos favoritos
+    }
+    
+    public function esFavorito($idus, $sku) {
+        // Verifica si el producto ya está marcado como favorito
+        $consulta = "SELECT favorito FROM elige WHERE idus = ? AND sku = ?";
+        $stmt = $this->conn->prepare($consulta);
+        $stmt->bind_param("ii", $idus, $sku); // "ii" indica dos enteros
+        $stmt->execute();
+    
+        // Verificar si el producto está en favoritos
+        $resultado = $stmt->get_result()->fetch_assoc();
+        if ($resultado && $resultado['favorito'] === 'si') {
+            return true;  // Es favorito
+        }
+        return false;  // No es favorito
+    }
     
     
     

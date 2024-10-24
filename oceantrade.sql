@@ -235,13 +235,6 @@ CREATE TABLE pertenece (
 );
 
 
-CREATE TABLE producto_favorito (
-	idus INT,
-    sku INT,
-     PRIMARY KEY (idus, sku),
-    FOREIGN KEY (sku) REFERENCES producto(sku),
-    FOREIGN KEY (idus) REFERENCES cliente(idus)
-    );
 
 CREATE TABLE producto_unitario (
     idunid INT AUTO_INCREMENT PRIMARY KEY,

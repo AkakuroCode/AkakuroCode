@@ -6,11 +6,13 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . '/../controllers/ProductoController.php';
 require_once __DIR__ . '/../controllers/OfertaController.php';
+require_once __DIR__ . '/../controllers/UsuarioController.php';  // Asegúrate de incluir el controlador de Usuario
 
 $productoController = new ProductoController();
 $productos = $productoController->readVisible(); // Solo productos visibles
 
 $ofertaController = new OfertaController(); // Para obtener las ofertas relacionadas
+$usuarioController = new UsuarioController();  // Instanciar el controlador de Usuario
 
 if (!$productos) {
     echo "No se encontraron productos.";
@@ -18,6 +20,7 @@ if (!$productos) {
 
 $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -95,6 +98,12 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
             <h2>Productos Disponibles</h2>
             <div class="row">
             <?php foreach ($productos as $producto): ?>
+                <?php
+                // Verifica si el producto ya está en favoritos llamando al controlador
+                $esFavorito = $usuarioController->esFavorito($_SESSION['idus'], $producto['sku']); // Comprueba si es favorito
+                // Determina el color del corazón según si es favorito o no
+                $iconoFavorito = $esFavorito ? 'favoritos2.png' : 'favoritos.png';  // Rutas de las imágenes de corazón
+                ?>
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
@@ -141,6 +150,10 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                                     </select>
                                     <button type="submit" class="btn btn-primary" <?php echo ($cantidadDisponible <= 0) ? 'disabled' : ''; ?>>Comprar</button>
                                 </form>
+                                <!-- Botón de agregar/quitar favorito -->
+                                <button class="btn-favorito" data-idus="<?php echo $_SESSION['idus']; ?>" data-sku="<?php echo $producto['sku']; ?>">
+                                <img src="/sigto/assets/images/<?php echo $iconoFavorito; ?>" alt="Favorito" class="heart-icon" id="favorito-<?php echo $producto['sku']; ?>">
+                                </button>
 
                                 <!-- Botón de Ver detalles -->
                                 <a href="/sigto/views/detallesproducto.php?id=<?php echo $producto['sku']; ?>" class="btn btn-info mt-2">Ver detalles</a>
@@ -180,5 +193,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="/sigto/assets/js/searchbar.js"></script>
+    <script src="/sigto/assets/js/favorito.js"></script>
+
 </body>
 </html>
