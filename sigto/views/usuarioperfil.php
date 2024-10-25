@@ -55,6 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="col-md-4 text-center">
                 <a href="/sigto/index?action=edit_profile" class="btn btn-outline-primary btn-lg btn-block mb-3">Editar Información</a>
                 <a href="historialCompras.php" class="btn btn-outline-secondary btn-lg btn-block">Historial de Compras</a>
+                <a href="verFavoritos.php" class="btn btn-outline-secondary btn-lg btn-block">Favoritos</a>
             </div>
         </div>
     </div>
