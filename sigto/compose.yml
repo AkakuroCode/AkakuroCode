@@ -1,32 +1,15 @@
-version: "3.8"
+version: "3"
 services:
   web:
-    build: .
+    image: php:8.2-apache
     volumes:
-      - ./:/var/www/html
-    depends_on:
-      - db
-    environment:
-      - DB_HOST=db
+      - ./web:/var/www/html
     ports:
       - 80:80
-  
-  db: 
-    image: mysql:8.0
-    volumes:
-      - ./db:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=123
-      - MYSQL_DATABASE=oceantrade
-    expose:
-      - "3310"
-    ports:
-      - "3310:3306"
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+  backoffice:
+    image: php:8.2-apache
+    volumes:
+      - ./backoffice:/var/www/html
     ports:
-      - 8001:80
-    environment:
-      - PMA_HOST=db
-      - PMA_PORT=3310
+      - 81:80
