@@ -8,7 +8,8 @@ CREATE TABLE cliente (
     direccion VARCHAR(30) NOT NULL,
     telefono VARCHAR(18) UNIQUE NOT NULL,
     email VARCHAR(30) UNIQUE NOT NULL,
-    passw VARCHAR(255) NOT NULL
+    passw VARCHAR(255) NOT NULL,
+    activo ENUM('sí', 'no') DEFAULT 'si'
 );
 
 -- Tabla carrito
@@ -39,7 +40,8 @@ CREATE TABLE empresa (
     telefono INT(15) UNIQUE NOT NULL,
     email VARCHAR(30) UNIQUE NOT NULL,
     passw VARCHAR(255) NOT NULL,
-    cuentabanco INT(15) UNIQUE NOT NULL
+    cuentabanco INT(15) UNIQUE NOT NULL,
+    activo ENUM('sí', 'no') DEFAULT 'si'
 );
 
 -- Tabla producto
