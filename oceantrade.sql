@@ -275,3 +275,10 @@ INSERT INTO categoria (nombre, descripcion) VALUES
 ('tecnología', 'Artículos tecnológicos y dispositivos electrónicos'),
 ('celulares', 'Teléfonos móviles y accesorios'),
 ('herramientas', 'Herramientas y equipos de construcción');
+
+INSERT INTO metodopago (proveedor) VALUES
+('Tarjeta de Crédito'),
+('Tarjeta de Débito'),
+('PayPal'),
+('Mercado Pago'),
+('Centros de Pago Local');

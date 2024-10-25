@@ -4,13 +4,15 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Verificar que el usuario esté logueado
 if (!isset($_SESSION['idus'])) {
     echo "Error: Usuario no logueado.";
     exit;
 }
-?>
 
+require_once __DIR__ . '/../controllers/MetodopagoController.php';
+$metodoDePagoController = new MetodoDePagoController();
+$metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -168,28 +170,13 @@ if (!isset($_SESSION['idus'])) {
 
             <!-- Opciones de Pago -->
             <div id="opciones-pago" style="display: none; margin-top: 20px;">
-                <h5>Seleccionar Método de Pago:</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="metodo_pago" id="credito" value="tarjeta_credito" required>
-                    <label class="form-check-label" for="credito">Tarjeta de Crédito</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="metodo_pago" id="debito" value="tarjeta_debito" required>
-                    <label class="form-check-label" for="debito">Tarjeta de Débito</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="metodo_pago" id="paypal" value="paypal" required>
-                    <label class="form-check-label" for="paypal">PayPal</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="metodo_pago" id="mercadopago" value="mercadopago" required>
-                    <label class="form-check-label" for="mercadopago">Mercado Pago</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="metodo_pago" id="centros_pago" value="centros_pago" required>
-                    <label class="form-check-label" for="centros_pago">Centros de Pago Local</label>
-                </div>
-
+                    <h5>Seleccionar Método de Pago:</h5>
+                    <?php foreach ($metodos_pago as $index => $metodo): ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="metodo_pago" id="metodo_pago_<?= $index ?>" value="<?= strtolower(str_replace(' ', '_', $metodo)) ?>" required>
+                            <label class="form-check-label" for="metodo_pago_<?= $index ?>"><?= $metodo ?></label>
+                        </div>
+                    <?php endforeach; ?>
                 <!-- Botón Finalizar -->
                 <button type="submit" class="btn btn-success mt-3">Finalizar y Pagar</button>
             </div>
