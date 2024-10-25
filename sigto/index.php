@@ -153,56 +153,57 @@ switch ($action) {
             }
         break;
 
-    case 'delete': // Eliminar un usuario
-        // Llama al método 'delete' del controlador y muestra el resultado
-        echo $controller->delete($idus);
-        header('Location: ?action=list');
-        exit;
 
-    case 'delete2': // Eliminar una empresa
-            // Llama al método 'delete' del controlador y muestra el resultado
-            echo $controller2->delete($idemp);
-            header('Location: ?action=list');
-        exit;
-    
-    
-        case 'login': 
+
+        case 'updateEmpresaStatus': // Cambiar estado activo/inactivo de una empresa
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $email = $_POST['email'];
-                $passw = $_POST['passw'];
+                $controller2->updateStatus(); // Llama al método updateStatus en EmpresaController
+                exit; // Termina la ejecución para que no se procese más código
+            }
+            break;
         
-                // Intentar iniciar sesión como usuario
-                $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
-        
-                if ($loginUsuario) {
-                    // Redireccionar al maincliente si el login es exitoso
-                    header('Location: /sigto/views/maincliente.php');
-                    exit;
-                } else {
-                    // Intentar iniciar sesión como empresa
-                    $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
-        
-                    if ($loginEmpresa) {
-                        // Redireccionar al mainempresa si el login es exitoso
-                        header('Location: /sigto/views/mainempresa.php');
+    
+    
+            case 'login': 
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $email = $_POST['email'];
+                    $passw = $_POST['passw'];
+            
+                    // Intentar iniciar sesión como usuario
+                    $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
+            
+                    if ($loginUsuario) {
+                        // Redireccionar al maincliente si el login es exitoso
+                        header('Location: /sigto/views/maincliente.php');
                         exit;
                     } else {
-                        // Intentar iniciar sesión como admin
-                        $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
-        
-                        if ($loginAdmin) {
-                            // Redireccionar a la vista de admin
-                            header('Location: /sigto/views/listarUsuarios.php');
+                        // Intentar iniciar sesión como empresa
+                        $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
+            
+                        if ($loginEmpresa === true) {
+                            // Redireccionar al mainempresa si el login es exitoso
+                            header('Location: /sigto/views/mainempresa.php');
                             exit;
+                        } elseif ($loginEmpresa === 'inactive') {
+                            $error = "Esta empresa ha sido dada de baja.";
                         } else {
-                            // Mostrar mensaje de error si el login falla o el usuario está dado de baja
-                            $error = "Email o contraseña incorrectos, o el usuario está dado de baja.";
+                            // Intentar iniciar sesión como admin
+                            $loginAdmin = $controller3->login(['email' => $email, 'passw' => $passw]);
+            
+                            if ($loginAdmin) {
+                                // Redireccionar a la vista de admin
+                                header('Location: /sigto/views/listarUsuarios.php');
+                                exit;
+                            } else {
+                                // Mostrar mensaje de error si el login falla
+                                $error = "Email o contraseña incorrectos.";
+                            }
                         }
                     }
                 }
-            }
-            include __DIR__ . '/views/loginUsuario.php';
-            break;
+                include __DIR__ . '/views/loginUsuario.php';
+                break;
+            
               
 
     case 'activar':
@@ -331,14 +332,7 @@ switch ($action) {
             $controller->updateStatus(); // Llama al método updateStatus en UsuarioController
             exit; // Termina la ejecución para que no se procese más código
         }
-        break;
-    
-    case 'updateEmpresaStatus':
-        $data = json_decode(file_get_contents("php://input"), true);
-        $result = $controller2->updateActivo($data['idemp'], $data['estado']);
-        echo json_encode($result);
-        exit;
-        
+        break;      
     
 }
 ?>

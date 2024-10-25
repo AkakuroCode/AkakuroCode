@@ -142,8 +142,15 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
                     <td><?php echo $empresa['email']; ?></td>
                     <td><?php echo $empresa['cuentabanco']; ?></td>
                     <td>
-                        <a id="editar" class="btn" href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
-                        <a id="eliminar" class="btn" href="/sigto/index.php?action=delete2&idemp=<?php echo $empresa['idemp']; ?>">Eliminar</a>
+                    <a id="editar" class="btn" href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
+
+                    <!-- Verificar si la empresa está activa o inactiva -->
+                    <?php if ($empresa['activo'] == 'si'): ?>
+                    <button class="btn-baja" onclick="cambiarEstadoEmpresa(<?php echo $empresa['idemp']; ?>, 'no')">Dar de baja</button>
+                    <?php else: ?>
+                      <button class="btn-alta" onclick="cambiarEstadoEmpresa(<?php echo $empresa['idemp']; ?>, 'si')">Dar de alta</button>
+                    <?php endif; ?>
+
                         <!-- Botón para ver logins -->
                         <button type="button" class="btn view-logins-btn" onclick="toggleEmpresaMenu(<?php echo $empresa['idemp']; ?>)">Ver Logins</button>
                     </td>
@@ -212,8 +219,35 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
         });
     }
 
+    function cambiarEstadoEmpresa(idemp, estado) {
+    fetch('/sigto/index.php?action=updateEmpresaStatus', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            idemp: idemp,
+            estado: estado
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload(); // Recargar la página para actualizar los botones
+        } else {
+            alert('Error al cambiar el estado de la empresa.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
     
 </script>
+
+<script src="/sigto/assets/js/admin.js"></script>
 
 </body>
 </html>

@@ -1,28 +1,55 @@
-function eliminarUsuario(idus) {
-    if (confirm('¿Estás seguro de que deseas dar de baja este usuario?')) {
-        fetch(`/sigto/index.php?action=delete&idus=${idus}`, {
+function cambiarEstadoUsuario(idus, estado) {
+    if (confirm(`¿Estás seguro de que deseas ${estado === 'si' ? 'dar de alta' : 'dar de baja'} este usuario?`)) {
+        fetch(`/sigto/index.php?action=updateStatus`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
-            body: `idus=${idus}` // Se envía el ID del usuario en el cuerpo de la solicitud
+            body: JSON.stringify({
+                idus: idus,
+                estado: estado
+            })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remover la fila de la tabla correspondiente al usuario eliminado
-                const row = document.querySelector(`tr[data-id="${idus}"]`);
-                if (row) {
-                    row.remove(); // Remover la fila visualmente
-                }
-                alert('Usuario dado de baja correctamente');
+                // Actualiza el botón de alta/baja del usuario sin recargar la página
+                location.reload(); // Refresca la página para reflejar el cambio de estado
             } else {
-                alert('Error al dar de baja el usuario');
+                alert('Error al cambiar el estado del usuario.');
             }
         })
         .catch(error => {
-            console.error('Error al dar de baja el usuario:', error);
-            alert('Hubo un problema al intentar dar de baja el usuario.');
+            console.error('Error al cambiar el estado del usuario:', error);
+            alert('Hubo un problema al intentar cambiar el estado del usuario.');
+        });
+    }
+}
+
+function cambiarEstadoEmpresa(idemp, estado) {
+    if (confirm(`¿Estás seguro de que deseas ${estado === 'si' ? 'dar de alta' : 'dar de baja'} esta empresa?`)) {
+        fetch(`/sigto/index.php?action=updateEmpresaStatus`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idemp: idemp,
+                estado: estado
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Actualiza el botón de alta/baja de la empresa sin recargar la página
+                location.reload(); // Refresca la página para reflejar el cambio de estado
+            } else {
+                alert('Error al cambiar el estado de la empresa.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al cambiar el estado de la empresa:', error);
+            alert('Hubo un problema al intentar cambiar el estado de la empresa.');
         });
     }
 }

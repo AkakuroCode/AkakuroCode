@@ -132,12 +132,7 @@ class Empresa {
         return $stmt->execute();
     }
 
-    public function delete() {
-        $query = "DELETE FROM " . $this->table_name . " WHERE idemp = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $this->idemp);
-        return $stmt->execute();
-    }
+  
 
     public function login() {
         $query = "SELECT * FROM " . $this->table_name . " WHERE email = ?";
@@ -197,6 +192,21 @@ class Empresa {
         // Cerrar el statement después de la inserción
         $stmt->close();
     }
+
+    public function updateEstado($estado) {
+        $query = "UPDATE empresa SET activo = ? WHERE idemp = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param('si', $estado, $this->idemp);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    
+        $stmt->close();
+    }
+    
     
     public function getEmpresaLogins($idemp) {
         $query = "SELECT fecha, hora, url FROM historial_login WHERE idemp = ?";

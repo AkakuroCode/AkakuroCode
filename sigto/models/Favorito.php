@@ -68,8 +68,10 @@ class Favorito {
 
     // Método para obtener todos los productos favoritos de un usuario
     public function getFavoritosByUser($idus) {
-        $query = "SELECT p.* FROM producto p 
-                  INNER JOIN " . $this->table_name . " e ON p.sku = e.sku 
+        $query = "SELECT p.*, o.porcentaje_oferta, o.preciooferta 
+                  FROM producto p 
+                  INNER JOIN elige e ON p.sku = e.sku 
+                  LEFT JOIN ofertas o ON p.sku = o.sku AND CURDATE() BETWEEN o.fecha_inicio AND o.fecha_fin
                   WHERE e.idus = ? AND e.favorito = 'si'";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $idus);
@@ -77,6 +79,7 @@ class Favorito {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    
 
     // Método para verificar si un producto está en favoritos
     public function esFavorito($idus, $sku) {
