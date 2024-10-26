@@ -270,6 +270,49 @@ pre {
 }
 
 
+/* Botón principal (Editar Información) */
+.btn-outline-primary {
+    background-color: var(--azulclaro);
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--azuloscuro); /* Color más oscuro en hover */
+}
+
+/* Botones secundarios (Historial de Compras y Favoritos) */
+.btn-outline-secondary {
+    background-color: white;
+    color: var(--azulclaro);
+    border: 1px solid var(--azulclaro);
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--azulclaro);
+    color: white;
+}
+
+/* Contenedor de botones para alinear en una fila */
+.btn-container {
+    display: flex;
+    flex-direction: column; /* Cambiado a columna */
+    align-items: center; /* Centra los botones horizontalmente */
+    gap: 10px; /* Espaciado entre los botones */
+    margin-top: 20px;
+}
+
+
+
 @media (width < 650px){
 
     footer{
