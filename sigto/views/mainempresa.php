@@ -36,9 +36,6 @@ if (!$productos) {
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php">Inicio</a>
                     </li>
-                      <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotrosempresa.php">Nosotros</a>
-                    </li>
                     <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php">Agregar Producto</a>
                     </li>
@@ -121,6 +118,8 @@ if (!$productos) {
         <div class="footer-container">
             <div class="footer-item">
                 <p>Contacto</p>
+                <a href="/sigto/views/nosotroscliente.php">Nosotros</a>
+                <br>
                 <a href="tel:+598 92345888">092345888</a>
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>

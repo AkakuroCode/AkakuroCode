@@ -71,9 +71,6 @@ if ($producto['tipo_stock'] === 'unidad') {
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
                         </li>
                         <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotroscliente.php">Nosotros</a>
-                        </li>
-                        <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
                         </li>
                         <li class="nav-item mx-3">
@@ -84,9 +81,6 @@ if ($producto['tipo_stock'] === 'unidad') {
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainvisitante.php">Inicio</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotrosvisitante.php">Nosotros</a>
                         </li>
                         <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/loginUsuario.php">Ingresar</a>
@@ -157,6 +151,8 @@ if ($producto['tipo_stock'] === 'unidad') {
         <div class="footer-container">
             <div class="footer-item">
                 <p>Contacto</p>
+                <a href="/sigto/views/nosotroscliente.php">Nosotros</a>
+                <br>
                 <a href="tel:+598 92345888">092345888</a>
                 <br>
                 <a href="mailto: oceantrade@gmail.com">oceantrade@gmail.com</a>
