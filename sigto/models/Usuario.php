@@ -146,11 +146,12 @@ class Usuario {
                   WHERE idus=?";
         $stmt = $this->conn->prepare($query);
     
-        $hashedPassword = password_hash($this->passw, PASSWORD_DEFAULT);
-        $stmt->bind_param("sssssssi", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $hashedPassword, $this->idus);
+        // No volver a hashear si ya está hasheado
+        $stmt->bind_param("sssssssi", $this->nombre, $this->apellido, $this->fecnac, $this->direccion, $this->telefono, $this->email, $this->passw, $this->idus);
     
         return $stmt->execute();
     }
+    
 
     public function updateActivo($estado) {
         $query = "UPDATE cliente SET activo = ? WHERE idus = ?";

@@ -49,7 +49,7 @@ class UsuarioController {
 
     public function update($data) {
         $usuario = new Usuario();
-        $usuario->setId($data['idus']); // Asegurarse de establecer el ID del usuario
+        $usuario->setId($data['idus']);
         $usuario->setNombre($data['nombre']);
         $usuario->setApellido($data['apellido']);
         $usuario->setFecnac($data['fecnac']);
@@ -59,11 +59,12 @@ class UsuarioController {
         
         // Verificar si se proporcionó una nueva contraseña
         if (!empty($data['passw'])) {
-            $usuario->setPassw($data['passw']); // Si se ingresó una nueva contraseña, la actualizamos
+            // Asignar y hashear solo si se ingresa una nueva contraseña
+            $usuario->setPassw(password_hash($data['passw'], PASSWORD_DEFAULT));
         } else {
-            // Si no se ingresó una nueva contraseña, obtenemos la actual de la base de datos
+            // Si no se ingresó nueva contraseña, mantener la actual sin re-hashear
             $usuarioData = $usuario->readOne();
-            $usuario->setPassw($usuarioData['passw']); // Mantener la contraseña actual
+            $usuario->setPassw($usuarioData['passw']); // Usar contraseña actual
         }
     
         if ($usuario->update()) {
@@ -72,6 +73,7 @@ class UsuarioController {
             return "Error al actualizar usuario.";
         }
     }
+    
 
     // Modificación del método delete para baja lógica
     public function delete($idus) {
