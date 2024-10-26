@@ -26,6 +26,9 @@ GRANT SELECT ON oceantrade.ofertas TO 'guest_user'@'localhost';
 GRANT SELECT ON oceantrade.producto_unitario TO 'guest_user'@'localhost';
 GRANT SELECT ON oceantrade.categoria TO 'guest_user'@'localhost';
 GRANT SELECT ON oceantrade.pertenece TO 'guest_user'@'localhost';
+GRANT SELECT ON oceantrade.cliente TO 'guest_user'@'localhost';
+GRANT SELECT ON oceantrade.empresa TO 'guest_user'@'localhost';
+GRANT SELECT ON oceantrade.admin TO 'guest_user'@'localhost';
 
 -- Aplicar los cambios
 FLUSH PRIVILEGES;
