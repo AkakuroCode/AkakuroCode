@@ -38,19 +38,21 @@ if (!$usuario) {
                   </button>
                   <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0">
-                      <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/views/maincliente.php">
+                        <i class="bi bi-house-door"></i> Inicio</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="nav-link" href="/sigto/views/usuarioperfil.php">
-                        <i class="bi bi-person-circle" style="color: white; font-size: 2em;"></i>
-                        </a>
+                        <a class="nav-link nav-icon" href="/sigto/views/usuarioperfil.php">
+                        <i class="bi bi-person-circle"></i> Perfil</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
+                        <a class="nav-link nav-icon" href="/sigto/index?action=view_cart">
+                        <i class="bi bi-cart"></i> Carrito</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
+                        <a class="nav-link nav-icon" href="/sigto/index.php?action=logout">
+                        <i class="bi bi-door-open">Salir</i></a>
                     </li>
                     </ul>
                     <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">

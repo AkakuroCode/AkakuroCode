@@ -31,6 +31,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <title>Catálogo</title>
 </head>
@@ -45,26 +46,29 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                 <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
                 <?php if (isset($_SESSION['idus'])): // Si el cliente está logueado ?>
                     <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
-                        </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/views/maincliente.php">
+                        <i class="bi bi-house-door"></i> Inicio</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/views/usuarioperfil.php">
+                        <i class="bi bi-person-circle"></i> Perfil</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/index?action=view_cart">
+                        <i class="bi bi-cart"></i> Carrito</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/index.php?action=logout">
+                        <i class="bi bi-door-open">Salir</i>
+                        </a>
+                    </li>
                     </ul>
                 <?php else: // Si el cliente no está logueado, mostrar el nav para visitantes ?>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainvisitante.php">Inicio</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/nosotrosvisitante.php">Nosotros</a>
+                            <a class="nav-link nav-icon" href="/sigto/views/mainvisitante.php">
+                            <i class="bi bi-house-door"></i> Inicio</a>
                         </li>
                         <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/loginUsuario.php">Ingresar</a>
