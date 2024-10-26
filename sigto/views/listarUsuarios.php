@@ -71,9 +71,9 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
 
                         <!-- Verificar si el usuario está activo o inactivo -->
                         <?php if ($usuario['activo'] == 'si'): ?>
-                            <button class="btn-baja" onclick="cambiarEstado(<?php echo $usuario['idus']; ?>, 'no')">Dar de baja</button>
+                            <button class="btn-baja" onclick="cambiarEstadoUsuario(<?php echo $usuario['idus']; ?>, 'no')">Dar de baja</button>
                         <?php else: ?>
-                            <button class="btn-alta" onclick="cambiarEstado(<?php echo $usuario['idus']; ?>, 'si')">Dar de alta</button>
+                            <button class="btn-alta" onclick="cambiarEstadoUsuario(<?php echo $usuario['idus']; ?>, 'si')">Dar de alta</button>
                         <?php endif; ?>
 
                         <button type="button" class="btn view-logins-btn" onclick="toggleMenu(<?php echo $usuario['idus']; ?>)">Ver Logins</button>
