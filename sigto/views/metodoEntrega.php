@@ -18,87 +18,47 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <title>Seleccionar Método de Entrega y Pago</title>
-    <script>
-        function mostrarOpcionesEntrega() {
-            var opcionesPickUp = document.getElementById('opciones-pickup');
-            var formularioDomicilio = document.getElementById('formulario-domicilio');
-            var botonContinuar = document.getElementById('boton-continuar');
-            
-            if (document.getElementById('pickUp').checked) {
-                opcionesPickUp.style.display = 'block';
-                formularioDomicilio.style.display = 'none';
-                botonContinuar.style.display = 'block';
-            } else if (document.getElementById('domicilio').checked) {
-                opcionesPickUp.style.display = 'none';
-                formularioDomicilio.style.display = 'block';
-                botonContinuar.style.display = 'block';
-            } else {
-                opcionesPickUp.style.display = 'none';
-                formularioDomicilio.style.display = 'none';
-                botonContinuar.style.display = 'none';
-            }
-        }
-
-        function validarCampos() {
-            // Verificar si un radio button de Pick Up está seleccionado
-            var pickupSeleccionado = document.querySelector('input[name="ubicacion_pickup"]:checked');
-            // Obtener los valores de los campos de entrega a domicilio
-            var calle = document.getElementById('calle').value;
-            var numero = document.getElementById('numero').value;
-
-            // Mostrar las opciones de pago solo si:
-            // 1. Se seleccionó una opción de Pick Up
-            // O
-            // 2. Los campos "Calle" y "Número de Puerta" están completos
-            if (pickupSeleccionado || (calle.trim() !== '' && numero.trim() !== '')) {
-                mostrarOpcionesPago();
-            } else {
-                alert("Por favor, complete todos los campos requeridos para continuar.");
-            }
-        }
-
-        function mostrarOpcionesPago() {
-            var opcionesPago = document.getElementById('opciones-pago');
-            opcionesPago.style.display = 'block'; // Mostrar opciones de pago después de continuar
-        }
-    </script>
 </head>
 <body>
     <div class="contenedor">
 
-    
     <header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
-      <div class="container-fluid">
-         <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
-              <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
-                </li>
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
-                </li>
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
-                </li>
-                <li class="nav-item mx-3">
-                  <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
-                </li>
-              </ul>
-              <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
-                <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
-                <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
-                </form>
-            </div>
-        </div>
-      </nav>
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/views/maincliente.php">
+                        <i class="bi bi-house-door"></i> Inicio</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/views/usuarioperfil.php">
+                        <i class="bi bi-person-circle"></i> Perfil</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/index?action=view_cart">
+                        <i class="bi bi-cart"></i> Carrito</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/index.php?action=logout">
+                        <i class="bi bi-door-open">Salir</i></a>
+                    </li>
+                    </ul>
+                    <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
+                    <input type="text" id="search-words" name="query" placeholder="Buscar productos..." onkeyup="showSuggestions(this.value)">
+                    <div id="suggestions"></div> <!-- Div para mostrar las sugerencias -->
+                    </form>
+                  </div>
+                </div>
+              </nav>    
     </header>
     <main>
     <div class="container mt-5">
@@ -205,6 +165,7 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
         </div>
         
         <script src="/sigto/assets/js/searchbar.js"></script>
+        <script src="/sigto/assets/js/compra.js"></script>
     </footer>
 </div>
 </body>
