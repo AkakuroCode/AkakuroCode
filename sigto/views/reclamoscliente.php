@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/reclamos.css">
     <title>Reclamos</title>
 </head>
 <body>
-    <header>
+<header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
                 <div class="container-fluid">
                   <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
@@ -18,17 +19,21 @@
                   </button>
                   <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0">
-                      <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link nav-icon" href="/sigto/views/maincliente.php">
+                        <i class="bi bi-house-door"></i> Inicio</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                        <a class="nav-link nav-icon" href="/sigto/views/usuarioperfil.php">
+                        <i class="bi bi-person-circle"></i> Perfil</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
+                        <a class="nav-link nav-icon" href="/sigto/index?action=view_cart">
+                        <i class="bi bi-cart"></i> Carrito</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
+                        <a class="nav-link nav-icon" href="/sigto/index.php?action=logout">
+                        <i class="bi bi-door-open">Salir</i></a>
                     </li>
                     </ul>
                     <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
@@ -37,7 +42,7 @@
                     </form>
                   </div>
                 </div>
-    </nav>
+              </nav>    
     </header>
 
         <main>
