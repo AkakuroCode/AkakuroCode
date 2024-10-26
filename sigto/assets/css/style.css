@@ -82,6 +82,12 @@ footer{
     max-width: 3.5em;
     height: auto;
     margin: 5px;
+    transition: transform 0.2s ease, filter 0.3s ease; /* Transiciones para el efecto hover */
+}
+
+.redes:hover {
+    transform: scale(1.1); /* Aumento de tamaño */
+    filter: brightness(1.2); /* Ligero aumento de brillo */
 }
 
 .forms-container{
@@ -129,17 +135,55 @@ button {
     background-color: var(--azuloscuro);
     color: white;
 }
+
+button[type="submit"].btn.btn-primary {
+    background-color: var(--azuloscuro);
+    color: white;
+    font-size: 1.1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+button[type="submit"].btn.btn-primary:hover {
+    background-color: var(--turquesa);
+    transform: scale(1.05); /* Efecto de aumento al pasar el cursor */
+}
+
+.btn-info {
+    background-color: var(--azulclaro); /* Fondo en un tono más suave */
+    color: white;
+    border: 2px solid var(--turquesa); /* Borde para resaltar */
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.btn-info:hover {
+    background-color: var(--turquesa); /* Cambio de color en hover */
+    color: white;
+    transform: scale(1.05); /* Aumento ligero de tamaño en hover */
+}
+
+
 .heart-icon {
     width: 30px;  /* Ajusta el tamaño del ícono de corazón */
-    height: 30px;  /* Asegúrate de que tenga proporciones cuadradas */
+    height: 30px;
     cursor: pointer;
+    transition: transform 0.2s ease, filter 0.3s ease; /* Efecto de transición */
+}
+
+.heart-icon:hover {
+    transform: scale(1.1); /* Aumento de tamaño al pasar el cursor */
+    filter: brightness(1.2); /* Ligero aumento de brillo */
 }
 
 .btn-favorito {
     background-color: transparent;
     border: none;
     padding: 0;
-    margin-top: 10px;  /* Ajusta el espacio superior si lo necesitas */
+    margin-top: 10px;
 }
 
 h2 {
@@ -170,46 +214,53 @@ pre {
 
 /*searchbar*/
 
-#search-results {
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    max-height: 200px;
-    overflow-y: auto;
+#search-form {
+    position: relative; /* Esto asegura que el contenedor de sugerencias se posicione relativo al formulario */
+}
+
+#search-words {
     width: 250px;
-    display: none;
-    z-index: 9999; /* Asegúrate de que tenga un valor de z-index alto */
+    padding: 8px 12px;
+    border: 2px solid var(--azulclaro);
+    border-radius: 10px 10px 0 0; /* Bordes redondeados solo en la parte superior */
+    background-color: #f9f9f9;
+    outline: none;
+    transition: width 0.4s ease, border-color 0.3s ease;
 }
 
-#search-results div {
-    padding: 10px;
-    cursor: pointer;
+#search-words:focus {
+    width: 300px;
+    border-color: var(--turquesa);
+    background-color: white;
 }
-
-#search-results div:hover {
-    background-color: #f0f0f0;
-}
-
 
 #suggestions {
     position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
+    top: 82%; /* Ajusta el espacio entre la barra de búsqueda y el menú de sugerencias */
+    left: 0;
+    width: 100%;
+    background-color: #f9f9f9;
+    border: 1px solid var(--azulclaro);
+    border-radius: 0 0 10px 10px; /* Mismo radio que la barra de búsqueda */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     max-height: 200px;
     overflow-y: auto;
-    width: 250px;
-    display: none; /* Se muestra con "block" cuando hay resultados */
-    z-index: 9999; /* Asegúrate de que este valor sea alto */
+    z-index: 9999;
 }
 
 #suggestions div {
-    padding: 10px;
+    padding: 10px 15px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #333;
 }
 
 #suggestions div:hover {
-    background-color: #f0f0f0;
+    background-color: #e0e0e0;
 }
+
+
+
 
 /*carrousel*/
 

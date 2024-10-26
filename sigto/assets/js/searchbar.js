@@ -1,14 +1,24 @@
 function showSuggestions(query) {
-    if (query.length == 0) {
-        document.getElementById("suggestions").innerHTML = "";
+    const suggestions = document.getElementById("suggestions");
+
+    if (query.length === 0) {
+        suggestions.innerHTML = "";
+        suggestions.style.display = "none"; // Oculta el contenedor cuando no hay texto en la búsqueda
         return;
     }
 
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("suggestions").innerHTML = this.responseText;
-            document.getElementById("suggestions").style.display = "block";
+        if (this.readyState === 4 && this.status === 200) {
+            console.log("Respuesta del servidor:", this.responseText);
+            suggestions.innerHTML = this.responseText;
+
+            // Muestra las sugerencias si hay contenido, oculta si está vacío
+            if (this.responseText.trim() !== "") {
+                suggestions.style.display = "block";
+            } else {
+                suggestions.style.display = "none";
+            }
         }
     };
 
