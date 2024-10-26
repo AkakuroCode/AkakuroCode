@@ -15,7 +15,7 @@ class ProductoController {
             return "Acceso denegado. Solo las empresas pueden agregar productos.";
         }
 
-        $producto = new Producto();
+        $producto = new Producto('write');
         $producto->setIdEmp($_SESSION['idemp']);
         $producto->setNombre($data['nombre']);
         $producto->setDescripcion($data['descripcion']);

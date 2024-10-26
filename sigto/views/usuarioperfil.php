@@ -3,7 +3,20 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Incluir el controlador de usuario o la lógica para obtener el usuario logueado
+require_once __DIR__ . '/../controllers/UsuarioController.php';
+
+$usuarioController = new UsuarioController();
+$usuario = $usuarioController->getUserById($_SESSION['idus']);
+
+// Verificar que se encontró el usuario
+if (!$usuario) {
+    echo "Error: no se encontró el usuario.";
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,6 +24,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario</title>
     <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css"> <!-- Estilos personalizados -->
 </head>
 <body>
@@ -28,7 +42,9 @@ if (session_status() === PHP_SESSION_NONE) {
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/maincliente.php">Inicio</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/usuarioperfil.php">Perfil</a>
+                        <a class="nav-link" href="/sigto/views/usuarioperfil.php">
+                        <i class="bi bi-person-circle" style="color: white; font-size: 2em;"></i>
+                        </a>
                     </li>
                     <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/index?action=view_cart">Carrito</a>
@@ -47,15 +63,14 @@ if (session_status() === PHP_SESSION_NONE) {
     </header>
 
     <div class="container mt-5">
-        <h2 class="text-center">Perfil de Usuario</h2>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-4 text-center">
-                <a href="/sigto/index?action=edit_profile" class="btn btn-outline-primary btn-lg btn-block mb-3">Editar Información</a>
-                <a href="historialCompras.php" class="btn btn-outline-secondary btn-lg btn-block">Historial de Compras</a>
-                <a href="verFavoritos.php" class="btn btn-outline-secondary btn-lg btn-block">Favoritos</a>
-            </div>
-        </div>
+    <h2 class="text-center">Perfil de <?php echo htmlspecialchars($usuario['nombre']); ?></h2>
+    <div class="btn-container">
+        <a href="/sigto/index?action=edit_profile" class="btn btn-outline-primary btn-lg">Editar Información</a>
+        <a href="historialCompras.php" class="btn btn-outline-secondary btn-lg">Historial de Compras</a>
+        <a href="verFavoritos.php" class="btn btn-outline-secondary btn-lg">Favoritos</a>
     </div>
+    </div>
+
 
     <footer>
         <div class="footer-container">
