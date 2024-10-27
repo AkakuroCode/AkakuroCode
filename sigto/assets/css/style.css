@@ -192,11 +192,35 @@ button[type="submit"].btn.btn-primary:hover {
     filter: brightness(1.2); /* Ligero aumento de brillo */
 }
 
+.card {
+    position: relative;
+}
+
+.botones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+
+.favorito-container {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+}
+
 .btn-favorito {
     background-color: transparent;
     border: none;
     padding: 0;
-    margin-top: 10px;
+}
+
+
+
+.form-compra {
+    display: flex;
+    flex-direction: column; /* Alinea los botones verticalmente */
+    gap: 5px; /* Espacio entre los botones */
 }
 
 h2 {
