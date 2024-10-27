@@ -96,13 +96,15 @@ if ($carritoItems && !empty($carritoItems)) {
                                 </div>
                                 <div>
                                     <p>Total: US$<span class="item-total" id="item-total-<?php echo $item['sku']; ?>"><?php echo number_format($item['subtotal'], 2); ?></span></p>
-                                    <form class="update-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
+                                    <div class="botones-container">
+                                        <form class="update-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
                                         <input type="number" name="cantidad" value="<?php echo $item['cantidad']; ?>" min="1" class="form-control mb-2 cantidad-input" style="width: 80px;">
-                                        <button type="button" class="btn btn-secondary" onclick="updateQuantity(this)">Actualizar</button>
-                                    </form>
-                                    <form class="delete-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
-                                        <button type="button" class="btn btn-danger" onclick="deleteItem(this)">Eliminar</button>
-                                    </form>
+                                        <button type="button" class="btn btn-secondary btn-actualizar" onclick="updateQuantity(this)">Actualizar</button>
+                                        </form>
+                                        <form class="delete-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
+                                        <button type="button" class="btn btn-danger btn-eliminar" onclick="deleteItem(this)">Eliminar</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
