@@ -47,11 +47,21 @@ flex-direction: column;
     color: rgb(255, 255, 255);   
 }
 
-.contenedor{
-    min-height: 100dvh;
-    display:grid;
+.contenedor {
+    min-height: 100vh; /* Asegura que el contenedor ocupe toda la pantalla */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinea el contenido hacia la parte superior */
     grid-template-rows: auto 1fr auto;
 }
+
+.container.mt-5 {
+    margin-top: 1rem; /* Ajusta el margen superior del main para reducir el espacio */
+    width: 80%; /* Ajusta el ancho del contenedor */
+    max-width: 900px; /* Define un ancho máximo */
+    min-height: 70vh; /* Ajusta la altura mínima */
+}
+
 
 footer{
     background: linear-gradient(to bottom , var(--turquesa) ,var(--azulmedio),var(--azuloscuro));
@@ -423,17 +433,5 @@ pre {
     .btn-comprar:hover {
         background-color: var(--azuloscuro);
     }
-    
-    .btn-eliminar {
-        background-color: #ff4b4b;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-    
-    .btn-eliminar:hover {
-        background-color: #cc0000;
-    }
+
 }
