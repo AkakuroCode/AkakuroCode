@@ -40,3 +40,23 @@ function mostrarOpcionesPago() {
     var opcionesPago = document.getElementById('opciones-pago');
     opcionesPago.style.display = 'block'; // Mostrar opciones de pago después de continuar
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("form-entrega");
+    const finalizarPagarBtn = document.querySelector("button[type='submit']");
+
+    finalizarPagarBtn.addEventListener("click", function(event) {
+        const metodoPagoSeleccionado = document.querySelector("input[name='metodo_pago']:checked");
+        
+        // Verificar si el método de pago es PayPal
+        if (metodoPagoSeleccionado && metodoPagoSeleccionado.value === "paypal") {
+            event.preventDefault(); // Prevenir el envío normal del formulario
+            // Redirigir a la API de PayPal
+            window.location.href = "/sigto/controllers/PaymentController.php?action=createPayment";
+        } else {
+            // Si no es PayPal, el formulario se envía normalmente
+            form.submit();
+        }
+    });
+});
