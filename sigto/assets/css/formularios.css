@@ -1,9 +1,10 @@
+/* Estilo del cuerpo y fondo de la página */
 body {
     font-family: Arial, sans-serif;
     background-image: url('../images/ocean\ background.jpg');
-    background-size: cover; /* Asegura que la imagen cubra toda la página */
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
-    background-position: center; /* Centra la imagen */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 form {
@@ -28,8 +29,41 @@ input {
     margin-top: 0.5em;
 }
 
-button {
-    color:  #0267FF;
+/* Contenedor del campo de contraseña */
+.input-group {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+    width: 100%;
+    margin-top: 0.5em;
+}
+
+/* Estilo del botón de mostrar/ocultar contraseña */
+.btn-show-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    color: #0267FF;
+    font-size: 1.2em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.btn-show-password:focus,
+.btn-show-password:hover {
+    color: #0056b3;
+}
+
+button, input[type="submit"] {
+    color: #0267FF;
     font-weight: bold;
     background-color: white;
     border: 3px solid #1900ff;
@@ -45,31 +79,31 @@ button {
 }
 
 div {
-    display:grid;
+    display: grid;
     justify-content: center;
     align-content: center;
 }
 
-.logologin{
-    height:400px;
+.logologin {
+    height: 400px;
     width: auto;
-    filter: drop-shadow(0 0 10px rgba(5, 96, 170, 0.678)); /* Añade un sombreado negro alrededor del logo */
-
+    filter: drop-shadow(0 0 10px rgba(5, 96, 170, 0.678));
 }
 
-.box{
+.box {
     flex-direction: column;
     justify-content: center;
 }
-p{
-font-weight: bold;
-text-align: center;
+
+p {
+    font-weight: bold;
+    text-align: center;
 }
 
-#registro{
+#registro {
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
+    color: #0267FF;
     font-weight: bold;
     background-color: white;
     border: 3px solid #1900ff;
@@ -79,20 +113,15 @@ text-align: center;
     width: 100%;
 }
 
-#descripcion {
-    width: 300px; 
-    height: 150px; 
-}
-
-#codigos_unitarios{
-    width: 300px; 
+#descripcion, #codigos_unitarios {
+    width: 300px;
     height: 150px;
 }
 
-select{
+select {
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
+    color: #0267FF;
     font-weight: bold;
     background-color: white;
     border: 3px solid #1900ff;
@@ -102,9 +131,8 @@ select{
     width: 100%;
 }
 
-
 #imagen {
-    display: none; /* Oculta el input real */
+    display: none;
 }
 
 .custom-file-upload {
@@ -121,36 +149,19 @@ select{
 
 #file-name {
     display: inline-block;
-    width: 200px; /* Ajusta el ancho a lo que necesites */
+    width: 200px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Esto agregará los puntos suspensivos */
+    text-overflow: ellipsis;
     font-style: italic;
     color: #ffffff;
     margin-top: 5px;
 }
 
-input[type="submit"] {
+#volver {
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
-    font-weight: bold;
-    background-color: white;
-    border: 3px solid #1900ff;
-    border-radius: 1em;
-    margin-top: 1em;
-    padding: 0.5em;
-    width: 100%;
-}
-
-input[type="submit"]:hover {
-    background-color: #ffffff;
-}
-
-#volver{
-    text-decoration: none;
-    text-align: center;
-    color:  white;
+    color: white;
     font-weight: bold;
     background-color: #0267FF;
     border: 3px solid #1900ff;
@@ -160,7 +171,8 @@ input[type="submit"]:hover {
     width: 100%;
 }
 
-#volver:hover{
+#volver:hover {
     background-color: white;
-    color:#0267FF
+    color: #0267FF;
 }
+
