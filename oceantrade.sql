@@ -1,3 +1,6 @@
+create database oceantrade charset utf8mb4;
+
+use oceantrade;
 
 -- Tabla cliente
 CREATE TABLE cliente (
