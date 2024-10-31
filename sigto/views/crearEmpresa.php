@@ -2,67 +2,43 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/sigto/assets/css/login.css">
     <title>Crear Empresa</title>
+    <link rel="stylesheet" href="/sigto/assets/css/formularios.css">
 </head>
 <body>
-    <div class="box">
-        <h2>Crear Empresa</h2>
-        
-        <!-- Formulario de Crear Empresa -->
-        <form id="createCompanyForm" method="POST" action="/sigto/index.php?action=createCompany">
-            <label for="companyName">Nombre de la Empresa:</label>
-            <input type="text" id="companyName" name="companyName" class="form-control" required>
+   
+    <form action="/sigto/index.php?action=create2" method="POST">
+    <h1>Crear Empresa</h1>
+    
+        <!-- Campo para el nombre de la empresa -->
+        <label for="nombre">Nombre de la Empresa:</label>
+        <input type="text" name="nombre" required><br>
 
-            <label for="address">Dirección:</label>
-            <input type="text" id="address" name="address" class="form-control" required>
+        <!-- Campo para la dirección de la empresa -->
+        <label for="direccion">Dirección:</label>
+        <input type="text" name="direccion" required><br>
 
-            <label for="phone">Teléfono:</label>
-            <input type="text" id="phone" name="phone" class="form-control" required>
+        <!-- Campo para el teléfono de la empresa -->
+        <label for="telefono">Teléfono:</label>
+        <input type="text" name="telefono" required><br>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" class="form-control" required>
+        <!-- Campo para el email de la empresa -->
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br>
 
-            <!-- Campo de Contraseña con botón de mostrar/ocultar -->
-            <label for="passw">Contraseña:</label>
-            <div class="input-group mb-3">
-                <input type="password" id="passw" name="passw" class="form-control" required>
-                <button class="btn-show-password" type="button" onclick="togglePassword()">
-                    <i class="bi bi-eye-fill"></i>
-                </button>
-            </div>
+        <!-- Campo para la contraseña -->
+        <label for="passw">Contraseña:</label>
+        <input type="password" name="passw" required><br>
 
-            <label for="bankAccount">Cuenta de Banco:</label>
-            <input type="text" id="bankAccount" name="bankAccount" class="form-control" required>
+        <!-- Campo para la cuenta de banco -->
+        <label for="cuentabanco">Cuenta de Banco:</label>
+        <input type="text" name="cuentabanco" required><br>
 
-            <!-- Botón para Crear Empresa -->
-            <button type="submit" class="btn btn-primary btn-block">Crear Empresa</button>
-            <button id="volver" onclick="window.location.href='/sigto/views/mainvisitante.php';">Volver al Inicio</button>
+        <!-- Botón para enviar el formulario -->
+        <input type="submit" value="Crear Empresa">
+        <br><br><br>
+        <a id="volver" href="/sigto/views/loginUsuario.php">Volver al Inicio</a>
+    </form>
 
-        </form>
-        
-
-    </div>
-
-    <!-- JavaScript para alternar visibilidad de la contraseña y cambiar el ícono -->
-    <script>
-        function togglePassword() {
-            const passwordField = document.getElementById("passw");
-            const eyeIcon = document.querySelector(".btn-show-password i");
-            
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                eyeIcon.classList.remove("bi-eye-fill");
-                eyeIcon.classList.add("bi-eye-slash");
-            } else {
-                passwordField.type = "password";
-                eyeIcon.classList.remove("bi-eye-slash");
-                eyeIcon.classList.add("bi-eye-fill");
-            }
-        }
-    </script>
 </body>
 </html>

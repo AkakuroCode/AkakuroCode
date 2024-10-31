@@ -41,7 +41,7 @@
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Crear">
         <br><br><br>
-        <a id="volver" href="/sigto/views/mainvisitante.php">Volver al Inicio</a>
+        <a id="volver" href="/sigto/views/loginUsuario.php">Volver al Inicio</a>
     </form>
 </body>
 </html>

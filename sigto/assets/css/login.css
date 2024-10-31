@@ -1,129 +1,85 @@
-/* Estilo del cuerpo y fondo de la página */
 body {
     font-family: Arial, sans-serif;
     background-image: url('../images/ocean\ background.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
+    background-size: cover; /* Asegura que la imagen cubra toda la página */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-position: center; /* Centra la imagen */
 }
 
-/* Contenedor principal del formulario */
-.box {
-    max-width: 350px;
-    width: 100%;
+form {
     background-color: #0267FF;
-    padding: 2em;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 4em;
     border: 3px solid #1900ff;
     border-radius: 1em;
     color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilo del logo */
-.logologin {
-    height: 200px;
-    width: auto;
-    filter: drop-shadow(0 0 10px rgba(5, 96, 170, 0.678));
-}
-
-/* Título del formulario */
-h2 {
-    text-align: center;
-    margin-bottom: 1em;
-}
-
-/* Estilo de las etiquetas */
 label {
     display: block;
     margin-top: 1em;
 }
 
-/* Estilo del contenedor del campo de contraseña */
-.input-group {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: white;
-    width: 100%;
-}
-
-/* Campo de entrada de texto (email y contraseña) */
-.form-control {
+input {
     width: 100%;
     padding: 0.5em;
-    padding-right: 2.5em;
-    border: none;
-    border-radius: 10px;
-    box-sizing: border-box;
-    background-color: white; /* Asegura que siempre tenga un fondo visible */
-    color: black; /* Asegura que el texto sea visible */
+    margin-top: 0.5em;
 }
 
-/* Estilo del botón de mostrar/ocultar contraseña dentro del campo */
-.btn-show-password {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    padding: 0;
-    color: #0267FF;
-    font-size: 1.2em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
-
-.btn-show-password:focus,
-.btn-show-password:hover {
-    color: #0056b3;
-}
-
-/* Botón de ingresar */
-.btn-primary {
-    color: #0267FF;
+button {
+    color:  #0267FF;
     font-weight: bold;
     background-color: white;
     border: 3px solid #1900ff;
-    border-radius: 10px;
+    border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
     width: 100%;
 }
 
-/* Mensaje de error */
 .error-message {
     color: red;
     margin-top: 1em;
 }
 
-/* Contenedor de las opciones de registro y navegación */
-.registro {
-    text-align: center;
-    width: 100%;
+div {
+    display:grid;
+    justify-content: center;
+    align-content: center;
 }
 
-/* Estilo de los enlaces de registro y navegación */
-#registro {
+.logologin{
+    height:400px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(5, 96, 170, 0.678)); /* Añade un sombreado negro alrededor del logo */
+
+}
+
+.box{
+    flex-direction: column;
+    justify-content: center;
+}
+p{
+font-weight: bold;
+text-align: center;
+}
+
+#registro{
     text-decoration: none;
-    color: #0267FF;
+    text-align: center;
+    color:  #0267FF;
     font-weight: bold;
     background-color: white;
     border: 3px solid #1900ff;
-    border-radius: 10px;
+    border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
     width: 100%;
-    display: inline-block;
 }
+
+#descripcion {
+    width: 300px; 
+    height: 150px; 
+}
+
