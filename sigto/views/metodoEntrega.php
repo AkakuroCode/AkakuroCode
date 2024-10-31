@@ -62,6 +62,7 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
     </header>
     <main>
     <div class="container mt-5">
+    <div class="form-container">
         <h2>Seleccionar Método de Entrega</h2>
         <form id="form-entrega" action="procesarEntregaYPago.php" method="POST">
             <!-- Selección de Retiro en Pick up -->
@@ -127,18 +128,20 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
 
             <!-- Opciones de Pago -->
             <div id="opciones-pago" style="display: none; margin-top: 20px;">
-                    <h5>Seleccionar Método de Pago:</h5>
-                    <?php foreach ($metodos_pago as $index => $metodo): ?>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="metodo_pago" id="metodo_pago_<?= $index ?>" value="<?= strtolower(str_replace(' ', '_', $metodo)) ?>" required>
-                            <label class="form-check-label" for="metodo_pago_<?= $index ?>"><?= $metodo ?></label>
-                        </div>
-                    <?php endforeach; ?>
+                <h5>Seleccionar Método de Pago:</h5>
+                <?php foreach ($metodos_pago as $index => $metodo): ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="metodo_pago" id="metodo_pago_<?= $index ?>" value="<?= strtolower(str_replace(' ', '_', $metodo)) ?>" required>
+                        <label class="form-check-label" for="metodo_pago_<?= $index ?>"><?= $metodo ?></label>
+                    </div>
+                <?php endforeach; ?>
                 <!-- Botón Finalizar -->
                 <button type="submit" class="btn btn-success mt-3">Finalizar y Pagar</button>
             </div>
         </form>
+        </div>
     </div>
+
     </main>
     <br><br><br><br><br><br>
     <footer>
