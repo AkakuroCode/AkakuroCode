@@ -263,8 +263,8 @@ CREATE TABLE ofertas (
 -- Tabla historial_compra
 CREATE TABLE historial_compra (
     idhistorial INT PRIMARY KEY AUTO_INCREMENT,
-    idus INT,
-    sku VARCHAR(50),
+    idus INT(11),
+    sku INT(11),
     fecha DATE NOT NULL,
     total_compra DECIMAL(10,2) NOT NULL CHECK (total_compra > 0),
     estado ENUM('Completado', 'Pendiente', 'Cancelado') NOT NULL,
@@ -276,8 +276,8 @@ CREATE TABLE historial_compra (
 -- Tabla venta
 CREATE TABLE venta (
     idventa INT PRIMARY KEY AUTO_INCREMENT,
-    idemp INT,
-    sku VARCHAR(50),
+    idemp INT(11),
+    sku INT(11),
     fecha DATE NOT NULL,
     total_venta DECIMAL(10,2) NOT NULL CHECK (total_venta > 0),
     FOREIGN KEY (sku) REFERENCES producto(sku),
