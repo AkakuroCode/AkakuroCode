@@ -15,7 +15,9 @@
                     <label for="email">Email:</label>
                     <input type="text" id="email" name="email" required>
                     <label for="passw">Contraseña:</label>
-                    <input type="password" id="passw" name="passw" required>
+                    <span class="input-wrapper">
+                    <input type="password" id="passw" name="passw" required><span class="toggle-password" onclick="togglePassword()">👁️</span></span>
+            
                     <button type="submit">Ingresar</button>
                     <?php if (isset($error)) { ?><p id="loginError" class="error-message">
                     <?php echo $error; ?></p><?php } ?>
@@ -27,6 +29,6 @@
                     <a id="registro" href="/sigto/views/mainvisitante.php">Volver al Inicio</a>
                 </div>
     </div>
-
+    <script src="/sigto/assets/js/passbutton.js"></script>
 </body>
 </html>

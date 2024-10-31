@@ -83,3 +83,34 @@ text-align: center;
     height: 150px; 
 }
 
+/* Contenedor del campo de contraseña */
+.input-wrapper {
+    position: relative;
+
+}
+/* Configuración para ambos campos de entrada */
+input[type="text"], input[type="password"] {
+    width: 100%; /* Asegura que ambos campos ocupen todo el ancho del contenedor */
+    max-width: 300px; /* Controla el ancho máximo */
+    padding: 0.5em;
+    box-sizing: border-box;
+    margin-top: 0.5em;
+}
+
+/* Campo de entrada de contraseña */
+#passw {
+    padding-right: 2.5em; /* Espacio para el ícono */
+}
+
+/* Ícono para mostrar/ocultar contraseña */
+.toggle-password {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2em;
+    color: gray;
+}
+
+

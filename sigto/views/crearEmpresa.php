@@ -39,6 +39,6 @@
         <br><br><br>
         <a id="volver" href="/sigto/views/loginUsuario.php">Volver al Inicio</a>
     </form>
-
+    <script src="/sigto/assets/js/passbutton.js"></script>
 </body>
 </html>
