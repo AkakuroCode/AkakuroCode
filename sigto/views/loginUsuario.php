@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/login.css">
     <title>Login</title>
 </head>
@@ -16,7 +17,7 @@
                     <input type="text" id="email" name="email" required>
                     <label for="passw">Contraseña:</label>
                     <span class="input-wrapper">
-                    <input type="password" id="passw" name="passw" required><span class="toggle-password" onclick="togglePassword()">👁️</span></span>
+                    <input type="password" id="passw" name="passw" required><span class="toggle-password" onclick="togglePassword()"><i class="bi bi-eye-fill"></i></span></span>
             
                     <button type="submit">Ingresar</button>
                     <?php if (isset($error)) { ?><p id="loginError" class="error-message">

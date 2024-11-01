@@ -105,12 +105,12 @@ input[type="text"], input[type="password"] {
 /* Ícono para mostrar/ocultar contraseña */
 .toggle-password {
     position: absolute;
-    right: 2px;
-    top: 50%;
+    right: 2.5px;
+    top: 70%;
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 1.2em;
-    color: gray;
+    color: #0267FF;
 }
 
 

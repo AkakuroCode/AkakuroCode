@@ -1,11 +1,14 @@
 function togglePassword() {
     const passwordField = document.getElementById("passw");
-    const passwordToggle = document.querySelector(".toggle-password");
+    const passwordToggle = document.querySelector(".toggle-password i");
+
     if (passwordField.type === "password") {
         passwordField.type = "text";
-        passwordToggle.textContent = "🙈"; // Cambia el icono cuando se muestre la contraseña
+        passwordToggle.classList.remove("bi-eye-fill");
+        passwordToggle.classList.add("bi-eye-slash-fill"); // Cambia a un ícono de ojo cerrado
     } else {
         passwordField.type = "password";
-        passwordToggle.textContent = "👁️"; // Cambia el icono cuando se oculte la contraseña
+        passwordToggle.classList.remove("bi-eye-slash-fill");
+        passwordToggle.classList.add("bi-eye-fill"); // Cambia al ícono de ojo abierto
     }
 }
