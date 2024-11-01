@@ -134,7 +134,7 @@ if (!$productos) {
                     <td>
                         <!-- Botón Editar -->
                         <a href="../sigto/index?action=edit3&sku=<?php echo htmlspecialchars($producto['sku']); ?>" class="btn btn-primary">Editar</a>
-
+                        <br>
 
                         <!-- Mostrar el botón de desactivar si el producto está visible -->
                         <?php if ($producto['visible'] == 1): ?>

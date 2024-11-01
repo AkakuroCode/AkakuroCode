@@ -105,7 +105,8 @@ $categorias = $categoriaController->getAllCategorias(); // Obtiene todas las cat
         <?php endif; ?>
 
         <button type="submit">Actualizar Producto</button>
-        <a href="?action=list2">Volver a la lista</a>
+        <br><br><br>
+        <a id="volver" href="?action=list2">Volver a la lista</a>
     </form>
 </body>
 </html>

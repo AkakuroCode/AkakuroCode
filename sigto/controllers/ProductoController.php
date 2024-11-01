@@ -102,7 +102,7 @@ class ProductoController {
 
 // Función para actualizar el producto
 public function update($data) {
-    $producto = new Producto();
+    $producto = new Producto('write');
     $producto->setSku($data['sku']);
     $producto->setIdEmp($_SESSION['idemp']);
     $producto->setNombre($data['nombre']);

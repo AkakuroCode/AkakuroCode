@@ -31,7 +31,7 @@ class OfertaController {
     }
 
     public function update($data) {
-        $oferta = new Oferta();
+        $oferta = new Oferta('write');
         $oferta->setSku($data['sku']);
         $oferta->setPorcentajeOferta($data['porcentaje_oferta']);
         $oferta->setPrecioOferta($data['preciooferta']);
