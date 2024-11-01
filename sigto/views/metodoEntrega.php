@@ -11,6 +11,7 @@ if (!isset($_SESSION['idus'])) {
 
 require_once __DIR__ . '/../controllers/MetodopagoController.php';
 require_once __DIR__ . '/../controllers/CentroReciboController.php';
+require_once __DIR__ . '/../controllers/VehiculoController.php';
 
 $metodoDePagoController = new MetodoDePagoController();
 $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
@@ -18,6 +19,9 @@ $paypalActivo = in_array('PayPal', $metodos_pago);
 
 $centroReciboController = new CentroReciboController();
 $centros_recibo = $centroReciboController->obtenerCentrosDeRecibo();
+
+$vehiculoController = new VehiculoController();
+$vehiculos = $vehiculoController->obtenerVehiculosDisponibles();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -117,6 +121,19 @@ $centros_recibo = $centroReciboController->obtenerCentrosDeRecibo();
                 </div>
             </div>
 
+            <!-- Select de Vehículos -->
+            <div id="vehiculo-container" style="display: none;">
+                <label for="vehiculo">Seleccione un Vehículo:</label>
+                <select class="form-select" id="vehiculo" name="vehiculo" required>
+                <option value="">Seleccione un vehículo...</option>
+                <?php foreach ($vehiculos as $vehiculo): ?>
+                    <option value="<?= $vehiculo['idv'] ?>">
+                        <?= $vehiculo['marca'] . ' ' . $vehiculo['modelo'] . ' - Capacidad: ' . $vehiculo['capacidad'] . 'kg' ?>
+                    </option>
+                <?php endforeach; ?>
+                </select>
+                </div>
+            </div>
             <!-- Botón Continuar -->
             <button type="button" id="boton-continuar" class="btn btn-primary mt-3" style="display: none;" onclick="validarCampos()">Continuar</button><br>
 

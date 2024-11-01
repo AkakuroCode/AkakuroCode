@@ -345,3 +345,10 @@ INSERT INTO centrorecibo (nombre, telefono) VALUES
 ('Centro de Recibo - Portones Shopping', '+598 2604 9876'),
 ('Centro de Recibo - Prado', '+598 2336 1122'),
 ('Centro de Recibo - Ciudad Vieja', '+598 2915 4455');
+
+
+INSERT INTO vehiculo (capacidad, modelo, tipo, marca, estado, hcarbono) VALUES 
+(2000, 'F-150', 'hibrido', 'Ford', 'disponible', 120.50),
+(1500, 'Model X', 'electrico', 'Tesla', 'disponible', 0.00),
+(2500, 'Sprinter', 'termico', 'Mercedes-Benz', 'disponible', 200.75),
+(1000, 'Leaf', 'electrico', 'Nissan', 'disponible', 0.00);

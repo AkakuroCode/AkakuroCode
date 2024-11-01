@@ -3,39 +3,42 @@ function mostrarOpcionesEntrega() {
     var formularioDomicilio = document.getElementById('formulario-domicilio');
     var botonContinuar = document.getElementById('boton-continuar');
     var opcionesPago = document.getElementById('opciones-pago');
+    var vehiculoContainer = document.getElementById('vehiculo-container');
 
-    // Ocultar el contenedor de opciones de pago cada vez que se cambia la opción de entrega
+    // Ocultar las opciones de pago cada vez que se cambia la opción de entrega
     opcionesPago.style.display = 'none';
 
     if (document.getElementById('pickUp').checked) {
         opcionesPickUp.style.display = 'block';
         formularioDomicilio.style.display = 'none';
+        vehiculoContainer.style.display = 'none'; // Ocultar el select de vehículos para la opción de pick-up
         botonContinuar.style.display = 'block';
     } else if (document.getElementById('domicilio').checked) {
         opcionesPickUp.style.display = 'none';
         formularioDomicilio.style.display = 'block';
+        vehiculoContainer.style.display = 'block'; // Mostrar el select de vehículos para la opción de domicilio
         botonContinuar.style.display = 'block';
     } else {
         opcionesPickUp.style.display = 'none';
         formularioDomicilio.style.display = 'none';
+        vehiculoContainer.style.display = 'none';
         botonContinuar.style.display = 'none';
     }
 }
 
 function validarCampos() {
-    // Verificar si un radio button de Pick Up está seleccionado
     var pickupSeleccionado = document.querySelector('input[name="ubicacion_pickup"]:checked');
-    // Obtener los valores de los campos de entrega a domicilio
     var calle = document.getElementById('calle').value;
     var numero = document.getElementById('numero').value;
+    var vehiculoSeleccionado = document.getElementById('vehiculo').value;
 
-    // Mostrar las opciones de pago solo si:
-    // 1. Se seleccionó una opción de Pick Up
-    // O
-    // 2. Los campos "Calle" y "Número de Puerta" están completos
+    // Validar los campos según el método de entrega seleccionado
     if (document.getElementById('pickUp').checked && pickupSeleccionado) {
         mostrarOpcionesPago();
-    } else if (document.getElementById('domicilio').checked && calle.trim() !== '' && numero.trim() !== '') {
+    } else if (document.getElementById('domicilio').checked && 
+               calle.trim() !== '' && 
+               numero.trim() !== '' && 
+               vehiculoSeleccionado !== '') {
         mostrarOpcionesPago();
     } else {
         alert("Por favor, complete todos los campos requeridos para continuar.");
