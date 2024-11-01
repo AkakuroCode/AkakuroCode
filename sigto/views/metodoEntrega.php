@@ -44,7 +44,7 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
                         <i class="bi bi-person-circle"></i> Perfil</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="nav-link nav-icon" href="/sigto/index?action=view_cart">
+                        <a class="nav-link nav-icon" href="/sigto/index.php?action=view_cart">
                         <i class="bi bi-cart"></i> Carrito</a>
                     </li>
                     <li class="nav-item mx-3">

@@ -47,7 +47,7 @@ if (!$usuario) {
                         <i class="bi bi-person-circle"></i> Perfil</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="nav-link nav-icon" href="/sigto/index?action=view_cart">
+                        <a class="nav-link nav-icon" href="/sigto/index.php?action=view_cart">
                         <i class="bi bi-cart"></i> Carrito</a>
                     </li>
                     <li class="nav-item mx-3">
@@ -67,7 +67,7 @@ if (!$usuario) {
     <div class="container mt-5">
     <h2 class="text-center">Perfil de <?php echo htmlspecialchars($usuario['nombre']); ?></h2>
     <div class="btn-container">
-        <a href="/sigto/index?action=edit_profile" class="btn btn-outline-primary btn-lg">Editar Información</a>
+        <a href="/sigto/index.php?action=edit_profile" class="btn btn-outline-primary btn-lg">Editar Información</a>
         <a href="historialCompras.php" class="btn btn-outline-secondary btn-lg">Historial de Compras</a>
         <a href="verFavoritos.php" class="btn btn-outline-secondary btn-lg">Favoritos</a>
     </div>

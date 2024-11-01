@@ -314,7 +314,17 @@ switch ($action) {
             echo json_encode(['success' => false, 'message' => 'Datos faltantes para eliminar el producto.']);
         }
         exit;
-            
+        
+    case 'obtener_total_carrito':
+            if (isset($_SESSION['idus'])) {
+                $idus = $_SESSION['idus'];
+                $totalCarrito = $carritoController->getTotalByUser($idus);
+                echo json_encode(['total' => number_format($totalCarrito, 2, '.', '')]);
+            } else {
+                echo json_encode(['total' => '0.00']);
+            }
+            exit;
+                
 
 
     case 'logout': // Cerrar sesión

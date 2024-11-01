@@ -52,7 +52,7 @@ if ($carritoItems && !empty($carritoItems)) {
                         </a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="nav-link nav-icon" href="/sigto/index?action=view_cart">
+                        <a class="nav-link nav-icon" href="/sigto/index.php?action=view_cart">
                         <i class="bi bi-cart"></i> Carrito
                     </a>
                     </li>
@@ -96,6 +96,9 @@ if ($carritoItems && !empty($carritoItems)) {
                                 </div>
                                 <div>
                                     <p>Total: US$<span class="item-total" id="item-total-<?php echo $item['sku']; ?>"><?php echo number_format($item['subtotal'], 2); ?></span></p>
+                                    <!-- Agrega este input oculto después de calcular $totalCarrito en PHP -->
+                                    <input type="hidden" id="total-carrito" value="<?php echo number_format($totalCarrito, 2); ?>">
+
                                     <div class="botones-container">
                                         <form class="update-form" data-sku="<?php echo $item['sku']; ?>" data-idus="<?php echo $idus; ?>">
                                         <input type="number" name="cantidad" value="<?php echo $item['cantidad']; ?>" min="1" class="form-control mb-2 cantidad-input" style="width: 80px;">

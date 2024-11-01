@@ -101,12 +101,15 @@ function deleteItem(button) {
 }
 
 
-// Función para actualizar el total después de la eliminación
 function updateTotal() {
     let total = 0;
     document.querySelectorAll('.item-total').forEach(item => {
-        total += parseFloat(item.textContent.replace('US$', '')); // Eliminar "US$" antes de convertir a número.
+        total += parseFloat(item.textContent.replace('US$', '')); // Elimina "US$" antes de convertir a número.
     });
 
-    document.getElementById('total').textContent = `US$${total.toFixed(2)}`; // Mostrar el total actualizado.
+    totalCarrito = total; // Actualiza la variable global totalCarrito
+    document.getElementById('total').textContent = `US$${totalCarrito.toFixed(2)}`;
+    document.getElementById('total-carrito').value = totalCarrito.toFixed(2); // Actualiza el input oculto
 }
+
+
