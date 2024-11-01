@@ -1,29 +1,38 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-
-use PayPalCheckoutSdk\Core\PayPalHttpClient;
-use PayPalCheckoutSdk\Core\SandboxEnvironment;
-use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
-use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 
 class PaymentController {
-    private $client;
+    private $clientId;
+    private $clientSecret;
 
     public function __construct() {
-        $clientId = "AShlUkfl78xGwqeOVkB8B854CyYgEXzOvZHb8ajFHZmrxSiX8-dwVqAPLE62B6lLhGrJ1U8wsWkfR3KQ";
-        $clientSecret = "EB4ceY2EHVlTywzB1u9uNVEVHiphG678H7HZ6O5wAbzaC4INegcKnhYgQtwN5gP4ZPT4KoEmCg2y6fXw";
+        $this->clientId = "AceErLCZ6XmVz4t3eQ-HNTR6L60MWTPws4Z8K2tdjiVaK05pJeuAhxWm2MEibyVMiCSQdqm10Y9ocAHm";
+        $this->clientSecret = "ELZU9uezhrkkF1VRZUKeteCrpkA6oXEWYkFCalmWxB7zHaNmmM1JUMmCSSpfDuqzYwqJtHMXwzHMWvMd";
+    }
 
-        // Configura el entorno de PayPal (Sandbox o producción)
-        $environment = new SandboxEnvironment($clientId, $clientSecret);
-        $this->client = new PayPalHttpClient($environment);
+    private function getAccessToken() {
+        $url = "https://api.sandbox.paypal.com/v1/oauth2/token";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->clientId . ":" . $this->clientSecret);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Accept: application/json",
+            "Accept-Language: en_US"
+        ]);
+
+        $response = curl_exec($ch);
+        $accessToken = json_decode($response)->access_token;
+        curl_close($ch);
+
+        return $accessToken;
     }
 
     public function createPayment() {
-        $request = new OrdersCreateRequest();
-        $request->prefer('return=representation');
-        
-        // Configura los detalles del pago
-        $request->body = [
+        $accessToken = $this->getAccessToken();
+        $url = "https://api.sandbox.paypal.com/v2/checkout/orders";
+        $data = [
             "intent" => "CAPTURE",
             "purchase_units" => [[
                 "amount" => [
@@ -37,37 +46,54 @@ class PaymentController {
             ]
         ];
 
-        try {
-            // Ejecuta la solicitud para crear el pago
-            $response = $this->client->execute($request);
-            foreach ($response->result->links as $link) {
-                if ($link->rel === "approve") {
-                    // Redirige al usuario a PayPal para completar el pago
-                    header("Location: " . $link->href);
-                    exit;
-                }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "Authorization: Bearer " . $accessToken
+        ]);
+
+        $response = curl_exec($ch);
+        $order = json_decode($response);
+        curl_close($ch);
+
+        foreach ($order->links as $link) {
+            if ($link->rel === "approve") {
+                // Redirige al usuario a PayPal para completar el pago
+                header("Location: " . $link->href);
+                exit;
             }
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
         }
     }
 
     public function executePayment() {
         $orderId = $_GET['token'] ?? null;
-        
+
         if ($orderId) {
-            $request = new OrdersCaptureRequest($orderId);
-            
-            try {
-                $response = $this->client->execute($request);
-                if ($response->result->status === "COMPLETED") {
-                    echo "Pago completado con éxito. Gracias por tu compra.";
-                    // Aquí puedes actualizar el estado de la orden en tu base de datos
-                } else {
-                    echo "El pago no se pudo completar.";
-                }
-            } catch (Exception $e) {
-                echo "Error: " . $e->getMessage();
+            $accessToken = $this->getAccessToken();
+            $url = "https://api.sandbox.paypal.com/v2/checkout/orders/{$orderId}/capture";
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                "Content-Type: application/json",
+                "Authorization: Bearer " . $accessToken
+            ]);
+
+            $response = curl_exec($ch);
+            $result = json_decode($response);
+            curl_close($ch);
+
+            if ($result->status === "COMPLETED") {
+                echo "Pago completado con éxito. Gracias por tu compra.";
+                // Aquí puedes actualizar el estado de la orden en tu base de datos
+            } else {
+                echo "El pago no se pudo completar.";
             }
         } else {
             echo "Token de pago no encontrado.";
