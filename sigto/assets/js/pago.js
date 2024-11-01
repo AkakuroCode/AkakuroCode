@@ -28,24 +28,60 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         },
         onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
+            return actions.order.capture().then(async function(details) {
                 alert('Pago completado por ' + details.payer.name.given_name);
-                fetch('/sigto/controllers/OrderController.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        orderId: data.orderID,
-                        payerName: details.payer.name.given_name,
-                        paymentStatus: details.status
-                    })
-                }).then(response => response.json())
-                  .then(data => {
-                      console.log('Orden registrada:', data);
-                  }).catch(error => {
-                      console.error('Error al registrar la orden:', error);
-                  });
+        
+                try {
+                    const response = await fetch('/sigto/controllers/CompraController.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            action: 'procesarCompra',  
+                            orderId: data.orderID,
+                            payerName: details.payer.name.given_name,
+                            paymentStatus: details.status,
+                            total: details.purchase_units[0].amount.value,
+                            currency: details.purchase_units[0].amount.currency_code,
+                            idpago: 'paypal',
+                            tipo_entrega: document.querySelector('input[name="metodo_entrega"]:checked').value,
+                            direccion: {
+                                calle: document.getElementById('calle').value,
+                                numero: document.getElementById('numero').value,
+                                esquina: document.getElementById('esquina').value
+                            },
+                            centroRecibo: document.querySelector('input[name="ubicacion_pickup"]:checked') ? document.querySelector('input[name="ubicacion_pickup"]:checked').value : null
+                        })
+                    });
+        
+                    if (!response.ok) {
+                        throw new Error("Error en la solicitud al servidor: " + response.status);
+                    }
+        
+                    // Intentar analizar JSON
+                    const resultText = await response.text();
+                    let result;
+                    try {
+                        result = JSON.parse(resultText);
+                    } catch (jsonError) {
+                        console.error("Error en la respuesta JSON:", jsonError);
+                        console.error("Respuesta del servidor:", resultText);
+                        alert('Error al registrar la orden. Inténtalo de nuevo.');
+                        return;
+                    }
+                    
+                    if (result.success) {
+                        console.log('Orden registrada exitosamente:', result);
+                        window.location.href = "/sigto/views/confirmacionCompra.php";
+                    } else {
+                        console.error('Error al registrar la orden:', result.message);
+                        alert('Error al registrar la orden. Inténtalo de nuevo.');
+                    }
+                } catch (error) {
+                    console.error('Error en la respuesta JSON:', error);
+                    alert('Error al registrar la orden. Inténtalo de nuevo.');
+                }
             });
         },
         onCancel: function(data) {
