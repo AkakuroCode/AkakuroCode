@@ -124,19 +124,20 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
             </div>
 
             <!-- Botón Continuar -->
-            <button type="button" id="boton-continuar" class="btn btn-primary mt-3" style="display: none;" onclick="validarCampos()">Continuar</button>
+            <button type="button" id="boton-continuar" class="btn btn-primary mt-3" style="display: none;" onclick="validarCampos()">Continuar</button><br>
+
+
 
             <!-- Opciones de Pago -->
             <div id="opciones-pago" style="display: none; margin-top: 20px;">
                 <h5>Seleccionar Método de Pago:</h5>
                 <?php foreach ($metodos_pago as $index => $metodo): ?>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="metodo_pago" id="metodo_pago_<?= $index ?>" value="<?= strtolower(str_replace(' ', '_', $metodo)) ?>" required>
-                        <label class="form-check-label" for="metodo_pago_<?= $index ?>"><?= $metodo ?></label>
-                    </div>
+                <div class="form-check">
+                <div id="paypal-button-container"></div>
+                </div>
                 <?php endforeach; ?>
-                <!-- Botón Finalizar -->
-                <button type="submit" class="btn btn-success mt-3">Finalizar y Pagar</button>
+            </div>
+
             </div>
         </form>
         </div>
@@ -169,6 +170,8 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
         
         <script src="/sigto/assets/js/searchbar.js"></script>
         <script src="/sigto/assets/js/compra.js"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id=AceErLCZ6XmVz4t3eQ-HNTR6L60MWTPws4Z8K2tdjiVaK05pJeuAhxWm2MEibyVMiCSQdqm10Y9ocAHm&currency=USD"></script>
+        <script src="/sigto/assets/js/pago.js"></script>
     </footer>
 </div>
 </body>
