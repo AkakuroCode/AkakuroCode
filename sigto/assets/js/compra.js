@@ -2,7 +2,11 @@ function mostrarOpcionesEntrega() {
     var opcionesPickUp = document.getElementById('opciones-pickup');
     var formularioDomicilio = document.getElementById('formulario-domicilio');
     var botonContinuar = document.getElementById('boton-continuar');
-    
+    var opcionesPago = document.getElementById('opciones-pago');
+
+    // Ocultar el contenedor de opciones de pago cada vez que se cambia la opción de entrega
+    opcionesPago.style.display = 'none';
+
     if (document.getElementById('pickUp').checked) {
         opcionesPickUp.style.display = 'block';
         formularioDomicilio.style.display = 'none';
@@ -29,7 +33,9 @@ function validarCampos() {
     // 1. Se seleccionó una opción de Pick Up
     // O
     // 2. Los campos "Calle" y "Número de Puerta" están completos
-    if (pickupSeleccionado || (calle.trim() !== '' && numero.trim() !== '')) {
+    if (document.getElementById('pickUp').checked && pickupSeleccionado) {
+        mostrarOpcionesPago();
+    } else if (document.getElementById('domicilio').checked && calle.trim() !== '' && numero.trim() !== '') {
         mostrarOpcionesPago();
     } else {
         alert("Por favor, complete todos los campos requeridos para continuar.");
@@ -40,23 +46,3 @@ function mostrarOpcionesPago() {
     var opcionesPago = document.getElementById('opciones-pago');
     opcionesPago.style.display = 'block'; // Mostrar opciones de pago después de continuar
 }
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById("form-entrega");
-    const finalizarPagarBtn = document.querySelector("button[type='submit']");
-
-    finalizarPagarBtn.addEventListener("click", function(event) {
-        const metodoPagoSeleccionado = document.querySelector("input[name='metodo_pago']:checked");
-        
-        // Verificar si el método de pago es PayPal
-        if (metodoPagoSeleccionado && metodoPagoSeleccionado.value === "paypal") {
-            event.preventDefault(); // Prevenir el envío normal del formulario
-            // Redirigir a la API de PayPal
-            window.location.href = "/sigto/controllers/PaymentController.php?action=createPayment";
-        } else {
-            // Si no es PayPal, el formulario se envía normalmente
-            form.submit();
-        }
-    });
-});

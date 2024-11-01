@@ -31,7 +31,7 @@ CREATE TABLE carrito (
 CREATE TABLE metodopago (
     idpago INT AUTO_INCREMENT PRIMARY KEY,
     proveedor VARCHAR(40) NOT NULL,
-    estado  ENUM('activo', 'inactivo') NOT NULL
+    estado  ENUM('activo', 'inactivo') DEFAULT 'activo' NOT NULL
 );
 
 
@@ -44,7 +44,7 @@ CREATE TABLE empresa (
     email VARCHAR(30) UNIQUE NOT NULL,
     passw VARCHAR(255) NOT NULL,
     cuentabanco INT(15) UNIQUE NOT NULL,
-    activo ENUM('sí', 'no') DEFAULT 'si'
+    activo ENUM('si', 'no') DEFAULT 'si'
 );
 
 -- Tabla producto
@@ -59,16 +59,16 @@ CREATE TABLE producto (
     stock TINYINT(3) NOT NULL,
     imagen VARCHAR(255),
     visible TINYINT(1) DEFAULT 1,
-    tipo_stock ENUM('unidad','cantidad'),
+    tipo_stock ENUM('unidad','cantidad') DEFAULT 'cantidad',
     FOREIGN KEY (idemp) REFERENCES empresa(idemp)
 );
 
 -- Tabla compra
 CREATE TABLE compra (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    idcompra INT AUTO_INCREMENT PRIMARY KEY,
     idpago INT UNIQUE NOT NULL,
     estado ENUM('Completado', 'Pendiente', 'Cancelado') NOT NULL,
-    direccion VARCHAR(50) NOT NULL,
+    tipo_entrega ENUM('Envio', 'Recibo') NOT NULL,
     FOREIGN KEY (idpago) REFERENCES metodopago(idpago)
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE pagina (
 
 -- Tabla envio
 CREATE TABLE envio (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    idenvio INT AUTO_INCREMENT PRIMARY KEY,
     idv INT UNIQUE NOT NULL,
     fecsa DATE NOT NULL,
     fecen DATE NOT NULL CHECK (fecen >= fecsa),
@@ -100,18 +100,18 @@ CREATE TABLE envio (
 
 -- Tabla centrorecibo
 CREATE TABLE centrorecibo (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    idrecibo INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50),
     telefono VARCHAR(18) UNIQUE NOT NULL,
-    FOREIGN KEY (id) REFERENCES compra(id)
 );
 
 -- Tabla inicia
 CREATE TABLE inicia (
-    id INT,
+    idcompra INT,
     idpago INT,
-    PRIMARY KEY (id, idpago),
+    PRIMARY KEY (idcompra, idpago),
 	FOREIGN KEY (idpago) REFERENCES metodopago(idpago),
-    FOREIGN KEY (id) REFERENCES compra(id)
+    FOREIGN KEY (idcompra) REFERENCES compra(idcompra)
 );
 
 -- Tabla cierra
@@ -125,10 +125,10 @@ CREATE TABLE cierra (
 
 -- Tabla transporta
 CREATE TABLE transporta (
-    id INT,
+    idenvio INT,
     idv INT,
-    PRIMARY KEY (id, idv),
-    FOREIGN KEY (id) REFERENCES compra(id),
+    PRIMARY KEY (idenvio, idv),
+    FOREIGN KEY (idenvio) REFERENCES envio(idenvio),
     FOREIGN KEY (idv) REFERENCES vehiculo(idv)
 );
 
@@ -137,23 +137,23 @@ CREATE TABLE transporta (
 -- Tabla recibe
 CREATE TABLE recibe (
     idus INT,
-    id INT,
+    idenvio INT,
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
-    PRIMARY KEY (idus, id),
+    PRIMARY KEY (idus, idenvio),
     FOREIGN KEY (idus) REFERENCES cliente(idus),
-    FOREIGN KEY (id) REFERENCES compra(id)
+    FOREIGN KEY (idenvio) REFERENCES envio(idenvio)
 );
 
 -- Tabla retira
 CREATE TABLE retira (
     idus INT,
-    id INT,
+    idrecibo INT,
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
-    PRIMARY KEY (idus, id),
+    PRIMARY KEY (idus, idrecibo),
     FOREIGN KEY (idus) REFERENCES cliente(idus),
-    FOREIGN KEY (id) REFERENCES compra(id)
+    FOREIGN KEY (idrecibo) REFERENCES centrorecibo(idrecibo)
 );
 
 -- Tabla tiene
@@ -256,8 +256,7 @@ CREATE TABLE ofertas (
   preciooferta decimal(10,2) DEFAULT NULL,
   fecha_inicio date DEFAULT NULL,
   fecha_fin date DEFAULT NULL,
-  
-   FOREIGN KEY (sku) REFERENCES producto(sku)
+  FOREIGN KEY (sku) REFERENCES producto(sku)
 );
 
 -- Tabla historial_compra
@@ -284,7 +283,40 @@ CREATE TABLE venta (
     FOREIGN KEY (idemp) REFERENCES empresa(idemp)
 );
 
- 
+ -- Tabla detalle_recibo
+CREATE TABLE detalle_recibo (
+    idcompra INT PRIMARY KEY,
+    direccion VARCHAR(255) NOT NULL,
+    estado ENUM('Pendiente', 'Completado') DEFAULT 'Pendiente' NOT NULL,
+    FOREIGN KEY (idcompra) REFERENCES compra(idcompra)
+);
+
+-- Tabla detalle_envio
+CREATE TABLE detalle_envio (
+    idcompra INT PRIMARY KEY,
+    direccion VARCHAR(255) NOT NULL,
+    estado ENUM('Pendiente', 'Completado') DEFAULT 'Pendiente' NOT NULL,
+    FOREIGN KEY (idcompra) REFERENCES compra(idcompra)
+);
+
+-- Tabla maneja
+CREATE TABLE maneja (
+    idcompra INT,
+    idenvio INT,
+    PRIMARY KEY (idcompra, idenvio),
+    FOREIGN KEY (idcompra) REFERENCES detalle_envio(idcompra),
+    FOREIGN KEY (idenvio) REFERENCES envio(idenvio)
+);
+
+-- Tabla especifica
+CREATE TABLE especifica (
+    idcompra INT,
+    idrecibo INT,
+    PRIMARY KEY (idcompra, idrecibo),
+    FOREIGN KEY (idcompra) REFERENCES detalle_recibo(idcompra),
+    FOREIGN KEY (idrecibo) REFERENCES centrorecibo(idrecibo)
+);
+
 
 /* Valores para rellenar tablas */
 
@@ -305,7 +337,11 @@ INSERT INTO categoria (nombre, descripcion) VALUES
 
 INSERT INTO metodopago (proveedor) VALUES
 ('Tarjeta de Crédito'),
-('Tarjeta de Débito'),
 ('PayPal'),
-('Mercado Pago'),
-('Centros de Pago Local');
+
+INSERT INTO centrorecibo (nombre, telefono) VALUES 
+('Centro de Recibo - Tres Cruces', '+598 2901 1234'),
+('Centro de Recibo - Unión', '+598 2506 5678'),
+('Centro de Recibo - Portones Shopping', '+598 2604 9876'),
+('Centro de Recibo - Prado', '+598 2336 1122'),
+('Centro de Recibo - Ciudad Vieja', '+598 2915 4455');

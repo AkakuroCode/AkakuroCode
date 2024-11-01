@@ -10,8 +10,14 @@ if (!isset($_SESSION['idus'])) {
 }
 
 require_once __DIR__ . '/../controllers/MetodopagoController.php';
+require_once __DIR__ . '/../controllers/CentroReciboController.php';
+
 $metodoDePagoController = new MetodoDePagoController();
 $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
+$paypalActivo = in_array('PayPal', $metodos_pago);
+
+$centroReciboController = new CentroReciboController();
+$centros_recibo = $centroReciboController->obtenerCentrosDeRecibo();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -81,29 +87,17 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
                 </label>
             </div>
 
-            <!-- Opciones de Pick up -->
+            <!-- Opciones de Pick up dinámicas desde la tabla centrorecibo -->
             <div id="opciones-pickup" style="display: none; margin-top: 20px;">
                 <h5>Seleccionar ubicación de Pick up:</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ubicacion_pickup" id="pickup1" value="ubicacion1" required>
-                    <label class="form-check-label" for="pickup1">Ubicación 1 - Shopping Tres Cruces</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ubicacion_pickup" id="pickup2" value="ubicacion2" required>
-                    <label class="form-check-label" for="pickup2">Ubicación 2 - Unión</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ubicacion_pickup" id="pickup3" value="ubicacion3" required>
-                    <label class="form-check-label" for="pickup3">Ubicación 3 - Portones Shopping</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ubicacion_pickup" id="pickup4" value="ubicacion4" required>
-                    <label class="form-check-label" for="pickup4">Ubicación 4 - Prado</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ubicacion_pickup" id="pickup5" value="ubicacion5" required>
-                    <label class="form-check-label" for="pickup5">Ubicación 5 - Centro</label>
-                </div>
+                <?php foreach ($centros_recibo as $centro): ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ubicacion_pickup" id="pickup<?= $centro['idrecibo'] ?>" value="<?= $centro['idrecibo'] ?>" required>
+                        <label class="form-check-label" for="pickup<?= $centro['idrecibo'] ?>">
+                            <?= htmlspecialchars($centro['nombre']) ?> - Tel: <?= htmlspecialchars($centro['telefono']) ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
             </div>
 
             <!-- Formulario para Entrega a Domicilio -->
@@ -131,14 +125,13 @@ $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
             <!-- Opciones de Pago -->
             <div id="opciones-pago" style="display: none; margin-top: 20px;">
                 <h5>Seleccionar Método de Pago:</h5>
-                <?php foreach ($metodos_pago as $index => $metodo): ?>
-                <div class="form-check">
-                <div id="paypal-button-container"></div>
-                </div>
-                <?php endforeach; ?>
+                <?php $paypalActivo = in_array("PayPal", $metodos_pago);if ($paypalActivo): ?>
+            <div id="paypal-button-container"></div>
+                <?php else: ?>
+                <div class="alert alert-warning" role="alert">El método de pago con PayPal está deshabilitado en este momento.</div>
+                <?php endif; ?>
             </div>
 
-            </div>
         </form>
         </div>
     </div>
