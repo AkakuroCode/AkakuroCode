@@ -6,33 +6,6 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit5a18ca45ec68842e3b98fddf2286c729
 {
-    public static $prefixLengthsPsr4 = array (
-        'S' => 
-        array (
-            'Sample\\' => 7,
-        ),
-        'P' => 
-        array (
-            'PayPalHttp\\' => 11,
-            'PayPalCheckoutSdk\\' => 18,
-        ),
-    );
-
-    public static $prefixDirsPsr4 = array (
-        'Sample\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/samples',
-        ),
-        'PayPalHttp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/paypal/paypalhttp/lib/PayPalHttp',
-        ),
-        'PayPalCheckoutSdk\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/lib/PayPalCheckoutSdk',
-        ),
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -40,8 +13,6 @@ class ComposerStaticInit5a18ca45ec68842e3b98fddf2286c729
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5a18ca45ec68842e3b98fddf2286c729::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5a18ca45ec68842e3b98fddf2286c729::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit5a18ca45ec68842e3b98fddf2286c729::$classMap;
 
         }, null, ClassLoader::class);
