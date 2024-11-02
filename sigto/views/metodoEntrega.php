@@ -11,7 +11,7 @@ if (!isset($_SESSION['idus'])) {
 
 require_once __DIR__ . '/../controllers/MetodopagoController.php';
 require_once __DIR__ . '/../controllers/CentroReciboController.php';
-require_once __DIR__ . '/../controllers/VehiculoController.php';
+
 
 $metodoDePagoController = new MetodoDePagoController();
 $metodos_pago = $metodoDePagoController->obtenerMetodosDePagoActivos();
@@ -20,8 +20,7 @@ $paypalActivo = in_array('PayPal', $metodos_pago);
 $centroReciboController = new CentroReciboController();
 $centros_recibo = $centroReciboController->obtenerCentrosDeRecibo();
 
-$vehiculoController = new VehiculoController();
-$vehiculos = $vehiculoController->obtenerVehiculosDisponibles();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -76,13 +75,13 @@ $vehiculos = $vehiculoController->obtenerVehiculosDisponibles();
 
             <!-- Selección de Retiro en Pick up -->
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="metodo_entrega" id="pickUp" value="pick_up" required onclick="mostrarOpcionesEntrega()">
+                <input class="form-check-input" type="radio" name="metodo_entrega" id="pickUp" value="Recibo" required onclick="mostrarOpcionesEntrega()">
                 <label class="form-check-label" for="pickUp">Retiro en Pick up</label>
             </div>
 
             <!-- Selección de Entrega a Domicilio -->
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="metodo_entrega" id="domicilio" value="domicilio" required onclick="mostrarOpcionesEntrega()">
+                <input class="form-check-input" type="radio" name="metodo_entrega" id="domicilio" value="Envio" required onclick="mostrarOpcionesEntrega()">
                 <label class="form-check-label" for="domicilio">Entrega a Domicilio</label>
             </div>
 
@@ -115,20 +114,6 @@ $vehiculos = $vehiculoController->obtenerVehiculosDisponibles();
                     <input type="text" class="form-control" id="esquina" name="direccion[esquina]">
                 </div>
             </div>
-
-            <!-- Select de Vehículos -->
-            <div id="vehiculo-container" style="display: none;">
-                <label for="vehiculo">Seleccione un Vehículo:</label>
-                <select class="form-select" id="vehiculo" name="vehiculo" required>
-                    <option value="">Seleccione un vehículo...</option>
-                    <?php foreach ($vehiculos as $vehiculo): ?>
-                        <option value="<?= $vehiculo['idv'] ?>">
-                            <?= $vehiculo['marca'] . ' ' . $vehiculo['modelo'] . ' - Capacidad: ' . $vehiculo['capacidad'] . 'kg' ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
             <!-- Botón Continuar -->
             <button type="button" id="boton-continuar" class="btn btn-primary mt-3" style="display: none;" onclick="validarCampos()">Continuar</button><br>
 

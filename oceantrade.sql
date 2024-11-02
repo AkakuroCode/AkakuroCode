@@ -19,11 +19,10 @@ CREATE TABLE cliente (
 CREATE TABLE carrito (
     idcarrito INT AUTO_INCREMENT PRIMARY KEY,
     idus INT UNIQUE NOT NULL,
-    sku INT UNIQUE NOT NULL,
     fechacrea DATE NOT NULL,
     fechamod DATE NOT NULL CHECK (fechamod >= fechacrea),
-    total INT(5) NOT NULL CHECK (total >= 0),
-    cantidad TINYINT(2) NOT NULL CHECK (cantidad >= 0),
+    estado ENUM('Activo', 'Inactivo') DEFAULT 'Activo',
+    total DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (idus) REFERENCES cliente(idus)
 );
 
@@ -72,15 +71,14 @@ CREATE TABLE compra (
     FOREIGN KEY (idpago) REFERENCES metodopago(idpago)
 );
 
--- Tabla vehiculo
-CREATE TABLE vehiculo (
-    idv INT AUTO_INCREMENT PRIMARY KEY,
-    capacidad INT(6) NOT NULL CHECK (capacidad > 0),
-    modelo VARCHAR(20) NOT NULL,
-    tipo ENUM('electrico', 'hibrido', 'termico') NOT NULL,
-    marca VARCHAR(20) NOT NULL,
-    estado ENUM('disponible', 'mantenimiento', 'uso') DEFAULT 'disponible',
-    hcarbono INT(6) DEFAULT 0 CHECK (hcarbono >= 0)
+-- Tabla detalle_carrito
+CREATE TABLE detalle_carrito (
+    iddetalle INT AUTO_INCREMENT PRIMARY KEY,
+    idcarrito INT NOT NULL,
+    sku INT NOT NULL,
+    cantidad INT NOT NULL,
+    FOREIGN KEY (idcarrito) REFERENCES carrito(idcarrito),
+    FOREIGN KEY (sku) REFERENCES producto(sku)
 );
 
 -- Tabla pagina
@@ -92,7 +90,6 @@ CREATE TABLE pagina (
 -- Tabla envio
 CREATE TABLE envio (
     idenvio INT AUTO_INCREMENT PRIMARY KEY,
-    idv INT UNIQUE NOT NULL,
     fecsa DATE NOT NULL,
     fecen DATE NOT NULL CHECK (fecen >= fecsa),
     FOREIGN KEY (idv) REFERENCES vehiculo(idv)
@@ -122,16 +119,6 @@ CREATE TABLE cierra (
     FOREIGN KEY (idpago) REFERENCES metodopago(idpago),
     FOREIGN KEY (idcarrito) REFERENCES carrito(idcarrito)
 );
-
--- Tabla transporta
-CREATE TABLE transporta (
-    idenvio INT,
-    idv INT,
-    PRIMARY KEY (idenvio, idv),
-    FOREIGN KEY (idenvio) REFERENCES envio(idenvio),
-    FOREIGN KEY (idv) REFERENCES vehiculo(idv)
-);
-
 
 
 -- Tabla recibe
@@ -286,8 +273,8 @@ CREATE TABLE venta (
  -- Tabla detalle_recibo
 CREATE TABLE detalle_recibo (
     idcompra INT PRIMARY KEY,
-    direccion VARCHAR(255) NOT NULL,
     estado ENUM('Pendiente', 'Completado') DEFAULT 'Pendiente' NOT NULL,
+    total_compra DECIMAL(10,2),
     FOREIGN KEY (idcompra) REFERENCES compra(idcompra)
 );
 
@@ -296,6 +283,7 @@ CREATE TABLE detalle_envio (
     idcompra INT PRIMARY KEY,
     direccion VARCHAR(255) NOT NULL,
     estado ENUM('Pendiente', 'Completado') DEFAULT 'Pendiente' NOT NULL,
+    total_compra DECIMAL(10,2),
     FOREIGN KEY (idcompra) REFERENCES compra(idcompra)
 );
 
@@ -346,9 +334,3 @@ INSERT INTO centrorecibo (nombre, telefono) VALUES
 ('Centro de Recibo - Prado', '+598 2336 1122'),
 ('Centro de Recibo - Ciudad Vieja', '+598 2915 4455');
 
-
-INSERT INTO vehiculo (capacidad, modelo, tipo, marca, estado, hcarbono) VALUES 
-(2000, 'F-150', 'hibrido', 'Ford', 'disponible', 120.50),
-(1500, 'Model X', 'electrico', 'Tesla', 'disponible', 0.00),
-(2500, 'Sprinter', 'termico', 'Mercedes-Benz', 'disponible', 200.75),
-(1000, 'Leaf', 'electrico', 'Nissan', 'disponible', 0.00);
