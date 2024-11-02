@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
                 alert('Pago completado por ' + details.payer.name.given_name);
-                fetch('/sigto/controllers/OrderController.php', {
+                fetch('/sigto/controllers/CompraController.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
