@@ -83,19 +83,21 @@ class Compra {
         return $stmt->execute();
     }
 
-    //Relacional en la tabla cierra
-    public function registrarCierre($idPago, $idCarrito) {
-        $sql = "INSERT INTO cierra (idpago, idcarrito) VALUES (?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $idPago, $idCarrito);
-        return $stmt->execute();
+   // Función para registrar en la tabla "cierra"
+    public function registrarCierre($idpago, $idcarrito) {
+    $query = "INSERT INTO cierra (idpago, idcarrito) VALUES (?, ?)";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("ii", $idpago, $idcarrito);
+    return $stmt->execute();
     }
-    
-    public function actualizarEstadoCarrito($idCarrito) {
-        $sql = "UPDATE carrito SET estado = 'Inactivo' WHERE idcarrito = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $idCarrito);
-        return $stmt->execute();
+
+    // Función para eliminar los productos del carrito
+    public function eliminarProductosDelCarrito($idcarrito) {
+    $query = "DELETE FROM detalle_carrito WHERE idcarrito = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("i", $idcarrito);
+    return $stmt->execute();
     }
+
     
 }

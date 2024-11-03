@@ -127,14 +127,16 @@ class CompraController {
         return;
         }
         echo json_encode(["success" => true, "message" => "Registro en tabla cierra exitoso."]);
-        // Actualizar el estado del carrito después de registrar la orden
-        $resultadoActualizarEstado = $this->compraModel->actualizarEstadoCarrito($idCarrito);
-            if (!$resultadoActualizarEstado) {
-                http_response_code(500);
-                echo json_encode(["success" => false, "message" => "Error al actualizar el estado del carrito."]);
-            return;
+
+        // Eliminar los productos del carrito después de registrar la orden
+        $resultadoEliminarProductos = $this->compraModel->eliminarProductosDelCarrito($idCarrito);
+        if (!$resultadoEliminarProductos) {
+            http_response_code(500);
+        echo json_encode(["success" => false, "message" => "Error al eliminar los productos del carrito."]);
+        return;
         }
-        echo json_encode(["success" => true, "message" => "Estado del carrito actualizado exitosamente."]);
+        echo json_encode(["success" => true, "message" => "Productos del carrito eliminados exitosamente."]);
+
     }
 }
 
