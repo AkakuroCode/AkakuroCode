@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ .'/controllers/RestoreController.php';
+require_once __DIR__ .'/../controllers/RestoreController.php';
 
 // Verificar que se pase el archivo de respaldo como argumento al script
 if (isset($argv[1])) {
