@@ -1,7 +1,7 @@
 <?php
-require_once 'models/Database.php';
-require_once 'models/Backup.php';
-require_once 'models/Restore.php';
+require_once __DIR__ .'/../models/Database.php';
+require_once __DIR__ .'/../models/Backup.php';
+require_once __DIR__ .'/../models/Restore.php';
 
 class RestoreController {
     public function restoreBackup($filePath) {

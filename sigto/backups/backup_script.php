@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ .'/controllers/BackupController.php';
+require_once __DIR__ .'/../controllers/BackupController.php';
 
 // Crear una instancia del controlador
 $backupController = new BackupController();
