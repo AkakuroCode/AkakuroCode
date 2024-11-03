@@ -12,21 +12,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     paypal.Buttons({
         createOrder: async function(data, actions) {
-            const totalCarrito = await obtenerTotalCarrito(); // Obtenemos el total desde el servidor
+            const totalCarrito = await obtenerTotalCarrito();
+            console.log('Total del carrito para PayPal:', totalCarrito);
             
             if (totalCarrito === '0.00') {
                 alert("Error: El total del carrito es 0. No se puede procesar el pago.");
-                return; // Evita continuar si el total es 0
+                return;
             }
-
+        
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: totalCarrito // Usa el total dinámico
+                        value: totalCarrito
                     }
                 }]
+            }).catch(err => {
+                console.error('Error al crear la orden en PayPal:', err);
+                throw err;
             });
-        },
+        }
+        ,
         onApprove: async function(data, actions) {
             const totalCarrito = await obtenerTotalCarrito(); // Obtenemos el total del servidor para enviar al backend
 

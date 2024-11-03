@@ -316,20 +316,25 @@ switch ($action) {
             
             
         
-    case 'obtener_total_carrito':
-        if (isset($_POST['sku'], $_POST['cantidad'], $_SESSION['idus'])) {
-            $sku = (int)$_POST['sku'];
-            $cantidad = (int)$_POST['cantidad']; // Asegúrate de recibir la cantidad desde el formulario/solicitud
-            $idus = (int)$_SESSION['idus'];
-        
-            $idcarrito = $carritoController->getActiveCartIdByUser($idus); // Obtén el idcarrito activo
-            $resultado = $carritoController->removeItem($idus, $sku, $cantidad); // Pasa los tres argumentos
-        
-                echo json_encode(['total' => number_format($totalCarrito, 2, '.', '')]);
-            } else {
-                echo json_encode(['total' => '0.00']);
-            }
-            exit;
+            case 'obtener_total_carrito':
+                if (isset($_SESSION['idus'])) {
+                    $idus = (int)$_SESSION['idus'];
+            
+                    // Obtén el idcarrito activo
+                    $idcarrito = $carritoController->getActiveCartIdByUser($idus);
+            
+                    if ($idcarrito !== null) {
+                        // Calcula el total del carrito
+                        $totalCarrito = $carritoController->getTotalByUser($idus);
+                        echo json_encode(['total' => number_format($totalCarrito, 2, '.', '')]);
+                    } else {
+                        echo json_encode(['total' => '0.00']);
+                    }
+                } else {
+                    echo json_encode(['total' => '0.00']);
+                }
+                exit;
+            
                 
 
 
