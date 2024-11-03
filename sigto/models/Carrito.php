@@ -101,7 +101,7 @@ public function updateQuantity($idcarrito, $sku, $cantidad) {
     }
 }
 
-public function getSubtotalByUserAndSku($sku) {
+public function getSubtotalByUserAndSku($idus, $sku) {
     $query = "SELECT 
                  (dc.cantidad * IFNULL(
                      IF(
@@ -109,19 +109,21 @@ public function getSubtotalByUserAndSku($sku) {
                          AND NOW() BETWEEN o.fecha_inicio AND o.fecha_fin, 
                          o.preciooferta, 
                          p.precio
-                     ), 0)
+                     ), p.precio)  -- Usa p.precio como valor por defecto en caso de que todo falle
                  ) AS subtotal
               FROM detalle_carrito dc
               INNER JOIN producto p ON dc.sku = p.sku
               LEFT JOIN ofertas o ON p.sku = o.sku
-              WHERE dc.sku = ?";
+              INNER JOIN carrito c ON dc.idcarrito = c.idcarrito
+              WHERE c.idus = ? AND dc.sku = ?";
 
     $stmt = $this->conn->prepare($query);
-    $stmt->bind_param("i", $sku);
+    $stmt->bind_param("ii", $idus, $sku);
     $stmt->execute();
     $result = $stmt->get_result()->fetch_assoc();
     return $result ? $result['subtotal'] : 0;
 }
+
 
 
 
@@ -147,41 +149,20 @@ public function recalcularTotalCarrito($idcarrito) {
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
 
-    return $row['total'] ?? 0; // Retornar el total calculado
+    return $row && $row['total'] !== null ? $row['total'] : 0; // Retornar 0 si el carrito está vacío
+
 }
 
 
-// Método para eliminar un producto del carrito y actualizar el total
+// Método para eliminar un producto o reducir su cantidad en detalle_carrito
 public function removeItem($idcarrito, $sku) {
-    $query = "DELETE FROM " . $this->detalle_table . " WHERE idcarrito = ? AND sku = ?";
-    $stmt = $this->conn->prepare($query);
-
-    if (!$stmt) {
-        echo "Error en la preparación de la consulta: " . $this->conn->error;
-        return false;
-    }
-
-    $stmt->bind_param("ii", $idcarrito, $sku);
-
-    if ($stmt->execute()) {
-        // Calcular el nuevo total del carrito después de eliminar un producto
-        $totalCarrito = $this->recalcularTotalCarrito($idcarrito);
-
-        // Actualizar el total en la tabla `carrito`
-        $queryUpdateTotal = "UPDATE " . $this->carrito_table . " SET total = ? WHERE idcarrito = ?";
-        $stmtUpdateTotal = $this->conn->prepare($queryUpdateTotal);
-
-        if (!$stmtUpdateTotal) {
-            echo "Error en la preparación de la consulta para actualizar el total: " . $this->conn->error;
-            return false;
-        }
-
-        $stmtUpdateTotal->bind_param("di", $totalCarrito, $idcarrito);
-        return $stmtUpdateTotal->execute();
-    } else {
-        return false;
-    }
+    $queryDelete = "DELETE FROM " . $this->detalle_table . " WHERE idcarrito = ? AND sku = ?";
+    $stmtDelete = $this->conn->prepare($queryDelete);
+    $stmtDelete->bind_param("ii", $idcarrito, $sku);
+    return $stmtDelete->execute();
 }
+
+
 
 public function getItemByUserAndSku($idus, $sku) {
     $query = "SELECT * FROM " . $this->detalle_table . " 
@@ -199,6 +180,17 @@ public function getItemByUserAndSku($idus, $sku) {
     $result = $stmt->get_result();
 
     return $result->fetch_assoc();
+}
+
+public function getCantidadProducto($idcarrito, $sku) {
+    $query = "SELECT cantidad FROM " . $this->detalle_table . " WHERE idcarrito = ? AND sku = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bind_param("ii", $idcarrito, $sku);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    return $row ? $row['cantidad'] : 0;
 }
 
     // Método para obtener el idcarrito activo de un usuario

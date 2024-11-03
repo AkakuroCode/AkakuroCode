@@ -72,8 +72,9 @@ public function calcularSubtotal($idus, $sku) {
 }
 
 public function removeItem($idus, $sku) {
-        $idcarrito = $this->carrito->getActiveCartIdByUser($idus);
-        return $this->carrito->removeItem($idcarrito, $sku);
-    }
-    
+    $idcarrito = $this->carrito->getActiveCartIdByUser($idus);
+    return $this->carrito->removeItem($idcarrito, $sku);
+}
+
+
 }

@@ -295,30 +295,36 @@ switch ($action) {
         
         
     
-            case 'delete_from_cart':
+        case 'delete_from_cart':
                 if (isset($_POST['sku']) && isset($_SESSION['idus'])) {
                     $sku = (int)$_POST['sku'];
                     $idus = (int)$_SESSION['idus'];
-                    $idcarrito = $carritoController->getActiveCartIdByUser($idus); // Obtén el idcarrito activo
-                    $resultado = $carritoController->removeItem($idcarrito, $sku);
+            
+                    $resultado = $carritoController->removeItem($idus, $sku);
             
                     if ($resultado) {
-                        // Recalcular el total del carrito después de eliminar un producto
-                        $totalCarrito = $carritoController->getTotalByUser($idus);
-                        echo json_encode(['success' => true, 'totalCarrito' => number_format($totalCarrito, 2)]);
+                        echo json_encode(['success' => true]);
                     } else {
                         echo json_encode(['success' => false, 'message' => 'No se pudo eliminar el producto.']);
                     }
                 } else {
                     echo json_encode(['success' => false, 'message' => 'Datos faltantes para eliminar el producto.']);
                 }
-                exit;
+            exit;
+            
+            
+            
             
         
     case 'obtener_total_carrito':
-            if (isset($_SESSION['idus'])) {
-                $idus = $_SESSION['idus'];
-                $totalCarrito = $carritoController->getTotalByUser($idus);
+        if (isset($_POST['sku'], $_POST['cantidad'], $_SESSION['idus'])) {
+            $sku = (int)$_POST['sku'];
+            $cantidad = (int)$_POST['cantidad']; // Asegúrate de recibir la cantidad desde el formulario/solicitud
+            $idus = (int)$_SESSION['idus'];
+        
+            $idcarrito = $carritoController->getActiveCartIdByUser($idus); // Obtén el idcarrito activo
+            $resultado = $carritoController->removeItem($idus, $sku, $cantidad); // Pasa los tres argumentos
+        
                 echo json_encode(['total' => number_format($totalCarrito, 2, '.', '')]);
             } else {
                 echo json_encode(['total' => '0.00']);
