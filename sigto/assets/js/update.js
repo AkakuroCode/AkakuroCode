@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const updateButtons = document.querySelectorAll('.btn-secondary');
-    const deleteButtons = document.querySelectorAll('.btn-danger');
+    const updateButtons = document.querySelectorAll('.btn-actualizar');
+    const deleteButtons = document.querySelectorAll('.btn-eliminar');
 
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -23,7 +23,7 @@ async function updateQuantity(button) {
     const idus = form.dataset.idus;
 
     try {
-        const response = await fetch('index.php?action=update_quantity', {
+        const response = await fetch('/sigto/index.php?action=update_quantity', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -35,31 +35,40 @@ async function updateQuantity(button) {
             })
         });
 
-        const result = await response.json();
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+
+        const rawResponse = await response.text(); // Verifica la respuesta cruda
+        console.log(rawResponse); // Imprime la respuesta cruda
+
+        const result = JSON.parse(rawResponse); // Parsear manualmente a JSON
 
         if (result.status === 'success') {
-            const itemTotalElement = form.closest('.list-group-item').querySelector('.item-total');
+            const cantidadInput = form.querySelector('.cantidad-input');
+            cantidadInput.value = cantidad; // Actualiza el valor en el input
+            // Actualizar elementos en la vista con el formato adecuado
+            const itemTotalElement = document.getElementById(`item-total-${sku}`);
             if (itemTotalElement) {
-                itemTotalElement.textContent = `${result.subtotal}`;
-            }
-
-            const cantidadElement = document.getElementById(`cantidad-${sku}`);
-            if (cantidadElement) {
-                cantidadElement.textContent = `Cantidad: ${cantidad}`;
+                itemTotalElement.textContent = `${result.subtotal}`; 
             }
 
             const totalElement = document.getElementById('total');
             if (totalElement) {
-                totalElement.textContent = `${result.totalCarrito}`;
+                totalElement.textContent = `${result.totalCarrito}`; 
             }
         } else {
             alert(result.message || 'Error al actualizar la cantidad');
         }
+
     } catch (error) {
         console.error('Error al actualizar la cantidad:', error);
         alert('Hubo un problema al actualizar la cantidad.');
     }
 }
+
+
+
 
 // Función para eliminar un producto del carrito
 function deleteItem(button) {
@@ -100,7 +109,6 @@ function deleteItem(button) {
     });
 }
 
-
 function updateTotal() {
     let total = 0;
     document.querySelectorAll('.item-total').forEach(item => {
@@ -108,8 +116,6 @@ function updateTotal() {
     });
 
     totalCarrito = total; // Actualiza la variable global totalCarrito
-    document.getElementById('total').textContent = `US$${totalCarrito.toFixed(2)}`;
+    document.getElementById('total').textContent = `${totalCarrito.toFixed(2)}`;
     document.getElementById('total-carrito').value = totalCarrito.toFixed(2); // Actualiza el input oculto
 }
-
-

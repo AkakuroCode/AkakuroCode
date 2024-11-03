@@ -259,61 +259,61 @@ switch ($action) {
             header('Location: ?action=login');
         }
         break;
-    // Case para actualizar la cantidad de un producto en el carrito
-    case 'update_quantity':
-        header('Content-Type: application/json'); // Asegúrate de que la respuesta sea JSON
-    
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idus'], $_POST['sku'], $_POST['cantidad'])) {
-            $idus = (int)$_POST['idus'];
-            $sku = (int)$_POST['sku'];
-            $cantidad = (int)$_POST['cantidad'];
-    
-            if ($cantidad > 0) {
-                $result = $carritoController->updateQuantity($idus, $sku, $cantidad);
-                if ($result) {
-                    // Calcula el nuevo subtotal y total del carrito después de actualizar
-                    $items = $carritoController->getItemsByUser($idus);
-                    $subtotal = 0;
-                    $totalCarrito = 0;
-                    foreach ($items as $item) {
-                        if ($item['sku'] == $sku) {
-                            $subtotal = $item['precio_actual'] * $cantidad;
-                        }
-                        $totalCarrito += $item['subtotal'];
-                    }
-    
-                    echo json_encode([
+        case 'update_quantity':
+            header('Content-Type: application/json');
+        
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idus'], $_POST['sku'], $_POST['cantidad'])) {
+                $idus = (int)$_POST['idus'];
+                $sku = (int)$_POST['sku'];
+                $cantidad = (int)$_POST['cantidad'];
+        
+                if ($cantidad > 0) {
+                    $result = $carritoController->updateQuantity($idus, $sku, $cantidad);
+        
+                    if ($result) {
+                        // Verifica que el subtotal se esté calculando correctamente
+                        $subtotal = isset($result['subtotal']) ? $result['subtotal'] : $carritoController->calcularSubtotal($idus, $sku);
+                        $totalCarrito = $carritoController->getTotalByUser($idus);
+
+                        echo json_encode([
                         'status' => 'success',
                         'subtotal' => number_format($subtotal, 2),
                         'totalCarrito' => number_format($totalCarrito, 2)
-                    ]);
+                        ]);
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'No se pudo actualizar la cantidad.']);
+                    }
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'No se pudo actualizar la cantidad.']);
+                    echo json_encode(['status' => 'error', 'message' => 'La cantidad debe ser mayor a cero.']);
                 }
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'La cantidad debe ser mayor a cero.']);
+                echo json_encode(['status' => 'error', 'message' => 'Datos incompletos.']);
             }
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Datos incompletos.']);
-        }
-        exit;
+            exit;
+        
+        
+        
+        
     
-    // Case para eliminar un producto del carrito
-    case 'delete_from_cart':
-        if (isset($_POST['sku']) && isset($_SESSION['idus'])) {
-            $sku = (int)$_POST['sku'];
-            $idus = (int)$_SESSION['idus'];
-            $resultado = $carritoController->removeItem($idus, $sku);
-    
-            if ($resultado) {
-                echo json_encode(['success' => true]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'No se pudo eliminar el producto.']);
-            }
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Datos faltantes para eliminar el producto.']);
-        }
-        exit;
+            case 'delete_from_cart':
+                if (isset($_POST['sku']) && isset($_SESSION['idus'])) {
+                    $sku = (int)$_POST['sku'];
+                    $idus = (int)$_SESSION['idus'];
+                    $idcarrito = $carritoController->getActiveCartIdByUser($idus); // Obtén el idcarrito activo
+                    $resultado = $carritoController->removeItem($idcarrito, $sku);
+            
+                    if ($resultado) {
+                        // Recalcular el total del carrito después de eliminar un producto
+                        $totalCarrito = $carritoController->getTotalByUser($idus);
+                        echo json_encode(['success' => true, 'totalCarrito' => number_format($totalCarrito, 2)]);
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'No se pudo eliminar el producto.']);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Datos faltantes para eliminar el producto.']);
+                }
+                exit;
+            
         
     case 'obtener_total_carrito':
             if (isset($_SESSION['idus'])) {
