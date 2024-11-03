@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../controllers/UsuarioController.php';
 require_once __DIR__ . '/../controllers/EmpresaController.php';
+require_once __DIR__ . '/../controllers/CategoriaController.php';
 
 // Instancia del controlador de usuario
 $usuarioController = new UsuarioController();
@@ -9,6 +10,48 @@ $usuarios = $usuarioController->readAll(); // Obtener todos los usuarios
 // Instancia del controlador de empresa
 $empresaController = new EmpresaController();
 $empresas = $empresaController->readAll(); // Obtener todas las empresas
+
+// Instancia del controlador de categorías
+$categoriaController = new CategoriaController();
+$categorias = $categoriaController->getAllCategorias(); // Obtener todas las categorías
+
+// Manejar la solicitud de agregar una nueva categoría
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category-name'], $_POST['category-description'])) {
+    $nombre = $_POST['category-name'];
+    $descripcion = $_POST['category-description'];
+
+    if ($categoriaController->addCategoria($nombre, $descripcion)) {
+        echo "<script>alert('Categoría agregada con éxito.');</script>";
+    } else {
+        echo "<script>alert('Error al agregar la categoría.');</script>";
+    }
+}
+
+// Manejar la solicitud de actualización de categoría
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update-category-id'], $_POST['update-category-name'], $_POST['update-category-description'])) {
+    $id = $_POST['update-category-id'];
+    $nombre = $_POST['update-category-name'];
+    $descripcion = $_POST['update-category-description'];
+
+    if ($categoriaController->updateCategoria($id, $nombre, $descripcion)) {
+        echo "<script>alert('Categoría actualizada con éxito.');</script>";
+    } else {
+        echo "<script>alert('Error al actualizar la categoría.');</script>";
+    }
+}
+
+// Manejar la solicitud de eliminación de categoría
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])) {
+    $id = $_POST['delete-category-id'];
+
+    if ($categoriaController->deleteCategoria($id)) {
+        echo "<script>alert('Categoría borrada con éxito.');</script>";
+    } else {
+        echo "<script>alert('Error al borrar la categoría.');</script>";
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +82,77 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
     </script>
 </head>
 <body>
+<nav class="navbar">
+    <ul class="nav-menu">
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link">Categorías</a>
+            <div class="dropdown-content">
+                <button class="dropdown-btn" onclick="showBox('add-box')">Agregar</button>
+                <button class="dropdown-btn" onclick="showBox('update-box')">Actualizar</button>
+                <button class="dropdown-btn" onclick="showBox('delete-box')">Borrar</button>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<!-- Cuadros de diálogo para cada acción -->
+<div id="add-box" class="action-box" style="display: none;">
+    <h2>Agregar Categoría</h2>
+    <button class="close-btn" onclick="closeBox('add-box')">&times;</button>
+    <form id="add-category-form" method="POST" action="">
+        <label for="category-name">Nombre:</label>
+        <input type="text" id="category-name" name="category-name" required><br><br>
+
+        <label for="category-description">Descripción (máximo 255 caracteres):</label>
+        <textarea id="category-description" name="category-description" maxlength="255" required></textarea><br><br>
+
+        <button type="submit">Agregar Categoría</button>
+    </form>
+</div>
+
+
+<div id="update-box" class="action-box" style="display: none;">
+    <h2>Actualizar Categoría</h2>
+    <form id="update-category-form" method="POST" action="">
+        <label for="update-category-id">ID de la Categoría:</label>
+        <select id="update-category-id" name="update-category-id" required>
+            <option value="">Seleccionar categoría</option>
+            <?php foreach ($categorias as $categoria): ?>
+                <option value="<?php echo htmlspecialchars($categoria['idcat']); ?>">
+                    <?php echo htmlspecialchars($categoria['nombre']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select><br><br>
+
+        <label for="update-category-name">Nuevo Nombre:</label>
+        <input type="text" id="update-category-name" name="update-category-name" required><br><br>
+
+        <label for="update-category-description">Nueva Descripción:</label>
+        <textarea id="update-category-description" name="update-category-description" maxlength="255" required></textarea><br><br>
+
+        <button type="submit">Actualizar Categoría</button>
+    </form>
+</div>
+
+
+
+<div id="delete-box" class="action-box" style="display: none;">
+    <h2>Borrar Categoría</h2>
+    <form id="delete-category-form" method="POST" action="">
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" name="delete-category-id" required>
+            <option value="">Seleccionar categoría</option>
+            <?php foreach ($categorias as $categoria): ?>
+                <option value="<?php echo htmlspecialchars($categoria['idcat']); ?>">
+                    <?php echo htmlspecialchars($categoria['nombre']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select><br><br>
+
+        <button type="submit">Borrar Categoría</button>
+    </form>
+</div>
+
 <div class="panel-gestion">
     <h1>Lista de Usuarios</h1>
     
@@ -247,7 +361,23 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
     
 </script>
 
+
+<script>
+    function showBox(boxId) {
+        const boxes = document.querySelectorAll('.action-box');
+        boxes.forEach(box => box.style.display = 'none');
+        document.getElementById(boxId).style.display = 'block';
+    }
+</script>
+
+<script>
+    function closeBox(boxId) {
+        document.getElementById(boxId).style.display = 'none';
+    }
+</script>
+
 <script src="/sigto/assets/js/admin.js"></script>
+
 
 </body>
 </html>

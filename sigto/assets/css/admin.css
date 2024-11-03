@@ -1,3 +1,71 @@
+.navbar {
+    background-color: #333;
+    padding: 10px;
+}
+
+.nav-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-item {
+    margin-right: 20px;
+    position: relative;
+}
+
+.nav-link {
+    color: rgb(252, 252, 252);
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    padding: 10px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #0267FF;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.dropdown-btn {
+    background-color: #068bf1;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 5px;
+    width: 100%;
+}
+.action-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
 .panel-gestion {
     padding: 20px;
     background-color: #f9f9f9;
@@ -25,18 +93,6 @@ th {
     background-color: #f2f2f2;
 }
 
-.edit-btn, .delete-btn, .view-logins-btn {
-    background-color: #0267FF;
-    color: white;
-    border: none;
-    padding: 7px 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: bold;
-    margin-right: 10px; /* Añadir espacio entre los botones */
-    display: inline-block;
-}
 
 .edit-btn:hover, .view-logins-btn:hover {
     background-color: #024C9F;
@@ -63,9 +119,7 @@ th {
     text-align: center;
 }
 
-#eliminar {
-    background-color: #FF0026;
-}
+
 
 #logout {
     text-decoration: none;
