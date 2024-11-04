@@ -115,9 +115,6 @@ class CompraController {
             return;
         }
         
-        // Confirmar la transacción
-        $this->compraModel->commit();
-        echo json_encode(["success" => true, "message" => "Orden registrada exitosamente."]);
 
         // Registrar en la tabla cierra
         $resultadoCierra = $this->compraModel->registrarCierre($idPago, $idCarrito);
@@ -128,14 +125,26 @@ class CompraController {
         }
         echo json_encode(["success" => true, "message" => "Registro en tabla cierra exitoso."]);
 
-        // Eliminar los productos del carrito después de registrar la orden
-        $resultadoEliminarProductos = $this->compraModel->eliminarProductosDelCarrito($idCarrito);
+        // Eliminar los productos del carrito
+        $resultadoEliminarProductos = $this->carritoController->removeAllItems($idCarrito);
         if (!$resultadoEliminarProductos) {
             http_response_code(500);
         echo json_encode(["success" => false, "message" => "Error al eliminar los productos del carrito."]);
         return;
         }
         echo json_encode(["success" => true, "message" => "Productos del carrito eliminados exitosamente."]);
+
+        // Confirmar la transacción al final, después de todas las operaciones exitosas
+        if ($resultadoCierra && $resultadoEliminarProductos) {
+            $this->compraModel->commit();
+            echo json_encode(["success" => true, "message" => "Orden registrada y carrito cerrado exitosamente."]);
+        } else {
+        // Si algo falla, puedes hacer rollback
+            $this->compraModel->rollback();
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error en el cierre de la compra."]);
+        return;
+        }
 
     }
 }

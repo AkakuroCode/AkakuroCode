@@ -172,6 +172,18 @@ public function removeItem($idcarrito, $sku) {
     return $stmtDelete->execute();
 }
 
+public function removeAllItems($idcarrito) {
+    $query = "DELETE FROM detalle_carrito WHERE idcarrito = ?";
+    $stmt = $this->conn->prepare($query);
+
+    if (!$stmt) {
+        echo "Error en la preparación de la consulta: " . $this->conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("i", $idcarrito);
+    return $stmt->execute();
+}
 
 
 public function getItemByUserAndSku($idus, $sku) {
@@ -288,6 +300,23 @@ public function getCantidadProducto($idcarrito, $sku) {
         $row = $result->fetch_assoc();
     
         return $row ? $row['total'] : 0; // Retorna el total o 0 si no se encuentra
+    }
+    
+    public function obtenerIdCarrito($idus) {
+        $query = "SELECT idcarrito FROM " . $this->carrito_table . " WHERE idus = ? AND estado = 'Activo' LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return null;
+        }
+    
+        $stmt->bind_param("i", $idus);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+    
+        return $row ? $row['idcarrito'] : null; // Devuelve el idcarrito si se encuentra, o null si no existe
     }
     
 }

@@ -147,7 +147,7 @@ function updateTotal() {
 
         const totalElement = document.getElementById('total');
         if (totalElement) {
-            totalElement.textContent = `US$${totalCarrito.toFixed(2)}`;
+            totalElement.textContent = `${totalCarrito.toFixed(2)}`;
         }
 
         const totalInputElement = document.getElementById('total-carrito');

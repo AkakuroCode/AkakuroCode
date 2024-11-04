@@ -88,6 +88,30 @@ public function removeItem($idus, $sku) {
     return $result;
 }
 
+public function removeAllItems($idcarrito) {
+    $resultado = $this->carrito->removeAllItems($idcarrito);
 
+    if (!$resultado) {
+        echo "Error al eliminar los productos del carrito.";
+        return false;
+    }
+
+    // Recalcular el total del carrito después de eliminar los productos
+    $this->carrito->recalcularTotalCarrito($idcarrito);
+
+    return true;
+}
+
+
+public function obtenerIdCarrito($idus) {
+    $idCarrito = $this->carrito->obtenerIdCarrito($idus);
+
+    if (!$idCarrito) {
+        echo "No se pudo obtener el ID del carrito.";
+        return null;
+    }
+
+    return $idCarrito;
+}
 
 }
