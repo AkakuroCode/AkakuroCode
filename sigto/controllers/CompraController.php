@@ -125,6 +125,44 @@ class CompraController {
         }
         echo json_encode(["success" => true, "message" => "Registro en tabla cierra exitoso."]);
 
+
+        // Paso: Crear el registro en historial_compra
+        $resultadoHistorialCompra = $this->compraModel->registrarEnHistorialCompra($idUsuario, date('Y-m-d'), $totalCompra, $stock);
+        if (!$resultadoHistorialCompra) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al registrar en la tabla historial_compra."]);
+        return;
+        }
+
+        
+        // Obtener el ID del historial de compra recién creado
+        $idhistorial = $this->compraModel->obtenerIdHistorialReciente($idUsuario);
+
+        if (!$idhistorial) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al obtener el ID del historial de compra."]);
+        return;
+        }
+
+        // Registrar cada producto del carrito en 'detalle_historial'
+        $productos = $this->carritoController->obtenerProductosDelCarrito($idCarrito);
+        if ($productos) {
+            foreach ($productos as $producto) {
+            $sku = $producto['sku'];
+            $codigoUnidad = $producto['codigo_unidad']; // Puede ser NULL
+            $estado = 'Completado'; // O el estado correspondiente
+
+            $resultadoDetalleHistorial = $this->compraModel->registrarDetalleHistorial($idhistorial, $sku, $estado, $codigoUnidad);
+            if (!$resultadoDetalleHistorial) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_historial."]);
+            return;
+            }
+            }
+        }
+
+        echo json_encode(["success" => true, "message" => "Compra procesada y detalles registrados exitosamente."]);
+
         // Eliminar los productos del carrito
         $resultadoEliminarProductos = $this->carritoController->removeAllItems($idCarrito);
         if (!$resultadoEliminarProductos) {

@@ -319,4 +319,24 @@ public function getCantidadProducto($idcarrito, $sku) {
         return $row ? $row['idcarrito'] : null; // Devuelve el idcarrito si se encuentra, o null si no existe
     }
     
+
+    public function obtenerProductosDelCarrito($idCarrito) {
+        $query = "SELECT d.sku, pu.codigo_unidad, d.cantidad
+                  FROM detalle_carrito d
+                  LEFT JOIN producto_unitario pu ON d.sku = pu.sku
+                  WHERE d.idcarrito = ?";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmt->bind_param("i", $idCarrito);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
 }

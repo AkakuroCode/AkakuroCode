@@ -114,4 +114,9 @@ public function obtenerIdCarrito($idus) {
     return $idCarrito;
 }
 
+public function obtenerProductosDelCarrito($idCarrito) {
+    return $this->carrito->obtenerProductosDelCarrito($idCarrito);
+}
+
+
 }

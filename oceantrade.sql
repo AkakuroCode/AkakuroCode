@@ -287,6 +287,18 @@ CREATE TABLE detalle_envio (
     FOREIGN KEY (idcompra) REFERENCES compra(idcompra)
 );
 
+-- Tabla dettalle_historial
+CREATE TABLE detalle_historial (
+    idregistrocompra INT AUTO_INCREMENT PRIMARY KEY,
+    idhistorial INT,
+    sku INT,
+    estado ENUM('Completado', 'Pendiente', 'Cancelado'),
+    codigo_unidad VARCHAR(50),
+    FOREIGN KEY (idhistorial) REFERENCES historial_compra(idhistorial),
+    FOREIGN KEY (sku) REFERENCES producto(sku),
+    FOREIGN KEY (codigo_unidad) REFERENCES producto_unitario(codigo_unidad)
+);
+
 -- Tabla maneja
 CREATE TABLE maneja (
     idcompra INT,

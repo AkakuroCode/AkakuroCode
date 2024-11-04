@@ -99,5 +99,50 @@ class Compra {
     return $stmt->execute();
     }
 
+    public function registrarEnHistorialCompra($idus, $fecha, $totalCompra, $stock) {
+        $query = "INSERT INTO historial_compra (idus, fecha, total_compra, stock) 
+                  VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmt->bind_param("isdi", $idus, $fecha, $totalCompra, $stock);
+        return $stmt->execute();
+    }
+
+    public function obtenerIdHistorialReciente($idUsuario) {
+        $query = "SELECT idhistorial FROM historial_compra WHERE idus = ? ORDER BY idhistorial DESC LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmt->bind_param("i", $idUsuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+    
+        return $row ? $row['idhistorial'] : null;
+    }
+    
+    public function registrarDetalleHistorial($idhistorial, $sku, $estado, $codigoUnidad) {
+        $query = "INSERT INTO detalle_historial (idhistorial, sku, estado, codigo_unidad)
+                  VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+    
+        if (!$stmt) {
+            echo "Error en la preparación de la consulta: " . $this->conn->error;
+            return false;
+        }
+    
+        // Asegúrate de que si $codigoUnidad es NULL, se maneje correctamente
+        $stmt->bind_param("iiss", $idhistorial, $sku, $estado, $codigoUnidad);
+        return $stmt->execute();
+    }
     
 }
