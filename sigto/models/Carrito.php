@@ -128,7 +128,6 @@ public function getSubtotalByUserAndSku($idus, $sku) {
 
 
 
-// Método para recalcular el total del carrito
 public function recalcularTotalCarrito($idcarrito) {
     $query = "SELECT SUM(cantidad * IFNULL(o.preciooferta, p.precio)) AS total 
               FROM " . $this->detalle_table . " d
@@ -149,9 +148,20 @@ public function recalcularTotalCarrito($idcarrito) {
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
 
-    return $row && $row['total'] !== null ? $row['total'] : 0; // Retornar 0 si el carrito está vacío
+    $total = $row && $row['total'] !== null ? $row['total'] : 0;
 
+    // Actualizar el total en la tabla `carrito`
+    $updateTotalQuery = "UPDATE " . $this->carrito_table . " SET total = ? WHERE idcarrito = ?";
+    $updateStmt = $this->conn->prepare($updateTotalQuery);
+
+    if ($updateStmt) {
+        $updateStmt->bind_param("di", $total, $idcarrito);
+        $updateStmt->execute();
+    }
+
+    return $total;
 }
+
 
 
 // Método para eliminar un producto o reducir su cantidad en detalle_carrito
@@ -232,8 +242,9 @@ public function getCantidadProducto($idcarrito, $sku) {
     
         return $row ? $row['precio_final'] : 0; // Retorna el precio con la oferta si existe, de lo contrario el precio normal
     }
+    
     public function createCart($idus) {
-        $query = "INSERT INTO " . $this->carrito_table . " (idus, fechacrea, estado, total) VALUES (?, NOW(), 'Activo', 0)";
+        $query = "INSERT INTO " . $this->carrito_table . " (idus, fechacrea, fechamod, estado, total) VALUES (?, NOW(), NOW(), 'Activo', 0)";
         $stmt = $this->conn->prepare($query);
     
         if (!$stmt) {
@@ -243,11 +254,24 @@ public function getCantidadProducto($idcarrito, $sku) {
     
         $stmt->bind_param("i", $idus);
         if ($stmt->execute()) {
-            return $this->conn->insert_id; // Devuelve el idcarrito recién creado
+            $idcarrito = $this->conn->insert_id; // Devuelve el idcarrito recién creado
+    
+            // Recalcula el total del carrito y actualiza la base de datos
+            $total = $this->recalcularTotalCarrito($idcarrito);
+            $updateTotalQuery = "UPDATE " . $this->carrito_table . " SET total = ? WHERE idcarrito = ?";
+            $updateStmt = $this->conn->prepare($updateTotalQuery);
+            
+            if ($updateStmt) {
+                $updateStmt->bind_param("di", $total, $idcarrito);
+                $updateStmt->execute();
+            }
+    
+            return $idcarrito;
         } else {
             return false;
         }
     }
+    
 
     public function getTotalByUser($idus) {
         $query = "SELECT total FROM " . $this->carrito_table . " WHERE idus = ? AND estado = 'Activo'";

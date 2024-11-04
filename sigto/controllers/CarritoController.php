@@ -16,7 +16,6 @@ class CarritoController {
         return $this->carrito->getItemsByUser($idus);
     }
 
-    // Método para agregar un producto al carrito
     public function addItem($idus, $sku, $cantidad) {
         // Obtener el idcarrito activo
         $idcarrito = $this->carrito->getActiveCartIdByUser($idus);
@@ -32,15 +31,21 @@ class CarritoController {
     
             if ($itemExistente) {
                 $nuevaCantidad = $itemExistente['cantidad'] + $cantidad;
-                return $this->carrito->updateQuantity($idcarrito, $sku, $nuevaCantidad);
+                $this->carrito->updateQuantity($idcarrito, $sku, $nuevaCantidad);
             } else {
-                return $this->carrito->addItem($idcarrito, $sku, $cantidad);
+                $this->carrito->addItem($idcarrito, $sku, $cantidad);
             }
+    
+            // Recalcular el total del carrito después de agregar un producto
+            $this->carrito->recalcularTotalCarrito($idcarrito);
+            
+            return true;
         } else {
             echo "Error al crear el carrito.";
             return false;
         }
     }
+    
 
     public function getTotalByUser($idus) {
         return $this->carrito->getTotalByUser($idus);
@@ -73,8 +78,16 @@ public function calcularSubtotal($idus, $sku) {
 
 public function removeItem($idus, $sku) {
     $idcarrito = $this->carrito->getActiveCartIdByUser($idus);
-    return $this->carrito->removeItem($idcarrito, $sku);
+    $result = $this->carrito->removeItem($idcarrito, $sku);
+
+    if ($result) {
+        // Recalcular el total después de eliminar el producto
+        $this->carrito->recalcularTotalCarrito($idcarrito);
+    }
+
+    return $result;
 }
+
 
 
 }
