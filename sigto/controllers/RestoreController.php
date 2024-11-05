@@ -1,18 +1,19 @@
 <?php
-require_once __DIR__ .'/../models/Database.php';
-require_once __DIR__ .'/../models/Backup.php';
-require_once __DIR__ .'/../models/Restore.php';
+require_once __DIR__ .'/../config/Database.php';
+require_once __DIR__ .'/../models/backup.php';
+require_once __DIR__ .'/../models/restore.php';
 
 class RestoreController {
     public function restoreBackup($filePath) {
         $db = new Database('admin'); // Cambia el rol según sea necesario
         $conn = $db->getConnection();
-        
+
         if ($conn) {
             if (file_exists($filePath) && is_readable($filePath)) {
                 $restore = new Restore($db);
                 $result = $restore->restoreBackup($filePath);
-                
+
+                // Registrar la acción en el log
                 $this->logRestoreAction('Restauración completada desde ' . $filePath);
                 return $result;
             } else {
@@ -26,7 +27,13 @@ class RestoreController {
     }
 
     private function logRestoreAction($message) {
-        $logFile = 'logs/restore_log.txt';
+        $logDir = __DIR__ . '/../logs'; // Ubicación de la carpeta logs
+        $logFile = $logDir . '/restore_log.txt';
+
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0777, true);
+        }
+
         file_put_contents($logFile, date('Y-m-d H:i:s') . ' - ' . $message . PHP_EOL, FILE_APPEND);
     }
 }

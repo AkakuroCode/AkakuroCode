@@ -305,7 +305,7 @@ CREATE TABLE `empresa` (
   UNIQUE KEY `telefono` (`telefono`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `cuentabanco` (`cuentabanco`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -314,6 +314,7 @@ CREATE TABLE `empresa` (
 
 LOCK TABLES `empresa` WRITE;
 /*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
+INSERT INTO `empresa` VALUES (1,'Flama Sa','Maria Orticochea 1336',23236,'Chiffonemanuel@gmail.com','$2y$10$A.0PwJOrViUnEDCxa9jZ4.AZgPQJ01nEkEpeyj5IiPH.M/1fvB3xq',2323123,'sí');
 /*!40000 ALTER TABLE `empresa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -736,4 +737,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-03 13:09:10
+-- Dump completed on 2024-11-05 19:17:39
