@@ -1,76 +1,122 @@
 <?php
 require_once __DIR__ . '/../models/Carrito.php';
 require_once __DIR__ . '/../models/Producto.php';
-require_once __DIR__ . '/../models/Usuario.php';// Para manejar el modelo de productos si es necesario
 
 class CarritoController {
-    // Método para agregar un producto al carrito
+    private $carrito;
+    private $producto;
+
+    public function __construct() {
+        $this->carrito = new Carrito();
+        $this->producto = new Producto();
+    }
+
+    // Método para obtener los productos del carrito de un usuario
+    public function getItemsByUser($idus) {
+        return $this->carrito->getItemsByUser($idus);
+    }
+
     public function addItem($idus, $sku, $cantidad) {
-        $carrito = new Carrito();
-        $carrito->setIdus($idus);
-        $carrito->setSku($sku);
-        $carrito->setCantidad($cantidad);
+        // Obtener el idcarrito activo
+        $idcarrito = $this->carrito->getActiveCartIdByUser($idus);
     
-        // Verificar si el producto ya está en el carrito para actualizar la cantidad
-        $itemExistente = $carrito->getItemByUserAndSku();
-        if ($itemExistente) {
-            // Si el producto ya está en el carrito, sumamos la nueva cantidad a la existente
-            $nuevaCantidad = $itemExistente['cantidad'] + $cantidad;
-            return $carrito->updateQuantity($idus, $sku, $nuevaCantidad);
-        } else {
-            // Obtener el precio del producto, considerando ofertas
-            $producto = new Producto();
-            $producto->setSku($sku);
-            $productoData = $producto->readOne();
+        if (!$idcarrito) {
+            // Si no existe, crea un nuevo carrito para el usuario
+            $idcarrito = $this->carrito->createCart($idus);
+        }
     
-            $precioProducto = $productoData['precio'];
-            if (isset($productoData['preciooferta']) && $productoData['preciooferta'] > 0) {
-                $precioProducto = $productoData['preciooferta'];
+        if ($idcarrito) {
+            // Verificar si el producto ya está en el carrito
+            $itemExistente = $this->carrito->getItemByUserAndSku($idus, $sku);
+    
+            if ($itemExistente) {
+                $nuevaCantidad = $itemExistente['cantidad'] + $cantidad;
+                $this->carrito->updateQuantity($idcarrito, $sku, $nuevaCantidad);
+            } else {
+                $this->carrito->addItem($idcarrito, $sku, $cantidad);
             }
     
-            // Establecer el total del producto (cantidad * precio unitario)
-            $carrito->setTotal($precioProducto * $cantidad);
-    
-            // Si no está en el carrito, agregarlo
-            return $carrito->addItem();
+            // Recalcular el total del carrito después de agregar un producto
+            $this->carrito->recalcularTotalCarrito($idcarrito);
+            
+            return true;
+        } else {
+            echo "Error al crear el carrito.";
+            return false;
         }
     }
     
-    
 
-    // Método para obtener todos los productos del carrito de un usuario
-    public function getItemsByUser($idus) {
-        $carrito = new Carrito();
-        return $carrito->getItemsByUser($idus);
-    }
-
-    // Método para actualizar la cantidad de un producto en el carrito
-    public function updateQuantity($idus, $sku, $cantidad) {
-        $carrito = new Carrito();
-        $carrito->setIdus($idus);
-        $carrito->setSku($sku);
-        $carrito->setCantidad($cantidad);
-        return $carrito->updateQuantity($idus, $sku, $cantidad);
-    }
-
-    // Método para eliminar un producto del carrito
-    public function removeItem($idus, $sku) {
-        $carrito = new Carrito();
-        $carrito->setIdus($idus);
-        $carrito->setSku($sku);
-        return $carrito->removeItem($idus, $sku);
-    }
-
-    // Método para obtener el total del carrito de un usuario
     public function getTotalByUser($idus) {
-        $items = $this->getItemsByUser($idus);
-        $total = 0;
+        return $this->carrito->getTotalByUser($idus);
+    }
+    public function getActiveCartIdByUser($idus) {
+    return $this->carrito->getActiveCartIdByUser($idus);
+}
+
+
+public function updateQuantity($idus, $sku, $cantidad) {
+    $idcarrito = $this->carrito->getActiveCartIdByUser($idus); // Asegúrate de que esto obtenga el idcarrito correctamente.
+    $result = $this->carrito->updateQuantity($idcarrito, $sku, $cantidad);
+    
+    if ($result) {
+        // Calcula el subtotal y el total del carrito
+        $subtotal = $this->calcularSubtotal($idus, $sku);
+        $totalCarrito = $this->carrito->recalcularTotalCarrito($idcarrito);
         
-        foreach ($items as $item) {
-            $total += $item['subtotal']; // Sumar los subtotales de cada producto (ya calculados con oferta si aplica)
-        }
-        
-        return $total;
+        return ['status' => 'success', 'subtotal' => $subtotal, 'totalCarrito' => $totalCarrito];
+    } else {
+        return ['status' => 'error', 'message' => 'No se pudo actualizar la cantidad.'];
     }
 }
-?>
+
+
+public function calcularSubtotal($idus, $sku) {
+    // Llama al método correspondiente en el modelo Carrito para obtener el subtotal
+    return $this->carrito->getSubtotalByUserAndSku($idus, $sku);
+}
+
+public function removeItem($idus, $sku) {
+    $idcarrito = $this->carrito->getActiveCartIdByUser($idus);
+    $result = $this->carrito->removeItem($idcarrito, $sku);
+
+    if ($result) {
+        // Recalcular el total después de eliminar el producto
+        $this->carrito->recalcularTotalCarrito($idcarrito);
+    }
+
+    return $result;
+}
+
+public function removeAllItems($idcarrito) {
+    $resultado = $this->carrito->removeAllItems($idcarrito);
+
+    if (!$resultado) {
+        echo "Error al eliminar los productos del carrito.";
+        return false;
+    }
+
+    // Recalcular el total del carrito después de eliminar los productos
+    $this->carrito->recalcularTotalCarrito($idcarrito);
+
+    return true;
+}
+
+
+public function obtenerIdCarrito($idus) {
+    $idCarrito = $this->carrito->obtenerIdCarrito($idus);
+
+    if (!$idCarrito) {
+        echo "No se pudo obtener el ID del carrito.";
+        return null;
+    }
+
+    return $idCarrito;
+}
+
+public function obtenerProductosDelCarrito($idCarrito) {
+    return $this->carrito->obtenerProductosDelCarrito($idCarrito);
+}
+
+
+}

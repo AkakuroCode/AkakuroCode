@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const updateButtons = document.querySelectorAll('.btn-secondary');
-    const deleteButtons = document.querySelectorAll('.btn-danger');
+    const updateButtons = document.querySelectorAll('.btn-actualizar');
+    const deleteButtons = document.querySelectorAll('.btn-eliminar');
 
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -23,7 +23,7 @@ async function updateQuantity(button) {
     const idus = form.dataset.idus;
 
     try {
-        const response = await fetch('index.php?action=update_quantity', {
+        const response = await fetch('/sigto/index.php?action=update_quantity', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -35,62 +35,76 @@ async function updateQuantity(button) {
             })
         });
 
-        const result = await response.json();
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+
+        const rawResponse = await response.text(); // Verifica la respuesta cruda
+        console.log(rawResponse); // Imprime la respuesta cruda
+
+        const result = JSON.parse(rawResponse); // Parsear manualmente a JSON
 
         if (result.status === 'success') {
-            const itemTotalElement = form.closest('.list-group-item').querySelector('.item-total');
-            if (itemTotalElement) {
-                itemTotalElement.textContent = `${result.subtotal}`;
-            }
-
+            const cantidadInput = form.querySelector('.cantidad-input');
+            cantidadInput.value = cantidad; // Actualiza el valor en el input
             const cantidadElement = document.getElementById(`cantidad-${sku}`);
             if (cantidadElement) {
                 cantidadElement.textContent = `Cantidad: ${cantidad}`;
             }
+            // Actualizar elementos en la vista con el formato adecuado
+            const itemTotalElement = document.getElementById(`item-total-${sku}`);
+            if (itemTotalElement) {
+                itemTotalElement.textContent = `${result.subtotal}`; 
+            }
 
             const totalElement = document.getElementById('total');
             if (totalElement) {
-                totalElement.textContent = `${result.totalCarrito}`;
+                totalElement.textContent = `${result.totalCarrito}`; 
             }
         } else {
             alert(result.message || 'Error al actualizar la cantidad');
         }
+
     } catch (error) {
         console.error('Error al actualizar la cantidad:', error);
         alert('Hubo un problema al actualizar la cantidad.');
     }
 }
 
+
+
+
 // Función para eliminar un producto del carrito
 function deleteItem(button) {
-    const sku = button.closest('.delete-form').dataset.sku;
-    const idus = button.closest('.delete-form').dataset.idus;
+    const form = button.closest('.delete-form');
+    const sku = form.dataset.sku;
+    const idus = form.dataset.idus;
 
-    fetch(`?action=delete_from_cart`, {
+    fetch(`/sigto/index?action=delete_from_cart`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `sku=${sku}&idus=${idus}`
+        body: `sku=${sku}&idus=${idus}` // No se envía cantidad
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Eliminar el elemento de la lista visualmente
             const itemElement = button.closest('.list-group-item');
             itemElement.remove();
-
-            // Actualizar el total en el resumen de compra
             updateTotal();
-
-            // Verificar si quedan productos en el carrito
             if (document.querySelectorAll('.list-group-item').length === 0) {
-                // Ocultar el resumen de compra
-                document.querySelector('.col-md-4').style.display = 'none';
-
-                // Mostrar mensaje de carrito vacío
-                document.querySelector('main.container').innerHTML = '<p class="text-center mt-4">No hay productos en el carrito.</p>';
+                const colMd4Element = document.querySelector('.col-md-4');
+                const mainContainer = document.querySelector('main.container');
+            
+                if (colMd4Element) {
+                    colMd4Element.style.display = 'none';
+                }
+                if (mainContainer) {
+                    mainContainer.innerHTML = '<p class="text-center mt-4">No hay productos en el carrito.</p>';
+                }
             }
+            
         } else {
             alert('Error al eliminar el producto del carrito.');
         }
@@ -101,15 +115,44 @@ function deleteItem(button) {
 }
 
 
+
+
+
 function updateTotal() {
     let total = 0;
-    document.querySelectorAll('.item-total').forEach(item => {
-        total += parseFloat(item.textContent.replace('US$', '')); // Elimina "US$" antes de convertir a número.
-    });
+    const itemTotals = document.querySelectorAll('.item-total');
 
-    totalCarrito = total; // Actualiza la variable global totalCarrito
-    document.getElementById('total').textContent = `US$${totalCarrito.toFixed(2)}`;
-    document.getElementById('total-carrito').value = totalCarrito.toFixed(2); // Actualiza el input oculto
+    if (itemTotals.length === 0) {
+        // Si no hay elementos, establecer el total a "0.00"
+        totalCarrito = 0;
+
+        const totalElement = document.getElementById('total');
+        if (totalElement) {
+            totalElement.textContent = `${totalCarrito.toFixed(2)}`;
+        }
+
+        const totalInputElement = document.getElementById('total-carrito');
+        if (totalInputElement) {
+            totalInputElement.value = totalCarrito.toFixed(2);
+        }
+    } else {
+        itemTotals.forEach(item => {
+            const itemValue = parseFloat(item.textContent.replace('US$', ''));
+            if (!isNaN(itemValue)) {
+                total += itemValue; // Sumar solo si es un número válido
+            }
+        });
+
+        totalCarrito = total;
+
+        const totalElement = document.getElementById('total');
+        if (totalElement) {
+            totalElement.textContent = `${totalCarrito.toFixed(2)}`;
+        }
+
+        const totalInputElement = document.getElementById('total-carrito');
+        if (totalInputElement) {
+            totalInputElement.value = totalCarrito.toFixed(2);
+        }
+    }
 }
-
-

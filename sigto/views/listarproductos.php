@@ -37,6 +37,7 @@ if (!$productos) {
 </head>
 <body>
 <header>
+<div class="contenedor"> 
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
@@ -66,7 +67,7 @@ if (!$productos) {
         </div>
     </nav>
 </header>
-<div class="panel-gestion">
+<div class="panel-gestion mt-5">
     <h1>Lista de Productos</h1>
     <table border="1">
         <thead>
@@ -174,6 +175,6 @@ if (!$productos) {
     </div>
 </footer>
 <script src="/sigto/assets/js/searchbar.js"></script>
-
+</div>
 </body>
 </html>

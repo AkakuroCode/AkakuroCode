@@ -1,27 +1,32 @@
-<?php
+<?php 
 require_once __DIR__ . '/../models/Compra.php';
+require_once __DIR__ . '/../controllers/CarritoController.php';
 
 class CompraController {
     private $compraModel;
+    private $carritoController;
 
     public function __construct() {
         $this->compraModel = new Compra();
+        $this->carritoController = new CarritoController();
     }
 
     public function procesarCompra() {
         header('Content-Type: application/json');
-
-        // Decodificar datos JSON
+        
         $data = json_decode(file_get_contents("php://input"), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(["success" => false, "message" => "Error en el formato de los datos JSON."]);
+            exit;
+        }
 
-        // Validar datos requeridos
-        if (!isset($data['orderId'], $data['payerName'], $data['paymentStatus'])) {
+        if (!isset($data['payerName'], $data['paymentStatus'], $data['idpago'], $data['tipo_entrega'])) {
             http_response_code(400);
             echo json_encode(["success" => false, "message" => "Datos incompletos."]);
             exit;
         }
 
-        // Iniciar sesión si es necesario
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -33,53 +38,159 @@ class CompraController {
             exit;
         }
 
-        $idPago = 1;  // Suponiendo que el ID de PayPal es 1; cámbialo según tu base de datos
-        $tipoEntrega = $data['tipo_entrega'] ?? 'domicilio';
+        $idPago = $data['idpago'];
+        $tipoEntrega = $data['tipo_entrega'];
+        $totalCompra = $data['total_compra'];
+        $idrecibo = $data['idrecibo'] ?? null;
         $direccion = isset($data['direccion']) ? implode(', ', $data['direccion']) : null;
-        $idCentroRecibo = $data['centroRecibo'] ?? null;
-        $idVehiculo = $data['vehiculo'] ?? null;
 
-        // Iniciar transacción
-        $this->compraModel->beginTransaction();
-
-        try {
-            // Crear la compra
-            $idCompra = $this->compraModel->crearCompra($idPago, $tipoEntrega, 'confirmada');
-            if (!$idCompra) {
-                throw new Exception("Error al crear la compra.");
-            }
-
-            // Insertar detalles según el tipo de entrega
-            if ($tipoEntrega === 'domicilio' && $direccion) {
-                $idDetalleEnvio = $this->compraModel->crearDetalleEnvio($idCompra, $direccion);
-                if (!$idDetalleEnvio) {
-                    throw new Exception("Error al crear el detalle de envío.");
-                }
-                if ($idVehiculo) {
-                    $this->compraModel->asignarVehiculo($idDetalleEnvio, $idVehiculo);
-                }
-            } elseif ($tipoEntrega === 'recibo' && $idCentroRecibo) {
-                $idDetalleRecibo = $this->compraModel->crearDetalleRecibo($idCompra, $idCentroRecibo);
-                if (!$idDetalleRecibo) {
-                    throw new Exception("Error al crear el detalle de recibo.");
-                }
-            }
-
-            // Confirmar transacción
-            $this->compraModel->commit();
-            echo json_encode(["success" => true, "message" => "Compra registrada exitosamente."]);
-
-        } catch (Exception $e) {
-            // Revertir transacción en caso de error
-            $this->compraModel->rollback();
-            error_log("Error en la compra: " . $e->getMessage());
+        // Paso 1: Insertar en la tabla compra
+        $idCompra = $this->compraModel->crearCompra($idPago, $tipoEntrega, 'Completado');
+        if (!$idCompra) {
             http_response_code(500);
-            echo json_encode(["success" => false, "message" => "Error al registrar la orden."]);
+            echo json_encode(["success" => false, "message" => "Error al registrar en la tabla compra."]);
+            return;
+        }
+        
+        // Paso 2: Registrar en la tabla inicia
+        $resultadoInicio = $this->compraModel->registrarInicioCompra($idCompra, $idPago);
+        if (!$resultadoInicio) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al registrar en la tabla inicia."]);
+            return;
+        }
+        
+        // Paso 3: Insertar en detalle_recibo o detalle_envio
+        if ($tipoEntrega === 'Recibo') {
+            $idDetalleRecibo = $this->compraModel->crearDetalleRecibo($idCompra, $totalCompra);
+            if (!$idDetalleRecibo) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_recibo."]);
+                return;
+            }
+            
+            // Relacionar en especifica
+            $resultadoEspecifica = $this->compraModel->relacionarEspecifica($idCompra, $idrecibo);
+            if (!$resultadoEspecifica) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla especifica."]);
+                return;
+            }
+        } elseif ($tipoEntrega === 'Envio') {
+            $idDetalleEnvio = $this->compraModel->crearDetalleEnvio($idCompra, $direccion, $totalCompra);
+            if (!$idDetalleEnvio) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_envio."]);
+                return;
+            }
+            
+            // Paso: Insertar en la tabla envio
+            $idEnvio = $this->compraModel->crearEnvio($idDetalleEnvio);
+            if (!$idEnvio) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla envio."]);
+                return;
+            }
+            
+            // Paso: Relacionar en la tabla maneja
+            $resultadoManeja = $this->compraModel->relacionarManeja($idCompra, $idEnvio);
+            if (!$resultadoManeja) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla maneja."]);
+                return;
+            }
+        }
+
+        // Obtener idCarrito
+        $idCarrito = $this->carritoController->obtenerIdCarrito($idUsuario);
+        if (!$idCarrito) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "No se pudo obtener el ID del carrito."]);
+            return;
+        }
+        
+        // Registrar en la tabla cierra
+        $resultadoCierra = $this->compraModel->registrarCierre($idPago, $idCarrito);
+        if (!$resultadoCierra) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al registrar en la tabla cierra."]);
+            return;
+        }
+
+        // Paso: Crear el registro en historial_compra
+        $stock = 0; // Inicialización de la variable $stock
+        $resultadoHistorialCompra = $this->compraModel->registrarOActualizarHistorialCompra($idUsuario, date('Y-m-d'));
+        if (!$resultadoHistorialCompra) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al registrar en la tabla historial_compra."]);
+            return;
+        }
+
+        // Obtener el ID del historial de compra recién creado
+        $idhistorial = $this->compraModel->obtenerIdHistorialReciente($idUsuario);
+        if (!$idhistorial) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al obtener el ID del historial de compra."]);
+            return;
+        }
+
+        // Obtener productos del carrito y verificar
+        $productos = $this->carritoController->obtenerProductosDelCarrito($idCarrito);
+        if (!$productos || !is_array($productos)) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al obtener los productos del carrito."]);
+        return;
+        }
+
+        // Calcular el stock (cantidad total de productos)
+        $stock = array_sum(array_column($productos, 'cantidad'));
+
+        foreach ($productos as $producto) {
+            $sku = $producto['sku'];
+            $cantidadComprada = $producto['cantidad'];
+            $estado = 'Completado';
+            $codigoUnidad = $producto['codigo_unidad'] ?? null; // Será NULL para productos sin `codigo_unidad`
+
+            // Llamada a registrarDetalleDesdeCarrito, que maneja tanto productos con código como sin código
+            $resultadoDetalleHistorial = $this->compraModel->registrarDetalleDesdeCarrito($idhistorial, $idCarrito, $sku, $estado);
+
+            if (!$resultadoDetalleHistorial) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_historial."]);
+            return;
+            }
+        } echo json_encode(["success" => true, "message" => "Compra procesada y detalles registrados exitosamente."]);
+
+        //Actualizamos la cantidad de 'stock' en historial_compra
+        $resultadoActualizacionStock = $this->compraModel->actualizarStockEnHistorialCompra($idhistorial);
+        if (!$resultadoActualizacionStock) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al actualizar el stock en historial_compra."]);
+            return;
+        }
+
+        // Eliminar los productos del carrito
+        $resultadoEliminarProductos = $this->carritoController->removeAllItems($idCarrito);
+        if (!$resultadoEliminarProductos) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al eliminar los productos del carrito."]);
+            return;
+        }
+
+        // Confirmar la transacción al final, después de todas las operaciones exitosas
+        if ($resultadoCierra && $resultadoEliminarProductos) {
+            $this->compraModel->commit();
+            echo json_encode(["success" => true, "message" => "Orden registrada y carrito cerrado exitosamente."]);
+        } else {
+            // Si algo falla, puedes hacer rollback
+            $this->compraModel->rollback();
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error en el cierre de la compra."]);
+            return;
         }
     }
 }
 
-// Llamada al controlador solo si es una solicitud POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller = new CompraController();
     $controller->procesarCompra();
