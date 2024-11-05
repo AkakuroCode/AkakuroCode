@@ -99,8 +99,8 @@ class Compra {
     return $stmt->execute();
     }
 
-    public function registrarEnHistorialCompra($idus, $fecha) {
-        // Primero, insertamos o actualizamos el registro en historial_compra sin el stock.
+    public function registrarOActualizarHistorialCompra($idus, $fecha) {
+        // Verificar si el historial ya existe
         $queryCheck = "SELECT idhistorial FROM historial_compra WHERE idus = ?";
         $stmtCheck = $this->conn->prepare($queryCheck);
     
@@ -114,7 +114,7 @@ class Compra {
         $resultCheck = $stmtCheck->get_result();
     
         if ($resultCheck->num_rows > 0) {
-            // Si existe, actualizamos la fecha (y luego el stock).
+            // Si existe, actualizar la fecha
             $queryUpdate = "UPDATE historial_compra SET fecha = ? WHERE idus = ?";
             $stmtUpdate = $this->conn->prepare($queryUpdate);
     
@@ -126,7 +126,7 @@ class Compra {
             $stmtUpdate->bind_param("si", $fecha, $idus);
             $stmtUpdate->execute();
         } else {
-            // Si no existe, creamos un nuevo registro.
+            // Si no existe, crear un nuevo registro
             $queryInsert = "INSERT INTO historial_compra (idus, fecha) VALUES (?, ?)";
             $stmtInsert = $this->conn->prepare($queryInsert);
     
@@ -139,10 +139,11 @@ class Compra {
             $stmtInsert->execute();
         }
     
-        // Obtener el idhistorial recién insertado o actualizado.
-        $idhistorial = $this->obtenerIdHistorialReciente($idus);
+        return $this->obtenerIdHistorialReciente($idus);
+    }
     
-        // Calcular el stock basado en la cantidad de productos en detalle_historial vinculados al idhistorial.
+    public function actualizarStockEnHistorialCompra($idhistorial) {
+        // Calcular el stock basado en la cantidad de productos en `detalle_historial`
         $queryStock = "SELECT COUNT(*) AS cantidad_total FROM detalle_historial WHERE idhistorial = ?";
         $stmtStock = $this->conn->prepare($queryStock);
     
@@ -156,7 +157,7 @@ class Compra {
         $resultStock = $stmtStock->get_result();
         $stock = $resultStock->fetch_assoc()['cantidad_total'];
     
-        // Actualizar el stock en historial_compra.
+        // Actualizar el stock en historial_compra
         $queryUpdateStock = "UPDATE historial_compra SET stock = ? WHERE idhistorial = ?";
         $stmtUpdateStock = $this->conn->prepare($queryUpdateStock);
     
@@ -168,6 +169,7 @@ class Compra {
         $stmtUpdateStock->bind_param("ii", $stock, $idhistorial);
         return $stmtUpdateStock->execute();
     }
+    
     
 
 
@@ -189,9 +191,28 @@ class Compra {
         return $row ? $row['idhistorial'] : null;
     }
     
-    public function registrarDetalleHistorial($idhistorial, $sku, $estado, $codigoUnidades) {
-        // Obtener el precio actual del producto, considerando si tiene oferta activa
-        $queryPrecio = "SELECT IF(o.preciooferta IS NOT NULL AND NOW() BETWEEN o.fecha_inicio AND o.fecha_fin, o.preciooferta, p.precio) AS precio_actual
+    public function registrarDetalleDesdeCarrito($idhistorial, $idCarrito, $sku, $estado) {
+        // Obtener la cantidad del producto en detalle_carrito
+        $queryCantidad = "SELECT cantidad FROM detalle_carrito WHERE idcarrito = ? AND sku = ?";
+        $stmtCantidad = $this->conn->prepare($queryCantidad);
+    
+        if (!$stmtCantidad) {
+            echo "Error en la preparación de la consulta para obtener la cantidad: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmtCantidad->bind_param("ii", $idCarrito, $sku);
+        $stmtCantidad->execute();
+        $resultCantidad = $stmtCantidad->get_result();
+        $cantidad = $resultCantidad->fetch_assoc()['cantidad'] ?? 0;
+    
+        if ($cantidad <= 0) {
+            echo "Cantidad no válida o no encontrada para el SKU $sku en el carrito $idCarrito.";
+            return false;
+        }
+    
+        // Obtener el precio actual del producto
+        $queryPrecio = "SELECT IF(o.preciooferta IS NOT NULL AND NOW() BETWEEN o.fecha_inicio AND o.fecha_fin, o.preciooferta, p.precio) AS precio_actual, p.tipo_stock
                         FROM producto p
                         LEFT JOIN ofertas o ON p.sku = o.sku
                         WHERE p.sku = ?";
@@ -205,25 +226,41 @@ class Compra {
         $stmtPrecio->bind_param("i", $sku);
         $stmtPrecio->execute();
         $resultPrecio = $stmtPrecio->get_result();
-        $precioActual = $resultPrecio->fetch_assoc()['precio_actual'];
+        $row = $resultPrecio->fetch_assoc();
+        $precioActual = $row['precio_actual'];
+        $tipoStock = $row['tipo_stock'];
     
-        // Verificar que $codigoUnidades sea un array antes de iterar
-        if (is_array($codigoUnidades)) {
-            foreach ($codigoUnidades as $codigoUnidad) {
-                $query = "INSERT INTO detalle_historial (idhistorial, sku, estado, codigo_unidad, precio_actual)
-                          VALUES (?, ?, ?, ?, ?)";
-                $stmt = $this->conn->prepare($query);
+        // Si es un producto de tipo "unidad", obtener cada código de unidad disponible e insertarlo en `detalle_historial`
+        if ($tipoStock === 'unidad') {
+            $queryUnidad = "SELECT codigo_unidad FROM producto_unitario WHERE sku = ? AND estado = 'Disponible' LIMIT 1";
+            $stmtUnidad = $this->conn->prepare($queryUnidad);
     
-                if (!$stmt) {
-                    echo "Error en la preparación de la consulta: " . $this->conn->error;
+            if (!$stmtUnidad) {
+                echo "Error en la preparación de la consulta para obtener códigos de unidad: " . $this->conn->error;
+                return false;
+            }
+    
+            for ($i = 0; $i < $cantidad; $i++) {
+                $stmtUnidad->bind_param("i", $sku);
+                $stmtUnidad->execute();
+                $resultUnidad = $stmtUnidad->get_result();
+                $codigoUnidad = $resultUnidad->fetch_assoc()['codigo_unidad'] ?? null;
+    
+                // Insertar en `detalle_historial`
+                $queryInsert = "INSERT INTO detalle_historial (idhistorial, sku, estado, codigo_unidad, precio_actual)
+                                VALUES (?, ?, ?, ?, ?)";
+                $stmtInsert = $this->conn->prepare($queryInsert);
+    
+                if (!$stmtInsert) {
+                    echo "Error en la preparación de la consulta de inserción en detalle_historial: " . $this->conn->error;
                     return false;
                 }
     
-                $stmt->bind_param("iissd", $idhistorial, $sku, $estado, $codigoUnidad, $precioActual);
-                $resultado = $stmt->execute();
+                $stmtInsert->bind_param("iissd", $idhistorial, $sku, $estado, $codigoUnidad, $precioActual);
+                $resultadoInsert = $stmtInsert->execute();
     
-                // Actualizar el estado del producto_unitario a "Vendido" si se registra correctamente
-                if ($resultado) {
+                // Actualizar el estado del producto_unitario a "Vendido"
+                if ($resultadoInsert && $codigoUnidad) {
                     $queryUpdateUnidad = "UPDATE producto_unitario SET estado = 'Vendido' WHERE codigo_unidad = ?";
                     $stmtUpdate = $this->conn->prepare($queryUpdateUnidad);
     
@@ -237,50 +274,38 @@ class Compra {
                 }
             }
         } else {
-            // Si $codigoUnidades no es un array, registrar con un código de unidad null
-            $query = "INSERT INTO detalle_historial (idhistorial, sku, estado, codigo_unidad, precio_actual)
-                      VALUES (?, ?, ?, NULL, ?)";
-            $stmt = $this->conn->prepare($query);
+            // Para productos de tipo "cantidad", registrar sin `codigo_unidad` y reducir el stock
+            $queryInsert = "INSERT INTO detalle_historial (idhistorial, sku, estado, codigo_unidad, precio_actual)
+                            VALUES (?, ?, ?, NULL, ?)";
+            $stmtInsert = $this->conn->prepare($queryInsert);
     
-            if (!$stmt) {
-                echo "Error en la preparación de la consulta: " . $this->conn->error;
+            if (!$stmtInsert) {
+                echo "Error en la preparación de la consulta de inserción en detalle_historial: " . $this->conn->error;
                 return false;
             }
     
-            $stmt->bind_param("iisd", $idhistorial, $sku, $estado, $precioActual);
-            $resultado = $stmt->execute();
+            for ($i = 0; $i < $cantidad; $i++) {
+                $stmtInsert->bind_param("iisd", $idhistorial, $sku, $estado, $precioActual);
+                $stmtInsert->execute();
+            }
+    
+            // Reducir el stock en la tabla `producto`
+            $queryUpdateStock = "UPDATE producto SET stock = stock - ? WHERE sku = ?";
+            $stmtUpdateStock = $this->conn->prepare($queryUpdateStock);
+    
+            if (!$stmtUpdateStock) {
+                echo "Error en la preparación de la consulta para reducir el stock en producto: " . $this->conn->error;
+                return false;
+            }
+    
+            $stmtUpdateStock->bind_param("ii", $cantidad, $sku);
+            $stmtUpdateStock->execute();
         }
     
         return true;
     }
     
-    public function obtenerCodigosUnidadDisponibles($sku, $cantidad) {
-        // Consultar códigos de unidad disponibles para el SKU específico, limitados por la cantidad
-        $query = "SELECT codigo_unidad FROM producto_unitario WHERE sku = ? AND estado = 'Disponible' LIMIT ?";
-        $stmt = $this->conn->prepare($query);
     
-        if (!$stmt) {
-            echo "Error en la preparación de la consulta: " . $this->conn->error;
-            return [];
-        }
-    
-        // Vincular los parámetros y ejecutar la consulta
-        $stmt->bind_param("ii", $sku, $cantidad);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        $codigos = [];
-        while ($row = $result->fetch_assoc()) {
-            $codigos[] = $row['codigo_unidad'];
-        }
-    
-        // Si la cantidad de códigos obtenidos es menor que la requerida, devolver solo los disponibles
-        if (count($codigos) < $cantidad) {
-            echo "Advertencia: No hay suficientes códigos de unidad disponibles para el SKU $sku. Se obtuvieron " . count($codigos) . " de $cantidad solicitados.";
-        }
-    
-        return $codigos;
-    }
-    
+     
     
 }

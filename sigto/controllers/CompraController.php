@@ -119,7 +119,7 @@ class CompraController {
 
         // Paso: Crear el registro en historial_compra
         $stock = 0; // Inicialización de la variable $stock
-        $resultadoHistorialCompra = $this->compraModel->registrarEnHistorialCompra($idUsuario, date('Y-m-d'), $stock);
+        $resultadoHistorialCompra = $this->compraModel->registrarOActualizarHistorialCompra($idUsuario, date('Y-m-d'));
         if (!$resultadoHistorialCompra) {
             http_response_code(500);
             echo json_encode(["success" => false, "message" => "Error al registrar en la tabla historial_compra."]);
@@ -134,59 +134,40 @@ class CompraController {
             return;
         }
 
-// Obtener productos del carrito y verificar
-$productos = $this->carritoController->obtenerProductosDelCarrito($idCarrito);
-if (!$productos || !is_array($productos)) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Error al obtener los productos del carrito."]);
-    return;
-}
-
-// Calcular el stock (cantidad total de productos)
-$stock = array_sum(array_column($productos, 'cantidad'));
-
-foreach ($productos as $producto) {
-    $sku = $producto['sku'];
-    $estado = 'Completado';
-    $cantidadComprada = $producto['cantidad'];
-    $tipoStock = $producto['tipo_stock'];
-
-    if ($tipoStock === 'Unidad') {
-        // Obtener códigos de unidad disponibles exactos para el SKU
-        $codigoUnidades = $this->compraModel->obtenerCodigosUnidadDisponibles($sku, $cantidadComprada);
-
-        if (!$codigoUnidades || count($codigoUnidades) < $cantidadComprada) {
+        // Obtener productos del carrito y verificar
+        $productos = $this->carritoController->obtenerProductosDelCarrito($idCarrito);
+        if (!$productos || !is_array($productos)) {
             http_response_code(500);
-            echo json_encode(["success" => false, "message" => "No hay suficientes códigos de unidad disponibles para el producto $sku."]);
+            echo json_encode(["success" => false, "message" => "Error al obtener los productos del carrito."]);
+        return;
+        }
+
+        // Calcular el stock (cantidad total de productos)
+        $stock = array_sum(array_column($productos, 'cantidad'));
+
+        foreach ($productos as $producto) {
+            $sku = $producto['sku'];
+            $cantidadComprada = $producto['cantidad'];
+            $estado = 'Completado';
+            $codigoUnidad = $producto['codigo_unidad'] ?? null; // Será NULL para productos sin `codigo_unidad`
+
+            // Llamada a registrarDetalleDesdeCarrito, que maneja tanto productos con código como sin código
+            $resultadoDetalleHistorial = $this->compraModel->registrarDetalleDesdeCarrito($idhistorial, $idCarrito, $sku, $estado);
+
+            if (!$resultadoDetalleHistorial) {
+                http_response_code(500);
+                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_historial."]);
+            return;
+            }
+        } echo json_encode(["success" => true, "message" => "Compra procesada y detalles registrados exitosamente."]);
+
+        //Actualizamos la cantidad de 'stock' en historial_compra
+        $resultadoActualizacionStock = $this->compraModel->actualizarStockEnHistorialCompra($idhistorial);
+        if (!$resultadoActualizacionStock) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al actualizar el stock en historial_compra."]);
             return;
         }
-
-        // Registrar cada código de unidad para el producto de tipo 'Unidad'
-        foreach ($codigoUnidades as $codigoUnidad) {
-            $resultadoDetalleHistorial = $this->compraModel->registrarDetalleHistorial($idhistorial, $sku, $estado, $codigoUnidad);
-            if (!$resultadoDetalleHistorial) {
-                http_response_code(500);
-                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_historial para el producto $sku."]);
-                return;
-            }
-        }
-    } else {
-        // Registrar un solo registro para productos de tipo 'Cantidad', con `codigo_unidad` como NULL
-        for ($i = 0; $i < $cantidadComprada; $i++) {
-            $resultadoDetalleHistorial = $this->compraModel->registrarDetalleHistorial($idhistorial, $sku, $estado, null);
-            if (!$resultadoDetalleHistorial) {
-                http_response_code(500);
-                echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_historial para el producto $sku."]);
-                return;
-            }
-        }
-    }
-}
-
-echo json_encode(["success" => true, "message" => "Compra procesada y detalles registrados exitosamente."]);
-
-
-
 
         // Eliminar los productos del carrito
         $resultadoEliminarProductos = $this->carritoController->removeAllItems($idCarrito);
@@ -196,20 +177,17 @@ echo json_encode(["success" => true, "message" => "Compra procesada y detalles r
             return;
         }
 
-
-
         // Confirmar la transacción al final, después de todas las operaciones exitosas
         if ($resultadoCierra && $resultadoEliminarProductos) {
             $this->compraModel->commit();
             echo json_encode(["success" => true, "message" => "Orden registrada y carrito cerrado exitosamente."]);
         } else {
-        // Si algo falla, puedes hacer rollback
+            // Si algo falla, puedes hacer rollback
             $this->compraModel->rollback();
             http_response_code(500);
             echo json_encode(["success" => false, "message" => "Error en el cierre de la compra."]);
-        return;
+            return;
         }
-
     }
 }
 

@@ -321,22 +321,54 @@ public function getCantidadProducto($idcarrito, $sku) {
     
 
     public function obtenerProductosDelCarrito($idCarrito) {
-        $query = "SELECT d.sku, pu.codigo_unidad, d.cantidad
-                  FROM detalle_carrito d
-                  LEFT JOIN producto_unitario pu ON d.sku = pu.sku
-                  WHERE d.idcarrito = ?";
-        $stmt = $this->conn->prepare($query);
-    
-        if (!$stmt) {
-            echo "Error en la preparación de la consulta: " . $this->conn->error;
+        // Consulta para obtener productos con `codigo_unidad`
+        $queryConCodigo = "SELECT d.sku, pu.codigo_unidad, d.cantidad
+                           FROM detalle_carrito d
+                           JOIN (
+                               SELECT pu.codigo_unidad, pu.sku,
+                                      @row_num := IF(@sku = pu.sku, @row_num + 1, 1) AS row_num,
+                                      @sku := pu.sku
+                               FROM producto_unitario pu
+                               CROSS JOIN (SELECT @row_num := 0, @sku := '') AS vars
+                               WHERE pu.estado = 'Disponible'
+                               ORDER BY pu.sku, pu.codigo_unidad
+                           ) AS pu ON d.sku = pu.sku AND pu.row_num <= d.cantidad
+                           WHERE d.idcarrito = ?";
+        
+        $stmtConCodigo = $this->conn->prepare($queryConCodigo);
+        if (!$stmtConCodigo) {
+            echo "Error en la preparación de la consulta con codigo_unidad: " . $this->conn->error;
             return false;
         }
     
-        $stmt->bind_param("i", $idCarrito);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmtConCodigo->bind_param("i", $idCarrito);
+        $stmtConCodigo->execute();
+        $resultConCodigo = $stmtConCodigo->get_result();
+        $productosConCodigo = $resultConCodigo->fetch_all(MYSQLI_ASSOC);
     
-        return $result->fetch_all(MYSQLI_ASSOC);
+        // Consulta para obtener productos sin `codigo_unidad`
+        $querySinCodigo = "SELECT d.sku, NULL as codigo_unidad, d.cantidad
+                           FROM detalle_carrito d
+                           LEFT JOIN producto_unitario pu ON d.sku = pu.sku
+                           WHERE d.idcarrito = ? AND pu.codigo_unidad IS NULL";
+        
+        $stmtSinCodigo = $this->conn->prepare($querySinCodigo);
+        if (!$stmtSinCodigo) {
+            echo "Error en la preparación de la consulta sin codigo_unidad: " . $this->conn->error;
+            return false;
+        }
+    
+        $stmtSinCodigo->bind_param("i", $idCarrito);
+        $stmtSinCodigo->execute();
+        $resultSinCodigo = $stmtSinCodigo->get_result();
+        $productosSinCodigo = $resultSinCodigo->fetch_all(MYSQLI_ASSOC);
+    
+        // Combinar ambos resultados
+        $productos = array_merge($productosConCodigo, $productosSinCodigo);
+    
+        return $productos;
     }
+    
+    
     
 }
