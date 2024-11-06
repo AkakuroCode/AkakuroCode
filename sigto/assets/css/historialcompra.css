@@ -33,6 +33,14 @@
     font-weight: bold;
 }
 
+.historial-container th:first-child {
+    border-top-left-radius: 8px; /* Borde redondeado superior izquierdo solo en el primer th */
+}
+
+.historial-container th:last-child {
+    border-top-right-radius: 8px; /* Borde redondeado superior derecho solo en el último th */
+}
+
 .historial-container tr:nth-child(even) {
     background-color: #f2f2f2;
 }
