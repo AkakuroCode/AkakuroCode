@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Incluir el controlador de usuario o la lógica para obtener el usuario logueado
 require_once __DIR__ . '/../controllers/UsuarioController.php';
 
+
 $usuarioController = new UsuarioController();
 $usuario = $usuarioController->getUserById($_SESSION['idus']);
 
@@ -25,6 +26,7 @@ if (!$usuario) {
     <meta charset="UTF-8">
     <title>Editar Usuario</title>
     <link rel="stylesheet" href="/sigto/assets/css/formularios.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
 <body>
     
@@ -58,15 +60,20 @@ if (!$usuario) {
         <label for="email">Email:</label>
         <input type="email" name="email" value="<?php echo $usuario['email']; ?>" required><br>
 
-        <!-- Campo para la contraseña -->
         <label for="passw">Contraseña:</label>
-        <input type="password" name="passw" placeholder="Deja en blanco si no deseas cambiarla"><br>
+        <span class="input-wrapper">
+        <input type="password" id="passw" name="passw" placeholder="Deja en blanco si no deseas cambiarla">
+        <span class="toggle-password" onclick="togglePassword()">
+        <i class="bi bi-eye-fill"></i>
+         </span>
+        </span><br>
+
 
         <!-- Botón para enviar el formulario -->
         <input type="submit" value="Actualizar">
         <br><br><br>
         <a id="volver" href="/sigto/views/usuarioperfil.php">Volver al perfil</a>
     </form>
-    
+    <script src="/sigto/assets/js/passbutton.js"></script>
 </body>
 </html>

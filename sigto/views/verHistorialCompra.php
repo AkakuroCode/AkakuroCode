@@ -41,7 +41,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/historialcompra.css">
-    <title>Inicio</title>
+    <title>Historial de Compras</title>
 </head>
 <body>
 <div class="contenedor"> 
@@ -81,6 +81,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     </nav>    
 </header>
 <main>
+    <br>
 <div class="historial-container">
     <h2>Historial de Compras</h2>
     <table>
@@ -91,6 +92,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                 <th>Estado</th>
                 <th>Código de Unidad</th>
                 <th>Precio Actual</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -102,6 +104,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                         <td><?php echo $registro['estado']; ?></td>
                         <td><?php echo $registro['codigo_unidad']; ?></td>
                         <td><?php echo "$" . number_format($registro['precio_actual'], 2); ?></td>
+                        <td><a href="/sigto/views/detallesproducto.php?id=<?php echo $registro['sku']; ?>" class="btn btn-info mb-2">Ver detalles</a></td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
