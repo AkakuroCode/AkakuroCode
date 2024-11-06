@@ -33,19 +33,16 @@ if (!$productos) {
                     <span class="navbar-toggler-icon"></span>
                   </button>
                   <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mb-2 mb-lg-0">
+                  <ul class="navbar-nav mb-2 mb-lg-0">
                       <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php">
                         <i class="bi bi-house-door"></i> Inicio</a>
                     </li>
                     <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/empresaperfil.php"><i class="bi bi-building"></i> Perfil</a>
+                        </li>
+                    <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php"><i class="bi bi-plus-circle"></i> Agregar</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php"><i class="bi bi-view-list"></i> Mis productos</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/verHistorialVenta.php"><i class="bi bi-cash-coin"></i> Ventas</a>
                     </li>
                     <li class="nav-item mx-3">
                         <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">
