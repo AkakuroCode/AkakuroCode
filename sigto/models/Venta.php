@@ -120,6 +120,51 @@ public function registrarDetalleVenta($idventa, $sku, $cantidad, $precio_unitari
     }
 }
 
+public function obtenerHistorialVentas($idemp) {
+    // Consulta para obtener las ventas realizadas por la empresa
+    $queryVentas = "SELECT idventa, fecha, stock FROM venta WHERE idemp = ?";
+    $stmtVentas = $this->conn->prepare($queryVentas);
+
+    if (!$stmtVentas) {
+        echo "Error en la preparación de la consulta para obtener ventas: " . $this->conn->error;
+        return false;
+    }
+
+    $stmtVentas->bind_param("i", $idemp);
+    $stmtVentas->execute();
+    $resultVentas = $stmtVentas->get_result();
+    $ventas = [];
+
+    while ($venta = $resultVentas->fetch_assoc()) {
+        // Para cada venta, obtenemos sus detalles
+        $ventaId = $venta['idventa'];
+        $venta['detalles'] = $this->obtenerDetallesVenta($ventaId);
+        $ventas[] = $venta;
+    }
+
+    return $ventas;
+}
+
+private function obtenerDetallesVenta($idventa) {
+    // Consulta para obtener los detalles de cada venta
+    $queryDetalles = "SELECT dv.sku, dv.cantidad, dv.precio_unitario, dv.subtotal, p.nombre AS nombre_producto
+                      FROM detalle_venta dv
+                      JOIN producto p ON dv.sku = p.sku
+                      WHERE dv.idventa = ?";
+    $stmtDetalles = $this->conn->prepare($queryDetalles);
+
+    if (!$stmtDetalles) {
+        echo "Error en la preparación de la consulta para obtener detalles de la venta: " . $this->conn->error;
+        return [];
+    }
+
+    $stmtDetalles->bind_param("i", $idventa);
+    $stmtDetalles->execute();
+    $resultDetalles = $stmtDetalles->get_result();
+    $detalles = $resultDetalles->fetch_all(MYSQLI_ASSOC);
+
+    return $detalles;
+}
 
     
 }

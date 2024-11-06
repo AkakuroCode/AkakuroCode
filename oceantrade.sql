@@ -263,10 +263,8 @@ CREATE TABLE historial_compra (
 CREATE TABLE venta (
     idventa INT PRIMARY KEY AUTO_INCREMENT,
     idemp INT(11),
-    sku INT(11),
     fecha DATE NOT NULL,
-    total_venta DECIMAL(10,2) NOT NULL CHECK (total_venta > 0),
-    FOREIGN KEY (sku) REFERENCES producto(sku),
+    stock INT(5),
     FOREIGN KEY (idemp) REFERENCES empresa(idemp)
 );
 
@@ -317,6 +315,16 @@ CREATE TABLE especifica (
     FOREIGN KEY (idrecibo) REFERENCES centrorecibo(idrecibo)
 );
 
+CREATE TABLE detalle_venta (
+    idventa INT NOT NULL,
+    sku INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (idventa, sku),
+    FOREIGN KEY (idventa) REFERENCES venta_historial(idventa) ON DELETE CASCADE,
+    FOREIGN KEY (sku) REFERENCES producto(sku) ON DELETE CASCADE
+);
 
 /* Valores para rellenar tablas */
 
