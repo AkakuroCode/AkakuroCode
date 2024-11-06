@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <title>Nosotros Empresa</title>
 </head>
@@ -18,16 +19,19 @@
                   <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0">
                       <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php">Inicio</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php"><i class="bi bi-house-door"></i> Inicio</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php">Agregar Producto</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php"><i class="bi bi-plus-circle"></i> Agregar</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php">Ver Productos</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php"><i class="bi bi-view-list"></i> Mis productos</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/verHistorialVenta.php"><i class="bi bi-cash-coin"></i> Ventas</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout"><i class="bi bi-door-closed"></i> Salir</a>
                     </li>
                     </ul>
                     <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">

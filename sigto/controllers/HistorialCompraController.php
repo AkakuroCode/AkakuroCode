@@ -28,4 +28,17 @@ class HistorialCompraController {
             return [];
         }
     }
+    
+    public function obtenerHistorialPorUsuarioAdmin($idus) {
+        // Obtiene el idhistorial asociado al usuario especificado
+        $idhistorial = $this->historialCompraModel->obtenerIdHistorialPorUsuario($idus);
+    
+        if ($idhistorial) {
+            // Obtiene los registros del historial de compras y los retorna
+            return $this->historialCompraModel->obtenerRegistrosPorHistorial($idhistorial);
+        } else {
+            // Retorna un array vacío si no hay historial
+            return [];
+        }
+    }
 }

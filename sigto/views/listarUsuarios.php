@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../controllers/UsuarioController.php';
 require_once __DIR__ . '/../controllers/EmpresaController.php';
 require_once __DIR__ . '/../controllers/CategoriaController.php';
+require_once __DIR__ . '/../controllers/HistorialCompraController.php';
 
 // Instancia del controlador de usuario
 $usuarioController = new UsuarioController();
@@ -14,6 +15,11 @@ $empresas = $empresaController->readAll(); // Obtener todas las empresas
 // Instancia del controlador de categorías
 $categoriaController = new CategoriaController();
 $categorias = $categoriaController->getAllCategorias(); // Obtener todas las categorías
+
+// Instancia del controlador de historial de compras
+$historialCompraModel = new HistorialCompraController();
+$historial = $historialCompraModel->obtenerHistorialPorUsuarioAdmin($idus);
+
 
 // Manejar la solicitud de agregar una nueva categoría
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category-name'], $_POST['category-description'])) {
@@ -64,6 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])
     <script>
         function toggleMenu(userId) {
             var element = document.getElementById('logins-' + userId);
+            if (element.style.display === 'none') {
+                element.style.display = 'table-row';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+
+        function toggleCompras(userId) {
+            var element = document.getElementById('compras-' + userId);
             if (element.style.display === 'none') {
                 element.style.display = 'table-row';
             } else {
@@ -157,7 +172,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])
 
 <div class="panel-gestion">
     <h1>Lista de Usuarios</h1>
-    
     <table>
         <thead>
             <tr>
@@ -172,69 +186,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])
             </tr>
         </thead>
         <tbody>
-        <?php if ($usuarios && $usuarios->num_rows > 0): ?>
-            <?php while ($usuario = $usuarios->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo $usuario['idus']; ?></td>
-                    <td><?php echo $usuario['nombre']; ?></td>
-                    <td><?php echo $usuario['apellido']; ?></td>
-                    <td><?php echo $usuario['fecnac']; ?></td>
-                    <td><?php echo $usuario['direccion']; ?></td>
-                    <td><?php echo $usuario['telefono']; ?></td>
-                    <td><?php echo $usuario['email']; ?></td>
-                    <td>
-                        <a id="editar" class="btn" href="/sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
-
-                        <!-- Verificar si el usuario está activo o inactivo -->
-                        <?php if ($usuario['activo'] == 'si'): ?>
+            <?php if ($usuarios && $usuarios->num_rows > 0): ?>
+                <?php while ($usuario = $usuarios->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo $usuario['idus']; ?></td>
+                        <td><?php echo $usuario['nombre']; ?></td>
+                        <td><?php echo $usuario['apellido']; ?></td>
+                        <td><?php echo $usuario['fecnac']; ?></td>
+                        <td><?php echo $usuario['direccion']; ?></td>
+                        <td><?php echo $usuario['telefono']; ?></td>
+                        <td><?php echo $usuario['email']; ?></td>
+                        <td>
+                            <a id="editar" class="btn" href="/sigto/index.php?action=edit&idus=<?php echo $usuario['idus']; ?>">Editar</a>
+                            <!-- Verificar si el usuario está activo o inactivo -->
+                            <?php if ($usuario['activo'] == 'si'): ?>
                             <button class="btn-baja" onclick="cambiarEstadoUsuario(<?php echo $usuario['idus']; ?>, 'no')">Dar de baja</button>
-                        <?php else: ?>
+                            <?php else: ?>
                             <button class="btn-alta" onclick="cambiarEstadoUsuario(<?php echo $usuario['idus']; ?>, 'si')">Dar de alta</button>
-                        <?php endif; ?>
+                            <?php endif; ?>
+                            <button class="btn view-logins-btn" onclick="toggleMenu(<?php echo $usuario['idus']; ?>)">Ver Logins</button>
+                            <button class="btn view-compras-btn" onclick="toggleCompras(<?php echo $usuario['idus']; ?>)">Ver Compras</button>
+                        </td>
+                    </tr>
 
-                        <button type="button" class="btn view-logins-btn" onclick="toggleMenu(<?php echo $usuario['idus']; ?>)">Ver Logins</button>
-                    </td>
+                    <!-- Historial de logins del usuario -->
+                    <tr id="logins-<?php echo $usuario['idus']; ?>" style="display:none;">
+                        <td colspan="8">
+                            <?php
+                            $logins = $usuarioController->getUserLogins($usuario['idus']);
+                            ?>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>URL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($logins as $login): ?>
+                                    <tr>
+                                        <td><?php echo $login['fecha']; ?></td>
+                                        <td><?php echo $login['hora']; ?></td>
+                                        <td><?php echo $login['url']; ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Historial de compras del usuario -->
+                    <tr id="compras-<?php echo $usuario['idus']; ?>" style="display:none;">
+                        <td colspan="8">
+                            <?php
+                            $compras = $historialCompraModel->obtenerHistorialPorUsuarioAdmin($usuario['idus']);
+                            ?>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Registro</th>
+                                        <th>SKU</th>
+                                        <th>Estado</th>
+                                        <th>Código de Unidad</th>
+                                        <th>Precio Actual</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($compras as $compra): ?>
+                                    <tr>
+                                        <td><?php echo $compra['idregistrocompra']; ?></td>
+                                        <td><?php echo $compra['sku']; ?></td>
+                                        <td><?php echo $compra['estado']; ?></td>
+                                        <td><?php echo $compra['codigo_unidad']; ?></td>
+                                        <td><?php echo "US$ " . number_format($compra['precio_actual'], 2); ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="8">No hay usuarios registrados.</td>
                 </tr>
-                <!-- Fila que contiene el historial de logins del usuario, inicialmente oculta -->
-                <tr id="logins-<?php echo $usuario['idus']; ?>" style="display:none;">
-                    <td colspan="8">
-                        <?php
-                        // Obtener los logins desde el controlador
-                        $logins = $usuarioController->getUserLogins($usuario['idus']);
-                        ?>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora</th>
-                                    <th>URL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($logins as $login): ?>
-                                <tr>
-                                    <td><?php echo $login['fecha']; ?></td>
-                                    <td><?php echo $login['hora']; ?></td>
-                                    <td><?php echo $login['url']; ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="8">No hay usuarios registrados.</td>
-            </tr>
-        <?php endif; ?>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
 
 <div class="panel-gestion">
     <h1>Lista de Empresas</h1>
-
     <table>
         <thead>
             <tr>
@@ -248,68 +291,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])
             </tr>
         </thead>
         <tbody>
-        <?php if ($empresas && $empresas->num_rows > 0): ?>
-            <?php while ($empresa = $empresas->fetch_assoc()): ?>
+            <?php if ($empresas && $empresas->num_rows > 0): ?>
+                <?php while ($empresa = $empresas->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo $empresa['idemp']; ?></td>
+                        <td><?php echo $empresa['nombre']; ?></td>
+                        <td><?php echo $empresa['direccion']; ?></td>
+                        <td><?php echo $empresa['telefono']; ?></td>
+                        <td><?php echo $empresa['email']; ?></td>
+                        <td><?php echo $empresa['cuentabanco']; ?></td>
+                        <td>
+                            <a id="editar" class="btn" href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
+                            <!-- Verificar si la empresa está activa o inactiva -->
+                            <?php if ($empresa['activo'] == 'si'): ?>
+                            <button class="btn-baja" onclick="cambiarEstadoEmpresa(<?php echo $empresa['idemp']; ?>, 'no')">Dar de baja</button>
+                            <?php else: ?>
+                            <button class="btn-alta" onclick="cambiarEstadoEmpresa(<?php echo $empresa['idemp']; ?>, 'si')">Dar de alta</button>
+                            <?php endif; ?>
+                            <button class="btn view-logins-btn" onclick="toggleEmpresaMenu(<?php echo $empresa['idemp']; ?>)">Ver Logins</button>
+                        </td>
+                    </tr>
+
+                    <!-- Historial de logins de la empresa -->
+                    <tr id="logins-empresa-<?php echo $empresa['idemp']; ?>" style="display:none;">
+                        <td colspan="7">
+                            <?php
+                            $logins_empresa = $empresaController->getEmpresaLogins($empresa['idemp']);
+                            ?>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>URL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($logins_empresa as $login_empresa): ?>
+                                    <tr>
+                                        <td><?php echo $login_empresa['fecha']; ?></td>
+                                        <td><?php echo $login_empresa['hora']; ?></td>
+                                        <td><?php echo $login_empresa['url']; ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
                 <tr>
-                    <td><?php echo $empresa['idemp']; ?></td>
-                    <td><?php echo $empresa['nombre']; ?></td>
-                    <td><?php echo $empresa['direccion']; ?></td>
-                    <td><?php echo $empresa['telefono']; ?></td>
-                    <td><?php echo $empresa['email']; ?></td>
-                    <td><?php echo $empresa['cuentabanco']; ?></td>
-                    <td>
-                    <a id="editar" class="btn" href="/sigto/index.php?action=edit2&idemp=<?php echo $empresa['idemp']; ?>">Editar</a>
-
-                    <!-- Verificar si la empresa está activa o inactiva -->
-                    <?php if ($empresa['activo'] == 'si'): ?>
-                    <button class="btn-baja" onclick="cambiarEstadoEmpresa(<?php echo $empresa['idemp']; ?>, 'no')">Dar de baja</button>
-                    <?php else: ?>
-                      <button class="btn-alta" onclick="cambiarEstadoEmpresa(<?php echo $empresa['idemp']; ?>, 'si')">Dar de alta</button>
-                    <?php endif; ?>
-
-                        <!-- Botón para ver logins -->
-                        <button type="button" class="btn view-logins-btn" onclick="toggleEmpresaMenu(<?php echo $empresa['idemp']; ?>)">Ver Logins</button>
-                    </td>
+                    <td colspan="7">No hay empresas registradas.</td>
                 </tr>
-                <!-- Fila que contiene el historial de logins de la empresa, inicialmente oculta -->
-                <tr id="logins-empresa-<?php echo $empresa['idemp']; ?>" style="display:none;">
-                    <td colspan="7">
-                        <?php
-                        // Obtener los logins desde el controlador
-                        $logins_empresa = $empresaController->getEmpresaLogins($empresa['idemp']);
-                        ?>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora</th>
-                                    <th>URL</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($logins_empresa as $login_empresa): ?>
-                                <tr>
-                                    <td><?php echo $login_empresa['fecha']; ?></td>
-                                    <td><?php echo $login_empresa['hora']; ?></td>
-                                    <td><?php echo $login_empresa['url']; ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="7">No hay empresas registradas.</td>
-            </tr>
-        <?php endif; ?>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
 
 <a id="logout" class="btn" href="/sigto/index.php?action=logout">Cerrar Sesión</a>
 
+</body>
+</html>
 <script>
     function cambiarEstado(idus, estado) {
         fetch('/sigto/index.php?action=updateStatus', {
@@ -383,3 +425,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])
 
 </body>
 </html>
+
+
+

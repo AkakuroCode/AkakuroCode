@@ -24,6 +24,7 @@ $ventas = $ventaModel->obtenerHistorialVentas($idemp);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/sigto/assets/css/style.css">
     <link rel="stylesheet" href="/sigto/assets/css/historialventa.css">
     <title>Historial de Ventas</title>
@@ -33,23 +34,25 @@ $ventas = $ventaModel->obtenerHistorialVentas($idemp);
     <header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
                 <div class="container-fluid">
-                  <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
+                  <a class="navbar-brand" href="/sigto/views/mainempresa.php"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
                   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
                   <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0">
                       <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php">Inicio</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php"><i class="bi bi-house-door"></i> Inicio</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php">Agregar Producto</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php"><i class="bi bi-plus-circle"></i> Agregar</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php">Ver Productos</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php"><i class="bi bi-view-list"></i> Mis productos</a>
+                    <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/verHistorialVenta.php"><i class="bi bi-cash-coin"></i> Ventas</a>
                     </li>
                     <li class="nav-item mx-3">
-                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout">Salir</a>
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout"><i class="bi bi-door-closed"></i> Salir</a>
                     </li>
                     </ul>
                     <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
@@ -98,7 +101,7 @@ $ventas = $ventaModel->obtenerHistorialVentas($idemp);
                                 <td>$<?= number_format($detalle['precio_unitario'], 2) ?></td>
                                 <td>$<?= number_format($detalle['subtotal'], 2) ?></td>
                                 <td>
-                                    <button class="btn-ver-lista" onclick="verEnLista(<?= $detalle['sku'] ?>)">Ver en lista</button>
+                                <a href="/sigto/views/listarproductos.php" class="btn btn-primary">Ver en lista</a>
                                 </td>
                             </tr>
                             <?php 

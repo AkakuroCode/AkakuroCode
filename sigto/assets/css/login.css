@@ -7,11 +7,11 @@ body {
 }
 
 form {
-    background-color: #0267FF;
+    background-color: #51Aee5;
     max-width: 300px;
     margin: 0 auto;
     padding: 4em;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     color: white;
 }
@@ -28,10 +28,10 @@ input {
 }
 
 button {
-    color:  #0267FF;
+    color:  #3871C1;
     font-weight: bold;
     background-color: white;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
@@ -68,10 +68,10 @@ text-align: center;
 #registro{
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
+    color:  #3871C1;
     font-weight: bold;
     background-color: white;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
@@ -110,7 +110,7 @@ input[type="text"], input[type="password"] {
     transform: translateY(-50%);
     cursor: pointer;
     font-size: 1.2em;
-    color: #0267FF;
+    color: #3871C1;
 }
 
 

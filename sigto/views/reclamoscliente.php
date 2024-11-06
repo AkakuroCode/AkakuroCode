@@ -33,7 +33,7 @@
                     </li>
                     <li class="nav-item mx-3">
                         <a class="nav-link nav-icon" href="/sigto/index.php?action=logout">
-                        <i class="bi bi-door-open">Salir</i></a>
+                        <i class="bi bi-door-open"></i>Salir</a>
                     </li>
                     </ul>
                     <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">

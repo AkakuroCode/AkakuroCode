@@ -54,7 +54,7 @@ $centros_recibo = $centroReciboController->obtenerCentrosDeRecibo();
                     <a class="nav-link nav-icon" href="/sigto/index.php?action=view_cart"><i class="bi bi-cart"></i> Carrito</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link nav-icon" href="/sigto/index.php?action=logout"><i class="bi bi-door-open"></i> Salir</a>
+                    <a class="nav-link nav-icon" href="/sigto/index.php?action=logout"><i class="bi bi-door-open"></i>Salir</a>
                 </li>
             </ul>
             <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">

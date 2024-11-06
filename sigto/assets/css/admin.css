@@ -106,7 +106,7 @@ th {
     background-color: #D4001E;
 }
 
-#editar, #eliminar, .view-logins-btn {
+#editar, #eliminar, .view-logins-btn, .view-compras-btn {
     text-decoration: none;
     background-color: #0267FF;
     color: white;

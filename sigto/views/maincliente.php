@@ -35,7 +35,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 <header>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
+            <a class="navbar-brand" href="/sigto/views/maincliente.php"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -55,7 +55,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                     </li>
                     <li class="nav-item mx-3">
                         <a class="nav-link nav-icon" href="/sigto/index.php?action=logout">
-                        <i class="bi bi-door-open">Salir</i></a>
+                        <i class="bi bi-door-closed"></i> Salir</a>
                     </li>
                 </ul>
                 <form id="search-form" action="/sigto/views/catalogo.php" method="GET" autocomplete="off">
@@ -93,7 +93,6 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
 
     <!-- Catálogo de productos -->
     <div class="container mt-5">
-        <p class="relleno">Más Vendidos</p>
         <h2>Productos Disponibles</h2>
         <div class="row">
             <?php foreach ($productos as $producto): ?>

@@ -8,11 +8,11 @@ body {
 
 form {
     text-align: center;
-    background-color: #0267FF;
+    background-color: #51Aee5;
     max-width: 300px;
     margin: 0 auto;
     padding: 4em;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     color: white;
 }
@@ -29,10 +29,10 @@ input {
 }
 
 button {
-    color:  #0267FF;
+    color:  #3871C1;
     font-weight: bold;
     background-color: white;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
@@ -69,10 +69,10 @@ text-align: center;
 #registro{
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
+    color:  #3871C1;
     font-weight: bold;
     background-color: white;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
@@ -92,10 +92,10 @@ text-align: center;
 select{
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
+    color:  #3871C1;
     font-weight: bold;
     background-color: white;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
@@ -110,10 +110,10 @@ select{
 .custom-file-upload {
     display: inline-block;
     padding: 0.5em 1em;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     background-color: white;
-    color: #0267FF;
+    color: #3871C1;
     font-weight: bold;
     cursor: pointer;
     text-align: center;
@@ -133,10 +133,10 @@ select{
 input[type="submit"] {
     text-decoration: none;
     text-align: center;
-    color:  #0267FF;
+    color:  #3871C1;
     font-weight: bold;
     background-color: white;
-    border: 3px solid #1900ff;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
@@ -152,8 +152,8 @@ input[type="submit"]:hover {
     text-align: center;
     color:  white;
     font-weight: bold;
-    background-color: #0267FF;
-    border: 3px solid #1900ff;
+    background-color: #3871C1;
+    border: 3px solid #3871C1;
     border-radius: 1em;
     margin-top: 1em;
     padding: 0.5em;
@@ -162,5 +162,5 @@ input[type="submit"]:hover {
 
 #volver:hover{
     background-color: white;
-    color:#0267FF
+    color:#3871C1
 }
