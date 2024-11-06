@@ -36,8 +36,9 @@ if (!$productos) {
     <link rel="stylesheet" href="/sigto/assets/css/admin.css">
 </head>
 <body>
-<header>
 <div class="contenedor"> 
+<header>
+
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#"><img class="w-50" src="/sigto/assets/images/navbar logo 2.png" alt="OceanTrade"></a>

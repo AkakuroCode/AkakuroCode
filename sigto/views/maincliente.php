@@ -165,7 +165,6 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
     </div>
 </main>
 
-<br><br><br><br><br><br>
 <footer>
     <div class="footer-container">
         <div class="footer-item">

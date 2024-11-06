@@ -68,7 +68,7 @@ if (!$usuario) {
     <h2 class="text-center">Perfil de <?php echo htmlspecialchars($usuario['nombre']); ?></h2>
     <div class="btn-container">
         <a href="/sigto/index.php?action=edit_profile" class="btn btn-outline-primary btn-lg">Editar Información</a>
-        <a href="historialCompras.php" class="btn btn-outline-secondary btn-lg">Historial de Compras</a>
+        <a href="verHistorialCompra.php" class="btn btn-outline-secondary btn-lg">Historial de Compras</a>
         <a href="verFavoritos.php" class="btn btn-outline-secondary btn-lg">Favoritos</a>
     </div>
     </div>
