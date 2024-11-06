@@ -1,5 +1,6 @@
 <?php 
 require_once __DIR__ . '/../models/Compra.php';
+require_once __DIR__ . '/../models/Venta.php';
 require_once __DIR__ . '/../controllers/CarritoController.php';
 
 class CompraController {
@@ -9,6 +10,7 @@ class CompraController {
     public function __construct() {
         $this->compraModel = new Compra();
         $this->carritoController = new CarritoController();
+        $this->ventaModel = new Venta(); // Instanciamos el modelo de Venta
     }
 
     public function procesarCompra() {
@@ -167,6 +169,65 @@ class CompraController {
             http_response_code(500);
             echo json_encode(["success" => false, "message" => "Error al actualizar el stock en historial_compra."]);
             return;
+        }
+        
+        // Paso 1: Obtener productos del carrito y verificar
+        $productos = $this->carritoController->obtenerProductosDelCarrito($idCarrito);
+        if (!$productos || !is_array($productos)) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al obtener los productos del carrito."]);
+        return;
+        }
+
+        // Paso 2: Agrupar productos por `idemp`
+        $productosPorEmpresa = [];
+        foreach ($productos as $producto) {
+        $idemp = $producto['idemp'];
+        if (!isset($productosPorEmpresa[$idemp])) {
+            $productosPorEmpresa[$idemp] = [];
+        }
+        $productosPorEmpresa[$idemp][] = $producto;
+        }
+
+        // Paso 3: Procesar cada grupo de productos por `idemp`
+        foreach ($productosPorEmpresa as $idemp => $productosEmpresa) {
+        // Registrar o actualizar la venta para el `idemp` actual
+        $idVenta = $this->ventaModel->registrarOActualizarVenta($idemp);
+        if (!$idVenta) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al registrar o actualizar la venta para la empresa con ID: $idemp"]);
+        return;
+        }
+
+        // Registrar cada producto en `detalle_venta`
+        foreach ($productosEmpresa as $producto) {
+        $sku = $producto['sku'];
+        $cantidad = $producto['cantidad'];
+        
+        // Obtener el precio unitario utilizando la función en el modelo de carrito
+        $precio_unitario = $this->carritoController->getPrecioProducto($sku);
+        if (!$precio_unitario) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al obtener el precio del producto con SKU: $sku"]);
+            return;
+        }
+
+        // Registrar en `detalle_venta`
+        $resultadoDetalleVenta = $this->ventaModel->registrarDetalleVenta($idVenta, $sku, $cantidad, $precio_unitario['precio_final']);
+        if (!$resultadoDetalleVenta) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al registrar en la tabla detalle_venta para el producto con SKU: $sku"]);
+        return;
+        }
+        }
+
+        // Actualizar el stock en la tabla `venta` para este `idventa`
+        $resultadoActualizacionStock = $this->ventaModel->actualizarStockEnVenta($idVenta);
+        if (!$resultadoActualizacionStock) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al actualizar el stock en la tabla venta para la empresa con ID: $idemp"]);
+        return;
+        }
         }
 
         // Eliminar los productos del carrito
