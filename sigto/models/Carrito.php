@@ -233,7 +233,7 @@ public function getCantidadProducto($idcarrito, $sku) {
         return $row ? $row['idcarrito'] : null;
     }
 
-    public function getPrecioProducto($sku) {
+    public function getPrecioProducto($sku) { 
         $query = "SELECT p.precio, 
                          IF(o.preciooferta IS NOT NULL AND NOW() BETWEEN o.fecha_inicio AND o.fecha_fin, o.preciooferta, p.precio) AS precio_final
                   FROM producto p 
@@ -251,9 +251,11 @@ public function getCantidadProducto($idcarrito, $sku) {
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
-    
-        return $row ? $row['precio_final'] : 0; // Retorna el precio con la oferta si existe, de lo contrario el precio normal
+        
+        // Retornar un array con 'precio_final' como clave, o false si no se encuentra el SKU
+        return $row ? ['precio_final' => $row['precio_final']] : false;
     }
+    
     
     public function createCart($idus) {
         $query = "INSERT INTO " . $this->carrito_table . " (idus, fechacrea, fechamod, estado, total) VALUES (?, NOW(), NOW(), 'Activo', 0)";
@@ -321,8 +323,8 @@ public function getCantidadProducto($idcarrito, $sku) {
     
 
     public function obtenerProductosDelCarrito($idCarrito) {
-        // Consulta para obtener productos con `codigo_unidad`
-        $queryConCodigo = "SELECT d.sku, pu.codigo_unidad, d.cantidad
+        // Consulta para obtener productos con `codigo_unidad` e `idemp`
+        $queryConCodigo = "SELECT d.sku, pu.codigo_unidad, d.cantidad, p.idemp
                            FROM detalle_carrito d
                            JOIN (
                                SELECT pu.codigo_unidad, pu.sku,
@@ -333,8 +335,9 @@ public function getCantidadProducto($idcarrito, $sku) {
                                WHERE pu.estado = 'Disponible'
                                ORDER BY pu.sku, pu.codigo_unidad
                            ) AS pu ON d.sku = pu.sku AND pu.row_num <= d.cantidad
+                           JOIN producto p ON d.sku = p.sku
                            WHERE d.idcarrito = ?";
-        
+    
         $stmtConCodigo = $this->conn->prepare($queryConCodigo);
         if (!$stmtConCodigo) {
             echo "Error en la preparación de la consulta con codigo_unidad: " . $this->conn->error;
@@ -346,12 +349,13 @@ public function getCantidadProducto($idcarrito, $sku) {
         $resultConCodigo = $stmtConCodigo->get_result();
         $productosConCodigo = $resultConCodigo->fetch_all(MYSQLI_ASSOC);
     
-        // Consulta para obtener productos sin `codigo_unidad`
-        $querySinCodigo = "SELECT d.sku, NULL as codigo_unidad, d.cantidad
+        // Consulta para obtener productos sin `codigo_unidad` e `idemp`
+        $querySinCodigo = "SELECT d.sku, NULL as codigo_unidad, d.cantidad, p.idemp
                            FROM detalle_carrito d
-                           LEFT JOIN producto_unitario pu ON d.sku = pu.sku
+                           LEFT JOIN producto_unitario pu ON d.sku = pu.sku AND pu.estado = 'Disponible'
+                           JOIN producto p ON d.sku = p.sku
                            WHERE d.idcarrito = ? AND pu.codigo_unidad IS NULL";
-        
+    
         $stmtSinCodigo = $this->conn->prepare($querySinCodigo);
         if (!$stmtSinCodigo) {
             echo "Error en la preparación de la consulta sin codigo_unidad: " . $this->conn->error;
@@ -371,4 +375,5 @@ public function getCantidadProducto($idcarrito, $sku) {
     
     
     
-}
+    
+    }

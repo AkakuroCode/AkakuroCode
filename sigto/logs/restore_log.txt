@@ -1,0 +1,18 @@
+2024-11-05 23:10:40 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:11:27 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:14:06 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:16:00 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:17:58 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:19:57 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:20:06 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:20:55 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:20:57 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:24:41 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:25:01 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:25:42 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:29:57 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:30:26 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:30:36 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:38:47 - Error: El archivo de respaldo no existe o no es accesible.
+2024-11-05 23:38:52 - Restauración completada desde C:\xampp\htdocs\AkakuroCode\AkakuroCode-1\sigto\backups\oceantrade_2024-11-03_17-20-21.sql
+2024-11-05 23:42:00 - Restauración completada desde oceantrade_2024-11-03_17-20-21.sql

@@ -47,10 +47,11 @@ class CarritoController {
     }
     
 
-    public function getTotalByUser($idus) {
+public function getTotalByUser($idus) {
         return $this->carrito->getTotalByUser($idus);
-    }
-    public function getActiveCartIdByUser($idus) {
+}
+
+public function getActiveCartIdByUser($idus) {
     return $this->carrito->getActiveCartIdByUser($idus);
 }
 
@@ -118,5 +119,7 @@ public function obtenerProductosDelCarrito($idCarrito) {
     return $this->carrito->obtenerProductosDelCarrito($idCarrito);
 }
 
-
+public function getPrecioProducto($sku) {
+    return $this->carrito->getPrecioProducto($sku);
+}
 }
