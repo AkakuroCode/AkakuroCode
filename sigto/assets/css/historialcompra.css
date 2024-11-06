@@ -51,3 +51,13 @@
     font-style: italic;
     color: #666;
 }
+
+footer {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f8f8;
+    padding: 10px 0;
+    margin-top: auto; /* Empuja el footer hacia abajo cuando el contenido es corto */
+}
+

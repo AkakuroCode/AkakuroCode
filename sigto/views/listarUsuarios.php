@@ -113,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])
 
 <div id="update-box" class="action-box" style="display: none;">
     <h2>Actualizar Categoría</h2>
+    <button class="close-btn" onclick="closeBox('update-box')">&times;</button>
     <form id="update-category-form" method="POST" action="">
         <label for="update-category-id">ID de la Categoría:</label>
         <select id="update-category-id" name="update-category-id" required>
@@ -138,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-category-id'])
 
 <div id="delete-box" class="action-box" style="display: none;">
     <h2>Borrar Categoría</h2>
+    <button class="close-btn" onclick="closeBox('delete-box')">&times;</button>
     <form id="delete-category-form" method="POST" action="">
         <label for="categoria">Categoría:</label>
         <select id="categoria" name="delete-category-id" required>

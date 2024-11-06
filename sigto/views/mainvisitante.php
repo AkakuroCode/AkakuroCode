@@ -52,13 +52,13 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
         <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
+                    <img src="/sigto/assets/images/carruselimg1.png" class="img-carrousel d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="/sigto/assets/images/carrousel.png" class="img-carrousel d-block w-100" alt="...">
+                    <img src="/sigto/assets/images/carruselimg2.png" class="img-carrousel d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="/sigto/assets/images/logo akakuro.png" class="img-carrousel d-block w-100" alt="...">
+                    <img src="/sigto/assets/images/carruselimg3.jpg" class="img-carrousel d-block w-100" alt="...">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
