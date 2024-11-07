@@ -153,6 +153,21 @@ switch ($action) {
             }
         break;
 
+        case 'edit_profile2': // Editar información del usuario logueado
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Si se envía el formulario de edición, llama al método 'update' del controlador
+                echo $controller->update($_POST);
+                // Redirigir al perfil del usuario
+                header('Location: /sigto/views/empresaperfil.php');
+                exit;
+            } else {
+                // Obtener el ID del usuario logueado desde la sesión
+                $idemp = $_SESSION['idemp'];
+                // Obtener los datos del usuario logueado para mostrarlos en el formulario de edición
+                $empresa = $controller2->readOne($idemp);
+                include __DIR__ . '/views/mieditarEmpresa.php'; // Cargar el formulario de edición de perfil
+            }
+        break;
 
 
         case 'updateEmpresaStatus': // Cambiar estado activo/inactivo de una empresa

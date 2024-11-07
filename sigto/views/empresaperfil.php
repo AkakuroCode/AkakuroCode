@@ -67,7 +67,7 @@ if (!$empresa) {
             <div class="col-md-10 p-5 bg-white shadow-lg rounded">
                 <h2 class="text-center mb-4">Perfil de <?php echo htmlspecialchars($empresa['nombre']); ?></h2>
                 <div class="d-flex flex-column align-items-center">
-                    <a href="/sigto/index.php?action=edit_empresa" class="btn btn-outline-primary btn-lg mb-2">Editar Información</a>
+                    <a href="/sigto/index.php?action=edit_profile2" class="btn btn-outline-primary btn-lg mb-2">Editar Información</a>
                     <a href="verHistorialVenta.php" class="btn btn-outline-secondary btn-lg mb-2">Historial de Ventas</a>
                     <a href="listarproductos.php" class="btn btn-outline-secondary btn-lg">Mis Productos</a>
                 </div>
