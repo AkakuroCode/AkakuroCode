@@ -90,13 +90,10 @@ if ($producto['tipo_stock'] === 'unidad') {
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php"><i class="bi bi-house-door"></i> Inicio</a>
                         </li>
                         <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/empresaperfil.php"><i class="bi bi-building"></i> Perfil</a>
+                        </li>
+                        <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php"><i class="bi bi-plus-circle"></i> Agregar</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php"><i class="bi bi-view-list"></i> Mis productos</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/verHistorialVenta.php"><i class="bi bi-cash-coin"></i> Ventas</a>
                         </li>
                         <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout"><i class="bi bi-door-closed"></i> Salir</a>
@@ -190,9 +187,9 @@ if ($producto['tipo_stock'] === 'unidad') {
         </div>
         
         <div class="footer-redes">
-            <a href="https://www.facebook.com/"><img class="redes" src="/sigto/assets/images/facebook logo.png" alt="Facebook"></a>
-            <a href="https://twitter.com/home"><img class="redes" src="/sigto/assets/images/x.png" alt="Twitter"></a>
-            <a href="https://www.instagram.com/"><img class="redes" src="/sigto/assets/images/ig logo.png" alt="Instagram"></a>
+            <a href="https://www.facebook.com/AkakuroCode/"><img class="redes" src="/sigto/assets/images/facebook logo.png" alt="Facebook"></a>
+            <a href="https://x.com/AkakuroCode"><img class="redes" src="/sigto/assets/images/x.png" alt="Twitter"></a>
+            <a href="https://www.instagram.com/akakurocode/"><img class="redes" src="/sigto/assets/images/ig logo.png" alt="Instagram"></a>
         </div>
     </div>
 </footer>
