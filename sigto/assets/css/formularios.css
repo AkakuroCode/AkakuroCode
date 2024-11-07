@@ -164,3 +164,24 @@ input[type="submit"]:hover {
     background-color: white;
     color:#3871C1
 }
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input[type="password"],
+.input-wrapper input[type="text"] {
+    width: 100%;
+    padding-right: 2.5rem; /* Espacio para el ícono a la derecha */
+}
+
+.toggle-password {
+    position: absolute;
+    margin-top: 4px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #3871C1;
+}
