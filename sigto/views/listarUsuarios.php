@@ -4,6 +4,8 @@ require_once __DIR__ . '/../controllers/EmpresaController.php';
 require_once __DIR__ . '/../controllers/CategoriaController.php';
 require_once __DIR__ . '/../controllers/HistorialCompraController.php';
 
+$idus = null;
+
 // Instancia del controlador de usuario
 $usuarioController = new UsuarioController();
 $usuarios = $usuarioController->readAll(); // Obtener todos los usuarios
