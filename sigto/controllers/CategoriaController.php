@@ -5,17 +5,17 @@ class CategoriaController {
     
     public function asignarCategoria($sku, $idcat) {
         // Código para asignar la categoría a un producto
-        $categoria = new Categoria();
+        $categoria = new Categoria('write');
         return $categoria->asignarCategoria($sku, $idcat);
     }
 
     public function getAllCategorias() {
-        $categoria = new Categoria();
+        $categoria = new Categoria('write');
         return $categoria->readAll();
     }
 
     public function addCategoria($nombre, $descripcion) {
-        $categoria = new Categoria();
+        $categoria = new Categoria('write');
         return $categoria->create($nombre, $descripcion);
     }
 
