@@ -71,13 +71,10 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/mainempresa.php"><i class="bi bi-house-door"></i> Inicio</a>
                         </li>
                         <li class="nav-item mx-3">
+                        <a class="text-white fs-4 text-decoration-none" href="/sigto/views/empresaperfil.php"><i class="bi bi-building"></i> Perfil</a>
+                        </li>
+                        <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/views/agregarproducto.php"><i class="bi bi-plus-circle"></i> Agregar</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/listarproductos.php"><i class="bi bi-view-list"></i> Mis productos</a>
-                        </li>
-                        <li class="nav-item mx-3">
-                            <a class="text-white fs-4 text-decoration-none" href="/sigto/views/verHistorialVenta.php"><i class="bi bi-cash-coin"></i> Ventas</a>
                         </li>
                         <li class="nav-item mx-3">
                             <a class="text-white fs-4 text-decoration-none" href="/sigto/index.php?action=logout"><i class="bi bi-door-closed"></i> Salir</a>

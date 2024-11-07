@@ -74,7 +74,7 @@ class ProductoController {
     }
 
     public function asignarCategoria($sku, $idcat) {
-        $producto = new Producto(); // Instanciar el modelo de Producto
+        $producto = new Producto('write'); // Instanciar el modelo de Producto
         return $producto->asignarCategoria($sku, $idcat); // Llamar al método del modelo
     }
 
