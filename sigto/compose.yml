@@ -3,13 +3,13 @@ services:
   web:
     image: php:8.2-apache
     volumes:
-      - ./var/www/html
+      - ./sigto:/var/www/html
     ports:
       - 80:80
 
-  backoffice:
+  backOffice:
     image: php:8.2-apache
     volumes:
-      - ./backoffice:/var/www/html
+      - ./sigto/backoffice:/var/www/html
     ports:
       - 81:80
