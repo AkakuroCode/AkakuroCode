@@ -3,7 +3,7 @@ services:
   web:
     image: php:8.2-apache
     volumes:
-      - ./test
+      - ./var/www/html
     ports:
       - 80:80
 
