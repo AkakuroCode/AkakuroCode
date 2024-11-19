@@ -27,3 +27,7 @@ for TABLE in $TABLES; do
 done
 
 echo "Respaldo de todas las tablas completado."
+
+
+
+#./backup_tablas.sh para correr el respaldo 
