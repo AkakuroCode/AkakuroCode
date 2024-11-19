@@ -1,0 +1,15 @@
+version: "3"
+services:
+  web:
+    image: php:8.2-apache
+    volumes:
+      - ./web:/var/www/html
+    ports:
+      - 80:80
+
+  backoffice:
+    image: php:8.2-apache
+    volumes:
+      - ./backoffice:/var/www/html
+    ports:
+      - 81:80

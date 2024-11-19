@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Crear usuario leandro
+      user: 
+        name: leandro
+        group: akakuro
+        password: $2y$10$W.F3rmnuDbOnik4mp1HWU.sCRGqAeS01FDrQYuVQr.Rr00kvYun0W
+      authorized_key: 
+        user: akakuro
+        key: "{{ item }}"
+        state: present
+      

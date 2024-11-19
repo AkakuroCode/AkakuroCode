@@ -1,0 +1,5 @@
+    - name: Clonar el repositorio desde GitHub
+      git:
+        repo: 'https://github.com/AkakuroCode/AkakuroCode'
+        dest: '/ruta/remota/proyecto'  # Cambia esto a la ubicación deseada en la VM
+        update: yes

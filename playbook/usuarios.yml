@@ -1,0 +1,18 @@
+---
+- hosts: all
+  gather_facts: no
+  become: true
+  tasks:
+  - name: Crear usuario AkakuroAdmin
+    user:
+      name: AkakuroAdmin
+      comment: Usuario Admin App
+      password : "{{ 'password123' | password_hash('sha512') }}"
+      create_home: true
+      groups:
+        - wheel
+  - name: Agregar clave AkakuroAdmin
+    authorized_key:
+      user: AkakuroAdmin
+      state: present
+      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC1Cx/TkYNmhoh9w6uB3LEy0L3+WiW9p3DkrGDBTxYqgBiRJIE2gsi8GEm7po/DG59tCGmmC1xJ4dSnIqhvL6/IQjSlLmkXTr5F5eyn6dA3YInt6/b6xbR6dvw21fOxj3vuGj1kG7wLfPmYe5YkX508dcIN6l+A28GM3jwvMCWEfKccqsyx6WLLxKt5VFBJO/F4iCbxpHjVbxdv/5IiIeTGf0WpUseJUEvqZ2588/4TNqBGRp70tYdl8q2Y7AF0CvxcxPlnw5tK4SISYgs6z2/Y/u3xVj7KUCDgZEaivvah4XH3z8CpM4VW76Ncb7E3glVJjArJPyvqV6i1y2RuqvYlFpPQ3k1zbTTvi1ejJ+3lH1YNjrhqB2qMZY5QdhDxu0BiFfD08bDArjTZ8myF3y2zsdA44RWnjYUzVuR5B887azz4oZwyQFwySKHLus382awIJ1oOS2jxH7Ym1/OwCD2xbmwn/13QLeYarBs7poUVd2cp9IoccWk2t/1zbRL7yls= leand@Leandro"

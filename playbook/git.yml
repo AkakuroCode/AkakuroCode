@@ -1,0 +1,8 @@
+- name: Instalar Git en la máquina virtual
+  hosts: oceantrade
+  become: yes
+  tasks:
+    - name: Instalar Git
+      yum:
+        name: git
+        state: present
