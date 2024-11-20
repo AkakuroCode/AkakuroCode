@@ -96,7 +96,7 @@ class UsuarioController {
         if ($result) {
             // Verificar si el usuario está inactivo (activo = 'no')
             if ($result['activo'] === 'no') {
-                return false; // No permitir el acceso
+                return 'inactive'; // No permitir el acceso
             }
     
             // Verificar la contraseña

@@ -187,10 +187,12 @@ switch ($action) {
                     // Intentar iniciar sesión como usuario
                     $loginUsuario = $controller->login(['email' => $email, 'passw' => $passw]);
             
-                    if ($loginUsuario) {
+                    if ($loginUsuario === true) {
                         // Redireccionar al maincliente si el login es exitoso
                         header('Location: /sigto/views/maincliente.php');
                         exit;
+                    } elseif ($loginUsuario === 'inactive') {
+                        $error = "Este usuario ha sido dado de baja.";
                     } else {
                         // Intentar iniciar sesión como empresa
                         $loginEmpresa = $controller2->login(['email' => $email, 'passw' => $passw]);
@@ -218,6 +220,7 @@ switch ($action) {
                 }
                 include __DIR__ . '/views/loginUsuario.php';
                 break;
+            
             
               
 
