@@ -1,15 +1,25 @@
-version: "3"
+version: "3.8"
 services:
   web:
-    image: php:8.2-apache
+    build: .
     volumes:
-      - ./web:/var/www/html
+      - ../sigto:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
     ports:
       - 80:80
-
-  backoffice:
-    image: php:8.2-apache
-    volumes:
-      - ./backoffice:/var/www/html
+  db: 
+    image: mysql:8.0
+    expose:
+      - "3310"
     ports:
-      - 81:80
+      - "3310:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8001:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306

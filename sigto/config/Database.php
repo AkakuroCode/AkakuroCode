@@ -1,6 +1,6 @@
 <?php
 class Database {
-    private $host = "127.0.0.1";
+    private $host = "db";
     private $db_name = "oceantrade";
     private $username;
     private $password;
@@ -17,8 +17,10 @@ class Database {
                 $this->password = 'password_app';
                 break;
             default:
-                $this->username = 'guest_user';
-                $this->password = 'password_guest';
+                // $this->username = 'guest_user';
+                // $this->password = 'password_guest';
+                $this->username = 'root';
+                $this->password = '';
                 break;
         }
     }

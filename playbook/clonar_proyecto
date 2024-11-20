@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Instalar Git en la máquina virtual (si aún no está instalado)
+      yum:
+        name: git
+        state: present
+        update_cache: yes
+    - name: Clonar el repositorio desde GitHub
+      git:
+        force: yes
+        clone: yes
+        repo: 'https://github.com/AkakuroCode/AkakuroCode.git'
+        dest: '/home/AkakuroCode-repo/'
+        update: yes

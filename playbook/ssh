@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Cambiar puerto de SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '#Port\ 22'
+        line: Port 35725
+
+    - name: Desactivar Root en SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '#PermitRootLogin\ yes'
+        line: PermitRootLogin no
+
+    - name: Desactivar Passwords en SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: 'PasswordAuthentication\ yes'
+        line: PasswordAuthentication no
+
+    - name: Restringir usuarios de SSH
+      lineinfile:
+        path: /etc/ssh/sshd_configh
+        line: AllowUsers akakuro
+        create: yes
+
+    - name: Reiniciar SSH
+      systemd:
+        state: restarted
+        name: sshd
+        enabled: yes
