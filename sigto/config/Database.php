@@ -1,6 +1,6 @@
 <?php
 class Database {
-    private $host = "db";
+    private $host = "localhost";
     private $db_name = "oceantrade";
     private $username;
     private $password;

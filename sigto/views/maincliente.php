@@ -109,7 +109,7 @@ $fechaActual = date('Y-m-d'); // Obtener la fecha actual
                 $iconoFavorito = $esFavorito ? 'favoritos2.png' : 'favoritos.png';
                 ?>
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 d-flex flex-column justify-content-between position-relative">
+                    <div class="card">
                         <img src="/sigto/assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
